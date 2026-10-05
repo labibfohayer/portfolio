@@ -115,7 +115,7 @@ export default function Hero() {
           <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(white,transparent_70%)] opacity-20" />
           
           <img 
-            src="/profile-ceo.jpg" 
+            src="/profile-ceo.webp" 
             alt="Md. Labib Fohayer" 
             className="relative z-10 w-full h-[120%] object-cover object-top"
             style={{ 
