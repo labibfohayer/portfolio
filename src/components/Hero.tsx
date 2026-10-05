@@ -117,10 +117,10 @@ export default function Hero() {
           <img 
             src="/profile-ceo.webp" 
             alt="Md. Labib Fohayer" 
-            className="relative z-10 w-full h-[120%] object-cover object-top"
+            className="relative z-10 w-auto max-w-full h-auto max-h-[110%] object-contain object-bottom"
             style={{ 
-              maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 95%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 95%)'
+              maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 98%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 98%)'
             }}
           />
         </motion.div>
