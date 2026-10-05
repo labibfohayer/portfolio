@@ -109,18 +109,21 @@ export default function Hero() {
           initial={{ opacity: 0, filter: "blur(20px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="relative h-[500px] xl:h-[800px] w-full flex justify-center items-end hidden md:flex"
+          className="relative h-[500px] xl:h-[800px] w-full flex justify-center items-center hidden md:flex overflow-hidden"
         >
-          {/* Glowing wireframe or abstract element behind image */}
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(white,transparent_70%)] opacity-20" />
+          {/* Edge fading overlays to blend the picture into the website background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-transparent z-20" />
+          <div className="absolute inset-0 bg-gradient-to-l from-[#050505] via-transparent to-transparent z-20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-transparent z-20" />
           
           <img 
             src="/profile-ceo.webp" 
             alt="Md. Labib Fohayer" 
-            className="relative z-10 w-auto max-w-full h-auto max-h-[110%] object-contain object-bottom"
+            className="relative z-10 w-full h-full object-cover object-center scale-110"
             style={{ 
-              maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 98%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 98%)'
+              maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)'
             }}
           />
         </motion.div>
