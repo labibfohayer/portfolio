@@ -41,7 +41,7 @@
   }
   
   .glass-card {
-    @apply bg-transparent backdrop-blur-md border border-white/[0.08] hover:border-cyan-500/30 transition-all duration-300 hover:bg-white/[0.02];
+    @apply bg-transparent border border-white/[0.08] hover:border-cyan-500/30 transition-all duration-300 hover:bg-white/[0.02];
   }
 
   .glass-pill {
