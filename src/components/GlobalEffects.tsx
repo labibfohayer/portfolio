@@ -82,6 +82,19 @@ export default function GlobalEffects() {
         }}
         transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
       />
+
+      {/* Subtle Mouse Spotlight */}
+      <motion.div
+        className="fixed top-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none z-[0] hidden md:block"
+        style={{
+          background: "radial-gradient(circle, rgba(6, 182, 212, 0.03) 0%, rgba(0, 0, 0, 0) 70%)"
+        }}
+        animate={{
+          x: mousePosition.x - 300,
+          y: mousePosition.y - 300,
+        }}
+        transition={{ type: "tween", ease: "linear", duration: 0.1 }}
+      />
     </>
   );
 }

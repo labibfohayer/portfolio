@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useInView, animate } from "framer-motion";
+import { motion, useInView, animate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import MagneticButton from "./ui/MagneticButton";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Counter({ from = 0, to, suffix = "", prefix = "" }: { from?: number, to: number, suffix?: string, prefix?: string }) {
   const nodeRef = useRef<HTMLSpanElement>(null);
@@ -26,12 +26,93 @@ function Counter({ from = 0, to, suffix = "", prefix = "" }: { from?: number, to
   return <span ref={nodeRef}>{prefix}{from}{suffix}</span>;
 }
 
+const roles = ["FULL-STACK AI DEVELOPER", "SYSTEMS ARCHITECT", "AUTOMATION EXPERT"];
+
+function Typewriter() {
+  const [text, setText] = useState("");
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = roles[roleIndex];
+    const speed = isDeleting ? 50 : 100;
+    
+    const timeout = setTimeout(() => {
+      if (!isDeleting && text === currentRole) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && text === "") {
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+      } else {
+        setText(currentRole.substring(0, text.length + (isDeleting ? -1 : 1)));
+      }
+    }, speed);
+    
+    return () => clearTimeout(timeout);
+  }, [text, isDeleting, roleIndex]);
+
+  return <span>{text}<span className="animate-pulse">|</span></span>;
+}
+
+function Particles() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-15">
+      {[...Array(30)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-cyan-500/40 rounded-full blur-[1px]"
+          initial={{
+            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+            scale: Math.random() * 2,
+            opacity: Math.random()
+          }}
+          animate={{
+            y: [null, Math.random() * -200],
+            opacity: [null, 0],
+          }}
+          transition={{
+            duration: Math.random() * 5 + 5,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 5
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Hero() {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+  
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    x.set(mouseX / width - 0.5);
+    y.set(mouseY / height - 0.5);
+  };
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
     <section id="home" className="relative min-h-screen pt-24 overflow-hidden flex flex-col justify-between">
       {/* Sci-Fi Background Effects */}
       <div className="absolute inset-0 bg-[black] -z-20" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/5 via-[black] to-[black] -z-10" />
+      <Particles />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid xl:grid-cols-2 gap-12 items-center flex-grow pt-10 pb-20">
         
@@ -78,11 +159,11 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="pt-4"
           >
-            <h2 className="text-xl md:text-2xl font-bold text-cyan-500 uppercase tracking-widest mb-2">
-              FULL-STACK AI DEVELOPER<span className="animate-pulse">|</span>
+            <h2 className="text-xl md:text-2xl font-bold text-cyan-500 uppercase tracking-widest mb-2 h-8">
+              <Typewriter />
             </h2>
             
-            <h3 className="text-2xl md:text-3xl italic text-neutral-300 font-serif mb-6">
+            <h3 className="text-2xl md:text-3xl italic text-neutral-300 font-serif mb-6 mt-2">
               Built for Scale & Precision.
             </h3>
             
@@ -109,24 +190,34 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right Content - Image with Glow */}
+        {/* Right Content - Image with Glow and 3D Tilt */}
         <motion.div
           initial={{ opacity: 0, filter: "blur(20px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="relative h-[400px] xl:h-[600px] w-full flex flex-col justify-center items-center md:items-end mt-12 md:mt-0"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+          className="relative h-[400px] xl:h-[600px] w-full flex flex-col justify-center items-center md:items-end mt-12 md:mt-0 [perspective:1000px]"
         >
           {/* Glowing Aura behind image */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[400px] bg-cyan-500/20 blur-[100px] rounded-full z-0" />
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[400px] bg-cyan-500/20 blur-[100px] rounded-full z-0 pointer-events-none" 
+            style={{ transform: "translateZ(-50px)" }}
+          />
           
           <img 
             src="/profile-transparent.png" 
             alt="Md. Labib Fohayer" 
-            className="relative z-10 w-auto h-full object-contain drop-shadow-[0_0_30px_rgba(6,182,212,0.4)]"
+            className="relative z-10 w-auto h-full object-contain drop-shadow-[0_0_30px_rgba(6,182,212,0.4)] pointer-events-none"
+            style={{ transform: "translateZ(30px)" }}
           />
           
           {/* Signature Image */}
-          <div className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-white/90 rotate-[-5deg]">
+          <div 
+            className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-white/90 rotate-[-5deg] pointer-events-none"
+            style={{ transform: "translateZ(80px)" }}
+          >
             Labib Fohayer
           </div>
         </motion.div>
