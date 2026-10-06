@@ -130,31 +130,23 @@ export default function Testimonials() {
       </div>
 
       {/* Infinite Scrolling Marquee */}
-      <div className="relative w-full overflow-hidden flex pb-8">
+      <div className="relative w-full overflow-hidden flex pb-8 group">
         
         {/* Edge Fade Masks */}
         <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-black to-transparent z-20 pointer-events-none" />
         
-        <div className="flex w-max relative z-10">
-          <motion.div
-            className="flex gap-6 pr-6"
-            animate={{ x: ["0%", "-100%"] }}
-            transition={{ ease: "linear", duration: 80, repeat: Infinity }}
-          >
+        <div className="flex w-max relative z-10 animate-[marquee_80s_linear_infinite] group-hover:[animation-play-state:paused]">
+          <div className="flex gap-6 pr-6">
             {reviews.map((review, idx) => (
               <ReviewCard key={`set1-${idx}`} review={review} />
             ))}
-          </motion.div>
-          <motion.div
-            className="flex gap-6 pr-6"
-            animate={{ x: ["0%", "-100%"] }}
-            transition={{ ease: "linear", duration: 80, repeat: Infinity }}
-          >
+          </div>
+          <div className="flex gap-6 pr-6">
             {reviews.map((review, idx) => (
               <ReviewCard key={`set2-${idx}`} review={review} />
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
