@@ -17,7 +17,7 @@ import TechMarquee from "@/components/TechMarquee";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-950 selection:bg-cyan-500/30 selection:text-white">
+    <main className="min-h-screen bg-[black] selection:bg-cyan-500/30 selection:text-white">
       <CommandPalette />
       <FloatingMusic />
       <Chatbot />

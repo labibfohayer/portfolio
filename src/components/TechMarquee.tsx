@@ -17,9 +17,9 @@ const techStack = [
 
 export default function TechMarquee() {
   return (
-    <section className="w-full bg-slate-950 py-10 border-y border-white/5 overflow-hidden flex relative z-10">
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+    <section className="w-full bg-[black] py-10 border-y border-white/5 overflow-hidden flex relative z-10">
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[black] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[black] to-transparent z-10 pointer-events-none" />
       
       <motion.div
         className="flex whitespace-nowrap gap-16 items-center"
