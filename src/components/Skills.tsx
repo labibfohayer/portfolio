@@ -1,10 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Network, Terminal, Database, Shield } from "lucide-react";
+import { Network, Terminal, Database, Shield, Layout, Cpu, Bot, GitBranch, Cloud, Layers } from "lucide-react";
 
 const allSkills = [
   "React", "Tailwind CSS", "Python", "Node.js", "REST API", "Firebase", "MongoDB", "Docker", "Git", "PowerShell", "C++", "Java"
+];
+
+const nodes = [
+  { name: "FRONTEND ARCHITECTURE", icon: Layout },
+  { name: "DATABASE SCHEMAS", icon: Database },
+  { name: "BACKEND APIS", icon: Terminal },
+  { name: "AI & CLOUD ORCHESTRATION", icon: Network },
+  { name: "SYSTEM AUTOMATION", icon: Cpu },
+  { name: "LLM & PROMPT ENGINEERING", icon: Bot },
+  { name: "CI/CD PIPELINES", icon: GitBranch },
+  { name: "SERVERLESS ARCHITECTURE", icon: Cloud },
+  { name: "STATE MANAGEMENT", icon: Layers }
 ];
 
 export default function Skills() {
@@ -76,47 +88,37 @@ export default function Skills() {
 
           {/* Floating Skill Nodes (Feature 3: Hover to pause and laser) */}
           <div className="absolute w-[600px] h-[600px] animate-[spin_40s_linear_infinite] group-hover/orbit:[animation-play-state:paused] z-20">
-            
-            {/* Top Node */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group/node1">
-              {/* Laser */}
-              <div className="absolute top-1/2 left-1/2 w-[2px] h-[300px] -translate-x-1/2 bg-gradient-to-t from-cyan-500/0 via-cyan-400 to-cyan-500/0 opacity-0 group-hover/node1:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ filter: "drop-shadow(0 0 8px #06b6d4)" }} />
-              <motion.div className="relative glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 animate-[spin_40s_linear_infinite_reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform">
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
-                <span className="text-xs font-bold text-white tracking-widest uppercase">FRONTEND ARCHITECTURE</span>
-              </motion.div>
-            </div>
-            
-            {/* Bottom Node */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 group/node2">
-              {/* Laser */}
-              <div className="absolute bottom-1/2 left-1/2 w-[2px] h-[300px] -translate-x-1/2 bg-gradient-to-b from-cyan-500/0 via-cyan-400 to-cyan-500/0 opacity-0 group-hover/node2:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ filter: "drop-shadow(0 0 8px #06b6d4)" }} />
-              <motion.div className="relative glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 animate-[spin_40s_linear_infinite_reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform">
-                <Database size={12} className="text-cyan-400" />
-                <span className="text-xs font-bold text-white tracking-widest uppercase">DATABASE SCHEMAS</span>
-              </motion.div>
-            </div>
-
-            {/* Left Node */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 group/node3">
-              {/* Laser */}
-              <div className="absolute left-1/2 top-1/2 h-[2px] w-[300px] -translate-y-1/2 bg-gradient-to-l from-cyan-500/0 via-cyan-400 to-cyan-500/0 opacity-0 group-hover/node3:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ filter: "drop-shadow(0 0 8px #06b6d4)" }} />
-              <motion.div className="relative glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 animate-[spin_40s_linear_infinite_reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform">
-                <Terminal size={12} className="text-cyan-400" />
-                <span className="text-xs font-bold text-white tracking-widest uppercase">BACKEND APIS</span>
-              </motion.div>
-            </div>
-
-            {/* Right Node */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 group/node4">
-              {/* Laser */}
-              <div className="absolute right-1/2 top-1/2 h-[2px] w-[300px] -translate-y-1/2 bg-gradient-to-r from-cyan-500/0 via-cyan-400 to-cyan-500/0 opacity-0 group-hover/node4:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ filter: "drop-shadow(0 0 8px #06b6d4)" }} />
-              <motion.div className="relative glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 animate-[spin_40s_linear_infinite_reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform">
-                <Network size={12} className="text-cyan-400" />
-                <span className="text-xs font-bold text-white tracking-widest uppercase">AI & CLOUD ORCHESTRATION</span>
-              </motion.div>
-            </div>
-
+            {nodes.map((node, i) => {
+              const radius = 300;
+              const angle = (i * 360) / nodes.length;
+              const radian = (angle * Math.PI) / 180;
+              const x = Math.cos(radian) * radius;
+              const y = Math.sin(radian) * radius;
+              
+              return (
+                <div 
+                  key={i} 
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 group/node${i}`}
+                  style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` }}
+                >
+                  {/* Laser pointing to center */}
+                  <div 
+                    className={`absolute top-1/2 left-1/2 h-[2px] w-[300px] origin-left pointer-events-none opacity-0 group-hover/node${i}:opacity-100 transition-opacity duration-300 z-0`}
+                    style={{
+                      background: 'linear-gradient(to right, rgba(6,182,212,0.8), rgba(6,182,212,0))',
+                      filter: "drop-shadow(0 0 8px #06b6d4)",
+                      transform: `translateY(-50%) rotate(${angle + 180}deg)`
+                    }}
+                  />
+                  
+                  {/* Floating Content */}
+                  <motion.div className="relative z-10 glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 animate-[spin_40s_linear_infinite_reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform whitespace-nowrap bg-black/80">
+                    <node.icon size={12} className="text-cyan-400" />
+                    <span className="text-[10px] font-bold text-white tracking-widest uppercase">{node.name}</span>
+                  </motion.div>
+                </div>
+              );
+            })}
           </div>
 
         </div>
