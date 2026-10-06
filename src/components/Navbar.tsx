@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, User, Layers, Cpu, Briefcase, FileText, Diamond } from "lucide-react";
+import { Menu, X, Home, User, Layers, Cpu, Briefcase, FileText, Diamond, Mail } from "lucide-react";
 import Link from "next/link";
 
 const navLinks = [
@@ -12,6 +12,7 @@ const navLinks = [
   { name: "SKILLS", href: "#skills", icon: Cpu },
   { name: "EXPERIENCE", href: "#experience", icon: Briefcase },
   { name: "BLOG", href: "#blog", icon: FileText },
+  { name: "CONTACT", href: "#contact", icon: Mail },
 ];
 
 export default function Navbar() {

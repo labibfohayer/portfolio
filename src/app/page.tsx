@@ -25,11 +25,11 @@ export default function Home() {
       <Hero />
       <TechMarquee />
       <About />
+      <Projects />
       <Skills />
       <Services />
-      <Projects />
-      <GithubStats />
       <Experience />
+      <GithubStats />
       <Testimonials />
       <Blog />
       <Contact />
