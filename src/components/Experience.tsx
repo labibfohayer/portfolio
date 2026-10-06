@@ -161,38 +161,10 @@ export default function Experience() {
           </motion.div>
         </div>
 
-        {/* Laser Grid Layout Container */}
-        <div className="relative mt-20">
-          
-          {/* Horizontal Laser Line (Spans across the middle gap) */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-900/50 to-transparent -translate-y-1/2 pointer-events-none z-0 overflow-hidden">
-            <motion.div 
-              className="absolute top-0 bottom-0 left-0 w-[30%] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
-              animate={{ left: ["-30%", "100%"] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-            />
-          </div>
-          
-          {/* Vertical Laser Line (Spans down the middle gap) */}
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-cyan-900/50 to-transparent -translate-x-1/2 pointer-events-none z-0 overflow-hidden">
-            <motion.div 
-              className="absolute top-0 bottom-0 left-0 w-full h-[30%] bg-gradient-to-b from-transparent via-cyan-400 to-transparent"
-              animate={{ top: ["-30%", "100%"] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "linear", delay: 2 }} 
-            />
-          </div>
-
-          {/* Center Intersection Hub */}
-          <div className="hidden lg:flex absolute top-1/2 left-1/2 w-4 h-4 rounded-full border border-cyan-500/50 bg-black -translate-x-1/2 -translate-y-1/2 z-0 items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-            <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(6,182,212,1)]" />
-          </div>
-
-          {/* The 4 Cards Grid */}
-          <div className="grid lg:grid-cols-2 gap-8 relative z-10">
-            {experiences.map((exp, idx) => (
-              <ExperienceCard key={idx} exp={exp} idx={idx} />
-            ))}
-          </div>
+        <div className="grid lg:grid-cols-2 gap-8">
+          {experiences.map((exp, idx) => (
+            <ExperienceCard key={idx} exp={exp} idx={idx} />
+          ))}
         </div>
 
       </div>
