@@ -75,22 +75,22 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     <div className="min-h-screen bg-[black] text-white selection:bg-cyan-500/30">
       
       {/* 1. Full-Width Hero Section */}
-      <div className="relative w-full h-[60vh] md:h-[75vh] min-h-[400px] overflow-hidden flex items-end">
+      <div className="relative w-full h-[70vh] md:h-[85vh] min-h-[500px] overflow-hidden flex items-end">
         {/* Hero Background Images */}
         <div className="absolute inset-0">
           {post.images.length > 1 ? (
             <div className="flex h-full w-full">
               {post.images.map((img, i) => (
-                <img key={i} src={img} className="w-1/2 h-full object-cover object-top" alt="Cover" />
+                <img key={i} src={img} className="w-1/2 h-full object-cover object-center" alt="Cover" />
               ))}
             </div>
           ) : (
-            <img src={post.images[0]} className="w-full h-full object-cover object-top" alt="Cover" />
+            <img src={post.images[0]} className="w-full h-full object-cover object-center" alt="Cover" />
           )}
         </div>
         
         {/* Dark Gradients for Readability and Fade-Out */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[black] via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[black] via-black/80 to-transparent opacity-90" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent" />
         
         {/* Back Button */}
@@ -102,7 +102,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </div>
 
         {/* Title & Meta over Hero */}
-        <div className="relative z-20 max-w-4xl mx-auto px-6 pb-16 md:pb-24 w-full">
+        <div className="relative z-20 max-w-4xl mx-auto px-6 pb-20 md:pb-32 w-full">
           <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-6">
             <span className="px-4 py-1.5 bg-cyan-500/20 text-cyan-400 text-[10px] md:text-xs font-bold rounded-full border border-cyan-500/30 uppercase tracking-widest backdrop-blur-md">
               {post.category}
@@ -117,7 +117,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* 4. Glassmorphism Article Card (Overlapping) */}
-      <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-30 -mt-12 md:-mt-20 pb-32">
+      <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-30 -mt-16 md:-mt-24 pb-32">
         <div className="glass-card p-6 md:p-14 lg:p-16 rounded-[2rem] border border-white/10 bg-black/60 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden">
           
           {/* Subtle Ambient Glows */}
