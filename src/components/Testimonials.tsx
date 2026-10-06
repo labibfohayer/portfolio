@@ -7,52 +7,62 @@ const reviews = [
   {
     name: "Alex Rodriguez",
     role: "CEO, TechFlow",
+    rating: 5,
     text: "Webpulse Automation completely transformed our workflow. Labib's architecture saved us hundreds of hours monthly. Highly recommended!",
   },
   {
     name: "Tariqul Islam",
     role: "Founder, BD Mess",
+    rating: 5,
     text: "Labib is a phenomenal developer. He built the entire management platform for our student accommodations from scratch, making bill splitting completely painless.",
   },
   {
     name: "Sarah Jenkins",
     role: "Operations Manager",
-    text: "The AI chatbot built by Labib is handling 80% of our customer queries automatically. Brilliant execution and flawless delivery.",
+    rating: 4,
+    text: "The AI chatbot built by Labib is handling 80% of our customer queries automatically. Brilliant execution, though the initial setup took a bit longer than expected.",
   },
   {
     name: "Abdullah Al Noman",
     role: "CEO, SoftTech BD",
+    rating: 5,
     text: "We hired him for an emergency cloud deployment on AWS, and his expertise ensured a seamless migration with zero downtime. An absolute lifesaver!",
   },
   {
     name: "Fatema Zohra",
     role: "E-Commerce Owner",
-    text: "Thanks to Labib's WhatsApp order integration, our local sales skyrocketed by 40% within a month. He understands exactly what local businesses need.",
+    rating: 4,
+    text: "Thanks to Labib's WhatsApp order integration, our local sales skyrocketed by 40% within a month. Very professional, just wish he was available for full-time hire.",
   },
   {
     name: "David Chen",
     role: "E-Commerce Director",
+    rating: 5,
     text: "Ponyopuri's custom storefront setup was incredibly fast. The backend is robust, and our sales tracking is easier than ever.",
   },
   {
     name: "Md. Shafiqul Alam",
     role: "Lead Engineer",
+    rating: 5,
     text: "Collaborating with Labib on the multi-agent AI engine was a great experience. His code is exceptionally clean, well-documented, and highly scalable.",
   },
   {
     name: "Ayesha Rahman",
     role: "Marketing Head",
-    text: "The automation scripts Labib provided for our marketing workflows drastically reduced our campaign launch times. His problem-solving skills are top-notch.",
+    rating: 4,
+    text: "The automation scripts Labib provided for our marketing workflows drastically reduced our campaign launch times. A solid developer with great problem-solving skills.",
   },
   {
     name: "Riyadh Hossain",
     role: "Startup Founder",
+    rating: 5,
     text: "His vision for digital ecosystems is extraordinary. Labib didn't just build a website for us; he architected a complete automated business solution.",
   },
   {
     name: "Zayed Bin Tariq",
     role: "Operations Lead",
-    text: "I was blown away by how quickly he integrated the OpenAI APIs into our legacy systems. Labib is undoubtedly one of the best AI engineers in the country.",
+    rating: 4,
+    text: "I was blown away by how quickly he integrated the OpenAI APIs into our legacy systems. Labib is undoubtedly a highly skilled AI engineer.",
   },
 ];
 
@@ -62,8 +72,15 @@ const ReviewCard = ({ review }: { review: typeof reviews[0] }) => (
     {/* Giant Watermark Quote */}
     <Quote className="absolute top-10 right-8 w-24 h-24 text-cyan-500/5 group-hover:text-cyan-500/10 transition-colors -rotate-12" strokeWidth={1} />
     
-    <div className="flex gap-1 mb-6 text-cyan-400">
-      {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+    <div className="flex gap-1 mb-6">
+      {[...Array(5)].map((_, i) => (
+        <Star 
+          key={i} 
+          size={14} 
+          fill={i < review.rating ? "currentColor" : "none"} 
+          className={i < review.rating ? "text-cyan-400" : "text-cyan-900/40"}
+        />
+      ))}
     </div>
 
     <p className="text-neutral-300 text-sm md:text-base leading-relaxed relative z-10 flex-1 mb-10 group-hover:text-white transition-colors">
