@@ -7,7 +7,52 @@ import Tilt from "react-parallax-tilt";
 const projects = [
   {
     id: "01",
-    title: "BD MESS DASHBOARD",
+    title: "WEBPULSE AUTOMATION",
+    role: "AGENCY PLATFORM & AUTOMATION",
+    desc: "A scalable tech agency platform offering custom web development and smart workflow automations to help businesses scale effortlessly.",
+    tech: ["NEXT.JS", "REACT", "TAILWIND CSS", "AUTOMATION"],
+    image: "/projects/webpulse.png",
+    contributions: [
+      "Architected the entire agency landing page and service workflows.",
+      "Integrated automated pipelines for lead generation and business scaling.",
+      "Engineered ultra-fast UI with modern glassmorphism and animations."
+    ],
+    liveUrl: "#",
+    githubUrl: "#"
+  },
+  {
+    id: "02",
+    title: "AL MADINA MADRASA",
+    role: "INSTITUTIONAL WEBSITE & MANAGEMENT",
+    desc: "Complete digital presence and automation foundation for Al Madina Model Madrasa & Research Institute.",
+    tech: ["REACT", "TAILWIND", "NODE.JS", "DATABASE"],
+    image: "/projects/al-madina.png",
+    contributions: [
+      "Built a highly responsive and fast public-facing institutional website.",
+      "Set up the foundational architecture for student and staff data routing.",
+      "Modernized the digital branding and online admission processes."
+    ],
+    liveUrl: "#",
+    githubUrl: "#"
+  },
+  {
+    id: "03",
+    title: "MADRASA OS",
+    role: "INSTITUTIONAL OPERATING SYSTEM",
+    desc: "A comprehensive management dashboard for madrasas covering student tracking, attendance, fees, staff payroll, and daily operations.",
+    tech: ["FULL-STACK", "DASHBOARD UI", "API ARCHITECTURE", "SECURITY"],
+    image: "/projects/madrasa-os.png",
+    contributions: [
+      "Engineered a centralized dashboard for managing 1000+ students and staff.",
+      "Automated complex fee collection, daily accounting, and attendance tracking.",
+      "Built role-based access control (RBAC) for admins, teachers, and parents."
+    ],
+    liveUrl: "#",
+    githubUrl: "#"
+  },
+  {
+    id: "04",
+    title: "BD MESS",
     role: "SMART LIVING & MEAL MANAGEMENT SYSTEM",
     desc: "A modern, high-craft living platform featuring automated utility splitting, meal calculation, and streamlined resident management flow.",
     tech: ["REACT 18", "TAILWIND CSS", "FIREBASE", "ALGORITHMS"],
@@ -21,8 +66,8 @@ const projects = [
     githubUrl: "#"
   },
   {
-    id: "02",
-    title: "ADVANCED EXPENSE TRACKER",
+    id: "05",
+    title: "EXPENSE TRACKER",
     role: "FINANCIAL ANALYTICS & ACCOUNTING",
     desc: "Production financial tracking and analytics platform featuring daily safe limits, digital vaults, and real-time computation.",
     tech: ["NEXT.JS", "TYPESCRIPT", "REST API", "FRAMER MOTION"],
@@ -36,7 +81,7 @@ const projects = [
     githubUrl: "#"
   },
   {
-    id: "03",
+    id: "06",
     title: "PONYOPURI E-COMMERCE",
     role: "SCALABLE DIGITAL STOREFRONT",
     desc: "Custom high-performance storefront that handles inventory management and direct WhatsApp ordering workflows.",
