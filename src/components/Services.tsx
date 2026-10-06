@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bot, Layout, Briefcase, ShoppingCart } from "lucide-react";
+import { Bot, Layout, Briefcase, ShoppingCart, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
 const services = [
@@ -10,28 +10,40 @@ const services = [
     title: "AI Automation & Smart Bots", 
     desc: "Custom AI-driven chatbots, workflow automations, and intelligent data-pipelines.",
     icon: <Bot size={28} className="text-cyan-400" />,
-    bgType: "AI"
+    bgType: "AI",
+    tech: ["Python", "OpenAI", "LangChain", "TensorFlow"],
+    features: ["Custom LLM Chatbots", "Workflow Automation", "Data Pipeline Architecture", "API Integration"],
+    stats: { value: "10X", label: "Faster Workflows" }
   },
   { 
     id: "02", 
     title: "Full-Stack Web Architecture", 
     desc: "Scalable, high-performance responsive web applications built with modern frameworks.",
     icon: <Layout size={28} className="text-cyan-400" />,
-    bgType: "WEB"
+    bgType: "WEB",
+    tech: ["React", "Next.js", "Node.js", "TailwindCSS"],
+    features: ["Responsive UI/UX", "Scalable Backend APIs", "Database Optimization", "Secure Authentication"],
+    stats: { value: "99.9%", label: "Uptime & Reliability" }
   },
   { 
     id: "03", 
     title: "Business & SaaS Tools", 
     desc: "Cloud-based utility applications automating daily accounts, billing, and resource management.",
     icon: <Briefcase size={28} className="text-cyan-400" />,
-    bgType: "SAAS"
+    bgType: "SAAS",
+    tech: ["MongoDB", "Express", "Firebase", "PostgreSQL"],
+    features: ["Custom Dashboards", "Billing & Invoicing", "Multi-tenant Architecture", "Real-time Analytics"],
+    stats: { value: "100%", label: "Client Satisfaction" }
   },
   { 
     id: "04", 
     title: "E-Commerce Infrastructure", 
     desc: "End-to-end e-commerce solutions, seamless payment integrations, and inventory tracking.",
     icon: <ShoppingCart size={28} className="text-cyan-400" />,
-    bgType: "ECOMMERCE"
+    bgType: "ECOMMERCE",
+    tech: ["Next.js", "Stripe", "Prisma", "AWS"],
+    features: ["Seamless Cart Experience", "Payment Gateway Integration", "Inventory Management", "Order Tracking"],
+    stats: { value: "50+", label: "Successful Deployments" }
   },
 ];
 
@@ -124,7 +136,7 @@ export default function Services() {
         </motion.div>
 
         {/* Expandable Accordion Layout */}
-        <div className="flex flex-col md:flex-row h-[700px] md:h-[500px] gap-4 w-full">
+        <div className="flex flex-col md:flex-row h-[900px] md:h-[550px] gap-4 w-full">
           {services.map((service, idx) => {
             const isActive = hoveredIdx === idx;
             const isAnyHovered = hoveredIdx !== null;
@@ -135,17 +147,19 @@ export default function Services() {
                 key={service.id}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className={`group relative overflow-hidden glass-card rounded-[2rem] flex flex-col justify-end p-6 md:p-8 transition-all duration-700 ease-in-out cursor-pointer border border-white/5 ${
+                className={`group relative overflow-hidden glass-card rounded-[2rem] flex flex-col p-6 md:p-8 transition-all duration-700 ease-in-out cursor-pointer border border-white/5 ${
                   isActive ? "flex-[4] md:flex-[3] border-cyan-500/50 shadow-[0_0_40px_rgba(6,182,212,0.2)] bg-cyan-950/10" 
-                  : isAnyHovered ? "flex-[0.8] md:flex-[0.5] opacity-50 blur-[1px]" 
+                  : isAnyHovered ? "flex-[0.8] md:flex-[0.6] opacity-50 blur-[1px]" 
                   : "flex-1"
                 }`}
               >
                 <AnimatedBackground type={service.bgType} />
                 
-                {/* Content */}
+                {/* Content Wrapper */}
                 <div className="relative z-10 w-full h-full flex flex-col">
-                  <div className="flex justify-between items-start mb-auto">
+                  
+                  {/* Top Header */}
+                  <div className="flex justify-between items-start">
                     <div className="w-12 h-12 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center shrink-0 group-hover:border-cyan-500/50 group-hover:bg-cyan-950/40 transition-colors duration-500">
                       {service.icon}
                     </div>
@@ -156,7 +170,55 @@ export default function Services() {
                     </div>
                   </div>
 
-                  <div className="mt-4">
+                  {/* Expanded Content Details (Tech Stack, Features, Stats) */}
+                  <div className={`flex flex-col justify-center transition-all duration-700 ease-in-out overflow-hidden ${isActive ? "flex-1 opacity-100 max-h-[350px] mt-6" : "flex-0 opacity-0 max-h-0 mt-0"}`}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full pr-4">
+                       
+                       {/* Features List */}
+                       <div>
+                         <h4 className="text-cyan-500 text-[10px] uppercase tracking-widest mb-3 font-bold flex items-center gap-2">
+                           <div className="w-2 h-[1px] bg-cyan-500" /> KEY FEATURES
+                         </h4>
+                         <ul className="space-y-3">
+                           {service.features.map((f, i) => (
+                             <li key={i} className="text-sm text-neutral-300 flex items-start gap-2">
+                                <CheckCircle2 size={14} className="text-cyan-400 mt-0.5 shrink-0" />
+                                <span>{f}</span>
+                             </li>
+                           ))}
+                         </ul>
+                       </div>
+
+                       {/* Tech Stack & Stats */}
+                       <div className="flex flex-col justify-between">
+                         <div>
+                           <h4 className="text-cyan-500 text-[10px] uppercase tracking-widest mb-3 font-bold flex items-center gap-2">
+                             <div className="w-2 h-[1px] bg-cyan-500" /> TECH STACK
+                           </h4>
+                           <div className="flex flex-wrap gap-2">
+                             {service.tech.map((t, i) => (
+                               <span key={i} className="text-[10px] font-mono px-2 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 backdrop-blur-sm whitespace-nowrap">
+                                 {t}
+                               </span>
+                             ))}
+                           </div>
+                         </div>
+                         
+                         <div className="mt-6 md:mt-0">
+                           <div className="text-3xl md:text-4xl font-display font-bold text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                             {service.stats.value}
+                           </div>
+                           <div className="text-[10px] text-neutral-400 uppercase tracking-widest mt-1">
+                             {service.stats.label}
+                           </div>
+                         </div>
+                       </div>
+                       
+                    </div>
+                  </div>
+
+                  {/* Bottom Title & Desc */}
+                  <div className="mt-auto pt-6">
                     <h3 className={`font-bold text-white mb-2 transition-all duration-500 ${isActive || !isAnyHovered ? "text-xl md:text-2xl" : "text-sm md:-rotate-90 md:-translate-y-20 md:whitespace-nowrap md:origin-left"}`}>
                       {service.title}
                     </h3>
@@ -168,6 +230,7 @@ export default function Services() {
                       </p>
                     </div>
                   </div>
+                  
                 </div>
               </motion.div>
             );
