@@ -1,8 +1,30 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import MagneticButton from "./ui/MagneticButton";
+import { useEffect, useRef } from "react";
+
+function Counter({ from = 0, to, suffix = "", prefix = "" }: { from?: number, to: number, suffix?: string, prefix?: string }) {
+  const nodeRef = useRef<HTMLSpanElement>(null);
+  const inView = useInView(nodeRef, { once: true, margin: "-50px" });
+  
+  useEffect(() => {
+    if (inView && nodeRef.current) {
+      animate(from, to, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate(value) {
+          if (nodeRef.current) {
+            nodeRef.current.textContent = prefix + Math.round(value) + suffix;
+          }
+        },
+      });
+    }
+  }, [from, to, inView, suffix, prefix]);
+
+  return <span ref={nodeRef}>{prefix}{from}{suffix}</span>;
+}
 
 export default function Hero() {
   return (
@@ -114,22 +136,30 @@ export default function Hero() {
       <div className="w-full border-t border-white/10 bg-black py-8 z-20">
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10 text-center">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">10X+</h4>
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">
+              <Counter to={10} suffix="X+" />
+            </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">EXECUTION VELOCITY</p>
             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">70%+</h4>
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">
+              <Counter to={70} suffix="%+" />
+            </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">COST COMPRESSION</p>
             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">24/7</h4>
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">
+              <Counter to={24} suffix="/7" />
+            </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">AUTONOMOUS WORKFLOWS</p>
             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">100%</h4>
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">
+              <Counter to={100} suffix="%" />
+            </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">PRODUCTION RESILIENCE</p>
             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
