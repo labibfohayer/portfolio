@@ -131,13 +131,13 @@ export default function About() {
                 </h3>
                 <div className="space-y-4 text-neutral-400 text-sm md:text-base leading-relaxed">
                   <p>
-                    My journey into tech wasn't conventional. It was driven by pure passion and resilience—transitioning from working as a <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">delivery rider</span> and salesman to establishing my own tech agency, <strong className="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">Webpulse Automation</strong>.
+                    My journey into tech wasn't conventional. It was driven by pure passion and resilience—transitioning from working hard as a <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">delivery rider</span> and salesman to establishing my own tech agency, <strong className="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] text-lg">Webpulse Automation</strong>.
                   </p>
                   <p>
-                    I architect intelligent automation systems designed to eliminate complexity, compress execution timelines, and multiply business potential. Instead of relying on slow, manual cycles, I build digital ecosystems that operate autonomously to deliver results in <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">days</span>.
+                    I didn't take the traditional route. By collaborating with advanced AI assistants, I've accelerated my development capabilities to architect systems that compress execution timelines. Instead of relying on slow, manual cycles, I build digital ecosystems that operate autonomously.
                   </p>
                   <p>
-                    By leveraging technologies like <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">React</span>, <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">Python</span>, and specialized AI frameworks, my architectures automate the entire lifecycle—from e-commerce solutions (Ponyopuri) to custom management platforms (<span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">BD Mess</span>).
+                    I have engineered and deployed a wide range of massive platforms from scratch. My portfolio includes the <span className="text-cyan-300 font-medium">Webpulse Automation System</span>, the complete digital transformation of <span className="text-cyan-300 font-medium">Al Madina Model Madrasa</span>, and the <span className="text-cyan-300 font-medium">Madrasa OS Platform</span>. I have also built robust applications like <span className="text-cyan-300 font-medium">BD Mess</span>, <span className="text-cyan-300 font-medium">Ponyopuri E-commerce</span>, and custom <span className="text-cyan-300 font-medium">Expense Trackers</span>—all tailored to deliver high-impact results in record time.
                   </p>
                 </div>
               </div>
