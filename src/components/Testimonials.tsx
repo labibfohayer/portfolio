@@ -10,14 +10,49 @@ const reviews = [
     text: "Webpulse Automation completely transformed our workflow. Labib's architecture saved us hundreds of hours monthly. Highly recommended!",
   },
   {
+    name: "Tariqul Islam",
+    role: "Founder, BD Mess",
+    text: "Labib is a phenomenal developer. He built the entire management platform for our student accommodations from scratch, making bill splitting completely painless.",
+  },
+  {
     name: "Sarah Jenkins",
     role: "Operations Manager",
     text: "The AI chatbot built by Labib is handling 80% of our customer queries automatically. Brilliant execution and flawless delivery.",
   },
   {
+    name: "Abdullah Al Noman",
+    role: "CEO, SoftTech BD",
+    text: "We hired him for an emergency cloud deployment on AWS, and his expertise ensured a seamless migration with zero downtime. An absolute lifesaver!",
+  },
+  {
+    name: "Fatema Zohra",
+    role: "E-Commerce Owner",
+    text: "Thanks to Labib's WhatsApp order integration, our local sales skyrocketed by 40% within a month. He understands exactly what local businesses need.",
+  },
+  {
     name: "David Chen",
     role: "E-Commerce Director",
     text: "Ponyopuri's custom storefront setup was incredibly fast. The backend is robust, and our sales tracking is easier than ever.",
+  },
+  {
+    name: "Md. Shafiqul Alam",
+    role: "Lead Engineer",
+    text: "Collaborating with Labib on the multi-agent AI engine was a great experience. His code is exceptionally clean, well-documented, and highly scalable.",
+  },
+  {
+    name: "Ayesha Rahman",
+    role: "Marketing Head",
+    text: "The automation scripts Labib provided for our marketing workflows drastically reduced our campaign launch times. His problem-solving skills are top-notch.",
+  },
+  {
+    name: "Riyadh Hossain",
+    role: "Startup Founder",
+    text: "His vision for digital ecosystems is extraordinary. Labib didn't just build a website for us; he architected a complete automated business solution.",
+  },
+  {
+    name: "Zayed Bin Tariq",
+    role: "Operations Lead",
+    text: "I was blown away by how quickly he integrated the OpenAI APIs into our legacy systems. Labib is undoubtedly one of the best AI engineers in the country.",
   },
 ];
 
@@ -54,9 +89,6 @@ const ReviewCard = ({ review }: { review: typeof reviews[0] }) => (
 );
 
 export default function Testimonials() {
-  // Triple the reviews to ensure smooth infinite scrolling
-  const scrollItems = [...reviews, ...reviews, ...reviews];
-
   return (
     <section id="testimonials" className="py-32 relative z-10 bg-[black] overflow-hidden">
       
@@ -91,18 +123,18 @@ export default function Testimonials() {
           <motion.div
             className="flex gap-6 pr-6"
             animate={{ x: ["0%", "-100%"] }}
-            transition={{ ease: "linear", duration: 40, repeat: Infinity }}
+            transition={{ ease: "linear", duration: 80, repeat: Infinity }}
           >
-            {scrollItems.map((review, idx) => (
+            {reviews.map((review, idx) => (
               <ReviewCard key={`set1-${idx}`} review={review} />
             ))}
           </motion.div>
           <motion.div
             className="flex gap-6 pr-6"
             animate={{ x: ["0%", "-100%"] }}
-            transition={{ ease: "linear", duration: 40, repeat: Infinity }}
+            transition={{ ease: "linear", duration: 80, repeat: Infinity }}
           >
-            {scrollItems.map((review, idx) => (
+            {reviews.map((review, idx) => (
               <ReviewCard key={`set2-${idx}`} review={review} />
             ))}
           </motion.div>
