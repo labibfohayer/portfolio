@@ -238,7 +238,7 @@ export default function Hero() {
             initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
             animate={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
             transition={{ duration: 2, ease: "easeInOut", delay: 1 }}
-            className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-white/90 rotate-[-5deg] pointer-events-none drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]"
+            className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-cyan-400 rotate-[-5deg] pointer-events-none drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]"
             style={{ transform: "translateZ(80px)" }}
           >
             Labib Fohayer
