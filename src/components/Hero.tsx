@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView, animate, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight, Github, Linkedin, Twitter } from "lucide-react";
 import MagneticButton from "./ui/MagneticButton";
 import { useEffect, useRef, useState } from "react";
 
@@ -114,6 +114,20 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/5 via-[black] to-[black] -z-10" />
       <Particles />
 
+      {/* Vertical Social Sidebar */}
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1, delay: 0.5 }}
+        className="hidden xl:flex fixed left-8 top-1/2 -translate-y-1/2 flex-col items-center gap-6 z-50"
+      >
+        <div className="w-px h-24 bg-gradient-to-b from-transparent to-cyan-500/50" />
+        <a href="#" className="text-neutral-400 hover:text-cyan-500 hover:scale-110 transition-all"><Github size={20} /></a>
+        <a href="#" className="text-neutral-400 hover:text-cyan-500 hover:scale-110 transition-all"><Linkedin size={20} /></a>
+        <a href="#" className="text-neutral-400 hover:text-cyan-500 hover:scale-110 transition-all"><Twitter size={20} /></a>
+        <div className="w-px h-24 bg-gradient-to-t from-transparent to-cyan-500/50" />
+      </motion.div>
+
       <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid xl:grid-cols-2 gap-12 items-center flex-grow pt-10 pb-20">
         
         {/* Left Content */}
@@ -142,14 +156,14 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="font-display font-bold leading-[1.1] tracking-tight uppercase"
+            className="font-display font-bold leading-[1.1] tracking-tight uppercase cursor-default"
           >
-            <h1 className="text-[12vw] xl:text-[6.5rem] text-white">
+            <h1 className="text-[12vw] xl:text-[6.5rem] text-white glitch-hover" data-text="MD LABIB">
               MD LABIB
             </h1>
             <h1 className="text-[12vw] xl:text-[6.5rem]">
-              <span className="text-white">FOHAY</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-500">ER</span>
+              <span className="text-white glitch-hover" data-text="FOHAY">FOHAY</span>
+              <span className="text-gradient-flow glitch-hover" data-text="ER">ER</span>
             </h1>
           </motion.div>
 
@@ -214,12 +228,15 @@ export default function Hero() {
           />
           
           {/* Signature Image */}
-          <div 
-            className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-white/90 rotate-[-5deg] pointer-events-none"
+          <motion.div 
+            initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+            animate={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
+            transition={{ duration: 2, ease: "easeInOut", delay: 1 }}
+            className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-white/90 rotate-[-5deg] pointer-events-none drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]"
             style={{ transform: "translateZ(80px)" }}
           >
             Labib Fohayer
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
