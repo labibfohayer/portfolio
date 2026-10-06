@@ -8,7 +8,7 @@ const blogContent = {
     date: "Oct 15, 2026",
     category: "AI Automation",
     readTime: "5 min read",
-    image: "/blog/blog-1.jpg",
+    images: ["/blog/blog-1.jpg"],
     content: `
 Customer support is the backbone of any business, but handling repetitive queries can drain a team's energy. At Webpulse Automation, I noticed many of our clients were struggling to keep up with 24/7 customer inquiries. That's when I built "Webpulse Bots."
 
@@ -22,7 +22,7 @@ The result? The bot successfully resolved 80% of routine client queries automati
     date: "Sep 28, 2026",
     category: "Entrepreneurship",
     readTime: "8 min read",
-    image: "/blog/blog-2.jpg",
+    images: ["/blog/blog-2-inner-1.jpg", "/blog/blog-2-inner-2.jpg"],
     content: `
 A few years ago, my daily routine consisted of navigating city traffic as a delivery rider and working as a salesman. Life was a constant grind, but I had a burning passion for technology. Between deliveries and late-night shifts, I started learning how to code.
 
@@ -36,7 +36,7 @@ Today, I am proud to be the Founder and CEO of Webpulse Automation. We build sca
     date: "Aug 10, 2026",
     category: "Web Development",
     readTime: "6 min read",
-    image: "/blog/blog-3.jpg",
+    images: ["/blog/blog-3-new.jpg"],
     content: `
 When building "Hisab App" (a financial tracker) and "Ponyopuri" (an e-commerce storefront), speed and scalability were my top priorities. That's why I chose Next.js and Supabase as my core stack.
 
@@ -50,7 +50,7 @@ One of the biggest challenges was handling complex relational data for accountin
     date: "Jul 22, 2026",
     category: "Technology",
     readTime: "4 min read",
-    image: "/blog/blog-4.jpg",
+    images: ["/blog/blog-4-inner.jpg"],
     content: `
 Imagine this: It's 3:00 AM, and a potential customer visits your website with a question. By the time your team wakes up to reply at 9:00 AM, the customer has already bought from a competitor. This is the reality for businesses without AI support.
 
@@ -81,10 +81,14 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] pointer-events-none" />
           
           <div className="relative z-10">
-            {/* Blog Cover Image */}
-            <div className="w-full h-64 md:h-96 rounded-2xl mb-10 overflow-hidden relative border border-white/5 shadow-2xl">
-              <img src={post.image} alt={post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+            {/* Blog Cover Images */}
+            <div className={`grid gap-4 mb-10 ${post.images.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+              {post.images.map((img, idx) => (
+                <div key={idx} className={`w-full ${post.images.length > 1 ? 'h-56 md:h-64' : 'h-64 md:h-96'} rounded-2xl overflow-hidden relative border border-white/5 shadow-2xl`}>
+                  <img src={img} alt={`${post.title} - ${idx}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                </div>
+              ))}
             </div>
 
             <div className="flex items-center gap-4 mb-6">

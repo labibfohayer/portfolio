@@ -32,7 +32,7 @@ const posts = [
     readTime: "6 min read",
     slug: "scaling-nextjs-supabase",
     featured: false,
-    image: "/blog/blog-3.jpg"
+    image: "/blog/blog-3-new.jpg"
   },
   {
     title: "The Future of Business: AI-Powered Customer Support",
