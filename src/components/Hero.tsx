@@ -218,7 +218,7 @@ export default function Hero() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative h-[400px] xl:h-[600px] w-full flex flex-col justify-center items-center md:items-end mt-12 md:mt-0 [perspective:1000px]"
+          className="relative h-[400px] xl:h-[600px] w-full flex flex-col justify-end items-center md:items-end mt-12 md:mt-0 [perspective:1000px]"
         >
           {/* Glowing Aura behind image */}
           <div 
@@ -229,7 +229,7 @@ export default function Hero() {
           <img 
             src="/profile-transparent.png" 
             alt="Md. Labib Fohayer" 
-            className="relative z-10 w-auto h-full object-contain drop-shadow-[0_0_30px_rgba(6,182,212,0.4)] pointer-events-none"
+            className="relative z-10 w-auto h-[90%] md:h-[95%] object-contain object-bottom drop-shadow-[0_0_30px_rgba(6,182,212,0.4)] pointer-events-none"
             style={{ transform: "translateZ(30px)" }}
           />
           
