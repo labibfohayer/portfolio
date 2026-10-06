@@ -69,50 +69,90 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     notFound();
   }
 
+  const paragraphs = post.content.split('\n\n').map(p => p.trim()).filter(Boolean);
+
   return (
-    <div className="min-h-screen bg-slate-950 text-white pt-24 pb-12">
-      <div className="max-w-3xl mx-auto px-6">
-        <Link href="/#blog" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors mb-8 group">
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
-        </Link>
-        
-        <div className="glass-card p-6 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden bg-black/40">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] pointer-events-none" />
-          
-          <div className="relative z-10">
-            {/* Blog Cover Images */}
-            <div className={`grid gap-4 mb-10 ${post.images.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
-              {post.images.map((img, idx) => (
-                <div key={idx} className={`w-full ${post.images.length > 1 ? 'h-56 md:h-80' : 'h-64 md:h-[28rem]'} rounded-2xl overflow-hidden relative border border-white/5 shadow-2xl bg-white/5`}>
-                  <img src={img} alt={`${post.title} - ${idx}`} className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-                </div>
+    <div className="min-h-screen bg-[black] text-white selection:bg-cyan-500/30">
+      
+      {/* 1. Full-Width Hero Section */}
+      <div className="relative w-full h-[60vh] md:h-[75vh] min-h-[400px] overflow-hidden flex items-end">
+        {/* Hero Background Images */}
+        <div className="absolute inset-0">
+          {post.images.length > 1 ? (
+            <div className="flex h-full w-full">
+              {post.images.map((img, i) => (
+                <img key={i} src={img} className="w-1/2 h-full object-cover object-top" alt="Cover" />
               ))}
             </div>
+          ) : (
+            <img src={post.images[0]} className="w-full h-full object-cover object-top" alt="Cover" />
+          )}
+        </div>
+        
+        {/* Dark Gradients for Readability and Fade-Out */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[black] via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent" />
+        
+        {/* Back Button */}
+        <div className="absolute top-0 left-0 w-full p-6 md:p-12 z-30">
+          <Link href="/#blog" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-all group bg-black/40 px-5 py-2.5 rounded-full backdrop-blur-md border border-white/10 hover:border-cyan-500/50 hover:bg-cyan-950/40">
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+            <span className="text-sm font-bold tracking-widest uppercase">Back to Home</span>
+          </Link>
+        </div>
 
-            <div className="flex items-center gap-4 mb-6">
-              <span className="px-3 py-1 bg-cyan-500/10 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/20 uppercase tracking-widest">
-                {post.category}
-              </span>
-              <span className="text-neutral-400 text-sm font-medium">{post.date}</span>
-              <span className="text-neutral-500 text-sm font-medium">• {post.readTime}</span>
-            </div>
-            
-            <h1 className="text-3xl md:text-5xl font-display font-bold mb-10 leading-tight">
-              {post.title}
-            </h1>
-            
-            <div className="prose prose-invert prose-cyan max-w-none prose-lg">
-              {post.content.split('\n\n').map((paragraph, idx) => {
-                if (!paragraph.trim()) return null;
+        {/* Title & Meta over Hero */}
+        <div className="relative z-20 max-w-4xl mx-auto px-6 pb-16 md:pb-24 w-full">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-6">
+            <span className="px-4 py-1.5 bg-cyan-500/20 text-cyan-400 text-[10px] md:text-xs font-bold rounded-full border border-cyan-500/30 uppercase tracking-widest backdrop-blur-md">
+              {post.category}
+            </span>
+            <span className="text-neutral-300 text-xs md:text-sm font-medium drop-shadow-md bg-black/40 px-3 py-1 rounded-full backdrop-blur-md">{post.date}</span>
+            <span className="text-cyan-400 text-xs md:text-sm font-medium drop-shadow-md bg-cyan-950/40 px-3 py-1 rounded-full backdrop-blur-md border border-cyan-500/20">• {post.readTime}</span>
+          </div>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] text-white drop-shadow-2xl">
+            {post.title}
+          </h1>
+        </div>
+      </div>
+
+      {/* 4. Glassmorphism Article Card (Overlapping) */}
+      <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-30 -mt-12 md:-mt-20 pb-32">
+        <div className="glass-card p-6 md:p-14 lg:p-16 rounded-[2rem] border border-white/10 bg-black/60 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden">
+          
+          {/* Subtle Ambient Glows */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
+          
+          {/* 3. Typography & Drop Cap */}
+          <div className="prose prose-invert prose-cyan max-w-none prose-lg md:prose-xl relative z-10 text-neutral-300">
+            {paragraphs.map((p, idx) => {
+              // First Paragraph: Drop Cap
+              if (idx === 0) {
                 return (
-                  <p key={idx} className="text-neutral-300 leading-relaxed mb-6">
-                    {paragraph.trim()}
+                  <p key={idx} className="leading-relaxed mb-10 first-letter:text-7xl first-letter:font-display first-letter:font-bold first-letter:text-cyan-400 first-letter:mr-4 first-letter:float-left first-letter:leading-[0.8] first-line:tracking-widest first-line:uppercase first-line:text-neutral-400">
+                    {p}
                   </p>
                 );
-              })}
-            </div>
+              }
+              
+              // Second Paragraph: Neon Blockquote Style (if there are enough paragraphs)
+              if (idx === 1 && paragraphs.length > 2) {
+                return (
+                  <p key={idx} className="leading-relaxed mb-10 pl-6 border-l-2 border-transparent relative bg-gradient-to-r from-cyan-950/30 to-transparent py-4 pr-4 rounded-r-2xl text-white font-medium">
+                    <span className="absolute left-[-2px] top-0 w-[2px] h-full bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,1)]" />
+                    {p}
+                  </p>
+                );
+              }
+
+              // Standard Paragraph
+              return (
+                <p key={idx} className="leading-relaxed mb-10 text-neutral-400">
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
