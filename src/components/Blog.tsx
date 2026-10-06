@@ -13,7 +13,8 @@ const posts = [
     category: "AI Automation",
     readTime: "5 min read",
     slug: "automated-client-support-ai",
-    featured: true
+    featured: true,
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
   },
   {
     title: "From Delivery Rider to Tech Founder: My Journey",
@@ -21,7 +22,8 @@ const posts = [
     category: "Entrepreneurship",
     readTime: "8 min read",
     slug: "delivery-rider-to-tech-founder",
-    featured: false
+    featured: false,
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80"
   },
   {
     title: "Scaling Full-Stack Apps with Next.js & Supabase",
@@ -29,7 +31,8 @@ const posts = [
     category: "Web Development",
     readTime: "6 min read",
     slug: "scaling-nextjs-supabase",
-    featured: false
+    featured: false,
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
   },
   {
     title: "The Future of Business: AI-Powered Customer Support",
@@ -37,7 +40,8 @@ const posts = [
     category: "Technology",
     readTime: "4 min read",
     slug: "ai-powered-customer-support",
-    featured: true
+    featured: true,
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
@@ -81,15 +85,26 @@ export default function Blog() {
                 <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} scale={1.01} transitionSpeed={2000} className="h-full">
                   <Link href={`/blog/${post.slug}`} className="glass-card p-8 md:p-10 rounded-[2rem] relative h-full flex flex-col group border border-white/5 hover:border-cyan-500/30 transition-all duration-500 cursor-pointer block bg-black/40 hover:bg-black/60 overflow-hidden">
                     
+                    {/* Hover Image Reveal */}
+                    <div className="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
+                      <img 
+                        src={post.image} 
+                        alt={post.title}
+                        className="w-full h-full object-cover opacity-0 group-hover:opacity-30 scale-110 group-hover:scale-100 transition-all duration-700 ease-out mix-blend-luminosity"
+                      />
+                      {/* Gradient Overlay for Text Readability */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    </div>
+
                     {/* Data Stream Border (Bottom) */}
-                    <div className="absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out origin-left shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+                    <div className="absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out origin-left shadow-[0_0_10px_rgba(6,182,212,0.8)] z-20" />
 
                     <div className="flex justify-between items-start mb-10 relative z-10">
-                      <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] tracking-widest uppercase font-bold rounded-full group-hover:bg-cyan-500/20 transition-colors">
+                      <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] tracking-widest uppercase font-bold rounded-full group-hover:bg-cyan-500/20 transition-colors backdrop-blur-md">
                         {post.category}
                       </span>
                       {/* Target Lock Arrow */}
-                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-950/50 transition-all duration-300">
+                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-950/50 transition-all duration-300 backdrop-blur-md">
                         <ArrowUpRight className="text-neutral-500 group-hover:text-cyan-400 group-hover:scale-125 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300" size={18} />
                       </div>
                     </div>
@@ -104,7 +119,7 @@ export default function Blog() {
                     </div>
 
                     {/* Subtle Radial Glow on Hover */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.15),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.15),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />
                   </Link>
                 </Tilt>
               </motion.div>
