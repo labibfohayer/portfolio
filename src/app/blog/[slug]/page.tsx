@@ -84,8 +84,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             {/* Blog Cover Images */}
             <div className={`grid gap-4 mb-10 ${post.images.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
               {post.images.map((img, idx) => (
-                <div key={idx} className={`w-full ${post.images.length > 1 ? 'h-56 md:h-64' : 'h-64 md:h-96'} rounded-2xl overflow-hidden relative border border-white/5 shadow-2xl`}>
-                  <img src={img} alt={`${post.title} - ${idx}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                <div key={idx} className={`w-full ${post.images.length > 1 ? 'h-56 md:h-80' : 'h-64 md:h-[28rem]'} rounded-2xl overflow-hidden relative border border-white/5 shadow-2xl bg-white/5`}>
+                  <img src={img} alt={`${post.title} - ${idx}`} className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                 </div>
               ))}
