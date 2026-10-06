@@ -14,7 +14,7 @@ const posts = [
     readTime: "5 min read",
     slug: "automated-client-support-ai",
     featured: true,
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
+    image: "/blog/blog-1.jpg"
   },
   {
     title: "From Delivery Rider to Tech Founder: My Journey",
@@ -23,7 +23,7 @@ const posts = [
     readTime: "8 min read",
     slug: "delivery-rider-to-tech-founder",
     featured: false,
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80"
+    image: "/blog/blog-2.jpg"
   },
   {
     title: "Scaling Full-Stack Apps with Next.js & Supabase",
@@ -32,7 +32,7 @@ const posts = [
     readTime: "6 min read",
     slug: "scaling-nextjs-supabase",
     featured: false,
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
+    image: "/blog/blog-3.jpg"
   },
   {
     title: "The Future of Business: AI-Powered Customer Support",
@@ -41,7 +41,7 @@ const posts = [
     readTime: "4 min read",
     slug: "ai-powered-customer-support",
     featured: true,
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80"
+    image: "/blog/blog-4.jpg"
   }
 ];
 
