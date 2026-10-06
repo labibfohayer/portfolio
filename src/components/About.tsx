@@ -1,35 +1,91 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GraduationCap, Target, Zap, ShieldCheck } from "lucide-react";
+import { ShieldCheck, GraduationCap, Zap } from "lucide-react";
+import { useState } from "react";
+
+function HoverGlowCard({ children, className = "", delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      className="relative h-full"
+    >
+      <motion.div
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 5 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" }}
+        className={`relative overflow-hidden group h-full ${className}`}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div
+          className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition duration-300 group-hover:opacity-100 z-10"
+          style={{
+            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(6,182,212,0.1), transparent 40%)`,
+          }}
+        />
+        <div
+          className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition duration-300 group-hover:opacity-100 z-10 border border-cyan-400/50"
+          style={{
+            maskImage: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, black, transparent 100%)`,
+            WebkitMaskImage: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, black, transparent 100%)`,
+          }}
+        />
+        <div className="relative z-20 h-full">
+          {children}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function About() {
   return (
-    <section id="about" className="py-32 relative z-10">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+    <section id="about" className="py-32 relative bg-black">
+      {/* Background elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-900/10 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        
+        {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="flex-1"
+            transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6">
-              <ShieldCheck size={12} className="text-cyan-500" /> BIOGRAPHY & TARGET ARCHITECTURE
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+              <ShieldCheck size={12} className="text-cyan-500 animate-pulse" /> BIOGRAPHY & TARGET ARCHITECTURE
             </div>
             <h2 className="text-5xl md:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9]">
               ABOUT MD. LABIB <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-500">FOHAYER.</span>
+              <span className="text-gradient-flow">FOHAYER.</span>
             </h2>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             className="w-full md:w-[400px]"
           >
-            <h3 className="text-3xl text-cyan-500 font-serif italic mb-2">Driven by Passion & Resilience.</h3>
+            <h3 className="text-3xl text-cyan-500 font-serif italic mb-2 drop-shadow-[0_0_10px_rgba(6,182,212,0.3)]">Driven by Passion & Resilience.</h3>
             <p className="text-sm text-neutral-400">
               Specialized in engineering robust automation pipelines and high-performance web platforms that replace manual friction with resilient, self-operating intelligence.
             </p>
@@ -37,121 +93,118 @@ export default function About() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid lg:grid-cols-12 gap-6">
+        <div className="grid lg:grid-cols-12 gap-6 relative">
           
           {/* Main Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-7 glass-card rounded-[2rem] p-8 md:p-12 flex flex-col justify-between"
-          >
-            <div>
-              <h3 className="text-xl font-bold tracking-widest uppercase mb-6 text-white">
-                THE FOUNDER'S STORY
-              </h3>
-              <div className="space-y-4 text-neutral-400 text-sm md:text-base leading-relaxed">
-                <p>
-                  My journey into tech wasn't conventional. It was driven by pure passion and resilience—transitioning from working as a delivery rider and salesman to establishing my own tech agency, <strong className="text-cyan-400">Webpulse Automation</strong>.
-                </p>
-                <p>
-                  I architect intelligent automation systems designed to eliminate complexity, compress execution timelines, and multiply business potential. Instead of relying on slow, manual cycles, I build digital ecosystems that operate autonomously to deliver results in days.
-                </p>
-                <p>
-                  By leveraging technologies like React, Python, and specialized AI frameworks, my architectures automate the entire lifecycle—from e-commerce solutions (Ponyopuri) to custom management platforms (BD Mess).
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-12 pt-8 border-t border-white/10 flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0">
-                <GraduationCap className="text-cyan-500" size={24} />
-              </div>
+          <div className="lg:col-span-7 h-full">
+            <HoverGlowCard className="glass-card rounded-[2rem] p-8 md:p-12 flex flex-col justify-between h-full border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
               <div>
-                <h4 className="font-bold text-white text-sm tracking-widest uppercase mb-1">FOUNDER & CEO @ WEBPULSE</h4>
-                <p className="text-xs text-neutral-500">
-                  Strong foundational expertise in full-stack architecture, automation algorithms, and building digital solutions that scale.
-                </p>
+                <h3 className="text-xl font-bold tracking-widest uppercase mb-6 text-white flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
+                  THE FOUNDER'S STORY
+                </h3>
+                <div className="space-y-4 text-neutral-400 text-sm md:text-base leading-relaxed">
+                  <p>
+                    My journey into tech wasn't conventional. It was driven by pure passion and resilience—transitioning from working as a <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">delivery rider</span> and salesman to establishing my own tech agency, <strong className="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">Webpulse Automation</strong>.
+                  </p>
+                  <p>
+                    I architect intelligent automation systems designed to eliminate complexity, compress execution timelines, and multiply business potential. Instead of relying on slow, manual cycles, I build digital ecosystems that operate autonomously to deliver results in <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">days</span>.
+                  </p>
+                  <p>
+                    By leveraging technologies like <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">React</span>, <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">Python</span>, and specialized AI frameworks, my architectures automate the entire lifecycle—from e-commerce solutions (Ponyopuri) to custom management platforms (<span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">BD Mess</span>).
+                  </p>
+                </div>
               </div>
+
+              <div className="mt-12 pt-8 border-t border-white/10 flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                  <GraduationCap className="text-cyan-500" size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-sm tracking-widest uppercase mb-1">FOUNDER & CEO @ WEBPULSE</h4>
+                  <p className="text-xs text-neutral-500">
+                    Strong foundational expertise in full-stack architecture, automation algorithms, and building digital solutions that scale.
+                  </p>
+                </div>
+              </div>
+            </HoverGlowCard>
+          </div>
+
+          {/* Right Cards Stack with Glowing Timeline */}
+          <div className="lg:col-span-5 relative">
+            {/* Glowing Timeline Connector */}
+            <div className="absolute left-[24px] top-8 bottom-8 w-[2px] bg-gradient-to-b from-cyan-500/0 via-cyan-500/50 to-cyan-500/0 hidden md:block">
+              <motion.div 
+                className="w-full h-1/3 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,1)]"
+                animate={{ y: ["0%", "200%"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              />
             </div>
-          </motion.div>
 
-          {/* Right Cards Stack */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="glass-card rounded-[2rem] p-8 flex-1"
-            >
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase">TARGET 01</span>
-                <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full">10X FASTER</span>
-              </div>
-              <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">10X EXECUTION VELOCITY</h4>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                Compressing conventional manual business processes into minutes using custom automation bots and intelligent scripts.
-              </p>
-            </motion.div>
+            <div className="flex flex-col gap-6 h-full md:pl-12">
+              <HoverGlowCard delay={0.2} className="glass-card rounded-[2rem] p-8 flex-1 border border-white/5 shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 01
+                  </span>
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">10X FASTER</span>
+                </div>
+                <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">10X EXECUTION VELOCITY</h4>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Compressing conventional manual business processes into minutes using custom automation bots and intelligent scripts.
+                </p>
+              </HoverGlowCard>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="glass-card rounded-[2rem] p-8 flex-1"
-            >
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase">TARGET 02</span>
-                <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full">70% SAVINGS</span>
-              </div>
-              <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">70% COST COMPRESSION</h4>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                Eliminating recurring manual overhead and inefficient retainers through deterministic, automated web pipelines.
-              </p>
-            </motion.div>
+              <HoverGlowCard delay={0.4} className="glass-card rounded-[2rem] p-8 flex-1 border border-white/5 shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 02
+                  </span>
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">70% SAVINGS</span>
+                </div>
+                <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">70% COST COMPRESSION</h4>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Eliminating recurring manual overhead and inefficient retainers through deterministic, automated web pipelines.
+                </p>
+              </HoverGlowCard>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="glass-card rounded-[2rem] p-8 flex-1 border-t-2 border-t-cyan-500/50"
-            >
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase">TARGET 03</span>
-                <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full">99.9% RELIABLE</span>
-              </div>
-              <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">PRODUCTION RESILIENCE</h4>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                Engineering strict architectures, clean React UI, and automated backends to ensure zero friction in production.
-              </p>
-            </motion.div>
-
+              <HoverGlowCard delay={0.6} className="glass-card rounded-[2rem] p-8 flex-1 border-t-2 border-t-cyan-500 shadow-[0_0_20px_rgba(0,0,0,0.3)] bg-gradient-to-br from-black to-cyan-950/20">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 03
+                  </span>
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">99.9% RELIABLE</span>
+                </div>
+                <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">PRODUCTION RESILIENCE</h4>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Engineering strict architectures, clean React UI, and automated backends to ensure zero friction in production.
+                </p>
+              </HoverGlowCard>
+            </div>
           </div>
         </div>
 
         {/* Wide Quote Card */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="mt-6 glass-card rounded-[2rem] p-8 md:p-12 border-l-4 border-l-cyan-500 flex flex-col md:flex-row justify-between items-center gap-8"
+          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+          className="mt-6 glass-card rounded-[2rem] p-8 md:p-12 border border-white/5 border-l-4 border-l-cyan-500 flex flex-col md:flex-row justify-between items-center gap-8 shadow-[0_0_30px_rgba(6,182,212,0.1)] hover:shadow-[0_0_40px_rgba(6,182,212,0.2)] transition-shadow duration-500"
         >
           <div className="flex-1">
-            <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase mb-4 block">
-              <Zap size={12} className="inline mr-2" /> CORE ENGINEERING PHILOSOPHY
+            <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase mb-4 flex items-center gap-2">
+              <Zap size={12} /> CORE ENGINEERING PHILOSOPHY
             </span>
             <h4 className="text-2xl md:text-3xl font-bold font-display uppercase tracking-wider text-white">
-              "Turning ideas and resilience into high-impact digital solutions that eliminate operational friction and scale effortlessly."
+              "Turning ideas and resilience into <span className="text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]">high-impact</span> digital solutions that eliminate operational friction and scale effortlessly."
             </h4>
           </div>
-          <div className="shrink-0">
-            <a href="https://wa.me/8801580506445" className="px-6 py-3 bg-cyan-900/40 border border-cyan-500 text-cyan-400 text-sm font-bold tracking-widest uppercase rounded-full hover:bg-cyan-500 hover:text-black transition-colors block text-center">
+          <div className="shrink-0 mt-6 md:mt-0">
+            <a href="https://wa.me/8801580506445" className="px-8 py-4 bg-cyan-900/40 border border-cyan-500 text-cyan-400 text-sm font-bold tracking-widest uppercase rounded-full hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] transition-all block text-center">
               WHATSAPP
             </a>
-            <span className="text-[10px] text-neutral-500 tracking-widest uppercase mt-2 block text-center">
+            <span className="text-[10px] text-neutral-500 tracking-widest uppercase mt-3 block text-center">
               Direct consultation
             </span>
           </div>
