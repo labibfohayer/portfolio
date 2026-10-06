@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #050505;
+  --color-background: #000000;
   --color-foreground: #ededed;
   
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-space), ui-sans-serif, system-ui, sans-serif;
+  --font-signature: var(--font-signature), cursive;
 
   --animate-marquee: marquee 25s linear infinite;
 
@@ -17,7 +18,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 2%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 98%;
     --border: 0 0% 12%;
   }

@@ -8,8 +8,8 @@ export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen pt-24 overflow-hidden flex flex-col justify-between">
       {/* Sci-Fi Background Effects */}
-      <div className="absolute inset-0 bg-[#050505] -z-20" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/5 via-[#050505] to-[#050505] -z-10" />
+      <div className="absolute inset-0 bg-[black] -z-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/5 via-[black] to-[black] -z-10" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid xl:grid-cols-2 gap-12 items-center flex-grow pt-10 pb-20">
         
@@ -98,36 +98,40 @@ export default function Hero() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[400px] bg-cyan-500/20 blur-[100px] rounded-full z-0" />
           
           <img 
-            src="/profile-ceo.webp" 
+            src="/profile-transparent.png" 
             alt="Md. Labib Fohayer" 
-            className="relative z-10 w-auto h-full object-contain drop-shadow-[0_0_30px_rgba(6,182,212,0.3)]"
+            className="relative z-10 w-auto h-full object-contain drop-shadow-[0_0_30px_rgba(6,182,212,0.4)]"
           />
           
-          {/* Signature Image (Placeholder text for now, could be replaced with an actual signature image) */}
-          <div className="relative z-20 -mt-10 mr-10 font-serif italic text-4xl text-white/80 signature-font rotate-[-5deg]">
+          {/* Signature Image */}
+          <div className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-white/90 rotate-[-5deg]">
             Labib Fohayer
           </div>
         </motion.div>
       </div>
 
       {/* Bottom Stats Section */}
-      <div className="w-full border-t border-white/10 bg-[#020202] py-8 z-20">
+      <div className="w-full border-t border-white/10 bg-black py-8 z-20">
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10 text-center">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex flex-col items-center justify-center">
             <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">10X+</h4>
-            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase">EXECUTION VELOCITY</p>
+            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">EXECUTION VELOCITY</p>
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex flex-col items-center justify-center">
             <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">70%+</h4>
-            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase">COST COMPRESSION</p>
+            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">COST COMPRESSION</p>
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="flex flex-col items-center justify-center">
             <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">24/7</h4>
-            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase">AUTONOMOUS WORKFLOWS</p>
+            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">AUTONOMOUS WORKFLOWS</p>
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-col items-center justify-center">
             <h4 className="text-3xl md:text-4xl font-display font-bold text-white mb-1">100%</h4>
-            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase">PRODUCTION RESILIENCE</p>
+            <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">PRODUCTION RESILIENCE</p>
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
           </motion.div>
         </div>
       </div>

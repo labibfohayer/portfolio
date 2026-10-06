@@ -88,7 +88,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-[#050505]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8"
+            className="fixed inset-0 z-40 bg-[black]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8"
           >
             {navLinks.map((link, i) => {
               const Icon = link.icon;

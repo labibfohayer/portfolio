@@ -15,7 +15,7 @@ export default function Footer() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <footer className="py-16 relative z-10 bg-[#050505] overflow-hidden">
+    <footer className="py-16 relative z-10 bg-[black] overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
       
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">

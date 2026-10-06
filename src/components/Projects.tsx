@@ -54,7 +54,7 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-32 relative z-10 bg-[#050505]">
+    <section id="projects" className="py-32 relative z-10 bg-[black]">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -105,7 +105,7 @@ export default function Projects() {
                       alt={project.title} 
                       className="w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent opacity-80" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[black] to-transparent opacity-80" />
                   </div>
                 )}
               </div>
