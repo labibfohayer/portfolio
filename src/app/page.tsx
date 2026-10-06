@@ -14,6 +14,7 @@ import FloatingMusic from "@/components/FloatingMusic";
 import Chatbot from "@/components/Chatbot";
 import CommandPalette from "@/components/CommandPalette";
 import TechMarquee from "@/components/TechMarquee";
+import SocialSidebar from "@/components/SocialSidebar";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <CommandPalette />
       <FloatingMusic />
       <Chatbot />
+      <SocialSidebar />
       <Navbar />
       <Hero />
       <TechMarquee />
