@@ -46,9 +46,9 @@ const GithubGlobe = () => {
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [1, 1, 1],
-      markerColor: [0.023, 0.713, 0.831], // cyan-500
-      glowColor: [0.023, 0.713, 0.831],
+      baseColor: [0.3, 0.3, 0.3],
+      markerColor: [0.1, 0.8, 1],
+      glowColor: [0.2, 0.2, 0.2],
       markers: [
         { location: [23.8103, 90.4125], size: 0.1 }, // Dhaka
         { location: [37.7749, -122.4194], size: 0.05 }, // SF
