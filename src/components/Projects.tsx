@@ -1,9 +1,8 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Code2, CheckCircle2 } from "lucide-react";
 import Tilt from "react-parallax-tilt";
-import { useRef } from "react";
 import MagneticButton from "./ui/MagneticButton";
 
 const projects = [
@@ -100,21 +99,8 @@ const projects = [
 ];
 
 export default function Projects() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Parallax Scroll logic for 3 columns
-  const { scrollYProgress } = useScroll({ 
-    target: containerRef, 
-    offset: ["start end", "end start"] 
-  });
-  
-  // Left and Right columns scroll slightly slower/faster than middle
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]); // Left
-  const y2 = useTransform(scrollYProgress, [0, 1], [50, -50]);  // Middle
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -100]); // Right
-
   return (
-    <section id="projects" ref={containerRef} className="py-32 relative z-10 bg-[black]">
+    <section id="projects" className="py-32 relative z-10 bg-[black]">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -138,13 +124,9 @@ export default function Projects() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, idx) => {
-            const colIndex = idx % 3;
-            const yOffset = colIndex === 0 ? y1 : colIndex === 1 ? y2 : y3;
-
             return (
               <motion.div
                 key={project.id}
-                style={{ y: yOffset }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
