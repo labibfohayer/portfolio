@@ -1,8 +1,29 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
 import { ShieldCheck, GraduationCap, Zap } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+function Counter({ from = 0, to, suffix = "", prefix = "", decimals = 0 }: { from?: number, to: number, suffix?: string, prefix?: string, decimals?: number }) {
+  const nodeRef = useRef<HTMLSpanElement>(null);
+  const inView = useInView(nodeRef, { once: true, margin: "-50px" });
+  
+  useEffect(() => {
+    if (inView && nodeRef.current) {
+      animate(from, to, {
+        duration: 2.5,
+        ease: "easeOut",
+        onUpdate(value) {
+          if (nodeRef.current) {
+            nodeRef.current.textContent = prefix + value.toFixed(decimals) + suffix;
+          }
+        },
+      });
+    }
+  }, [from, to, inView, suffix, prefix, decimals]);
+
+  return <span ref={nodeRef}>{prefix}{from}{suffix}</span>;
+}
 
 function HoverGlowCard({ children, className = "", delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -35,7 +56,7 @@ function HoverGlowCard({ children, className = "", delay = 0 }: { children: Reac
         <div
           className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition duration-300 group-hover:opacity-100 z-10"
           style={{
-            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(6,182,212,0.1), transparent 40%)`,
+            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(6,182,212,0.15), transparent 40%)`,
           }}
         />
         <div
@@ -98,7 +119,12 @@ export default function About() {
           {/* Main Card */}
           <div className="lg:col-span-7 h-full">
             <HoverGlowCard className="glass-card rounded-[2rem] p-8 md:p-12 flex flex-col justify-between h-full border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-              <div>
+              {/* Background Watermark */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display font-black text-[120px] md:text-[160px] text-white/[0.03] pointer-events-none select-none tracking-tighter rotate-[-5deg] z-0">
+                VISION
+              </div>
+
+              <div className="relative z-10">
                 <h3 className="text-xl font-bold tracking-widest uppercase mb-6 text-white flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
                   THE FOUNDER'S STORY
@@ -116,7 +142,7 @@ export default function About() {
                 </div>
               </div>
 
-              <div className="mt-12 pt-8 border-t border-white/10 flex items-start gap-4">
+              <div className="mt-12 pt-8 border-t border-white/10 flex items-start gap-4 relative z-10">
                 <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                   <GraduationCap className="text-cyan-500" size={24} />
                 </div>
@@ -133,12 +159,26 @@ export default function About() {
           {/* Right Cards Stack with Glowing Timeline */}
           <div className="lg:col-span-5 relative">
             {/* Glowing Timeline Connector */}
-            <div className="absolute left-[24px] top-8 bottom-8 w-[2px] bg-gradient-to-b from-cyan-500/0 via-cyan-500/50 to-cyan-500/0 hidden md:block">
+            <div className="absolute left-[24px] top-8 bottom-8 w-[2px] bg-gradient-to-b from-cyan-500/0 via-cyan-500/30 to-cyan-500/0 hidden md:block overflow-hidden">
               <motion.div 
-                className="w-full h-1/3 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,1)]"
-                animate={{ y: ["0%", "200%"] }}
+                className="absolute top-0 w-full h-[150px] bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,1)] z-10"
+                animate={{ top: ["-50%", "150%"] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               />
+              
+              {/* Pulsating Nodes */}
+              {[10, 50, 90].map((top, i) => (
+                <motion.div 
+                  key={i}
+                  className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-cyan-400 z-20"
+                  style={{ top: `${top}%` }}
+                  animate={{ 
+                    boxShadow: ["0 0 0px rgba(6,182,212,0)", "0 0 20px rgba(6,182,212,1)", "0 0 0px rgba(6,182,212,0)"],
+                    scale: [1, 1.5, 1]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, delay: i * 0.8, ease: "easeInOut" }}
+                />
+              ))}
             </div>
 
             <div className="flex flex-col gap-6 h-full md:pl-12">
@@ -147,9 +187,13 @@ export default function About() {
                   <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 01
                   </span>
-                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">10X FASTER</span>
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                    <Counter to={10} suffix="X FASTER" />
+                  </span>
                 </div>
-                <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">10X EXECUTION VELOCITY</h4>
+                <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">
+                  <Counter to={10} suffix="X" /> EXECUTION VELOCITY
+                </h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
                   Compressing conventional manual business processes into minutes using custom automation bots and intelligent scripts.
                 </p>
@@ -160,9 +204,13 @@ export default function About() {
                   <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 02
                   </span>
-                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">70% SAVINGS</span>
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                    <Counter to={70} suffix="% SAVINGS" />
+                  </span>
                 </div>
-                <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">70% COST COMPRESSION</h4>
+                <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">
+                  <Counter to={70} suffix="%" /> COST COMPRESSION
+                </h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
                   Eliminating recurring manual overhead and inefficient retainers through deterministic, automated web pipelines.
                 </p>
@@ -173,7 +221,9 @@ export default function About() {
                   <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 03
                   </span>
-                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">99.9% RELIABLE</span>
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                    <Counter to={99.9} decimals={1} suffix="% RELIABLE" />
+                  </span>
                 </div>
                 <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-2">PRODUCTION RESILIENCE</h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
