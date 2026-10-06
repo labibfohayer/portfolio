@@ -42,13 +42,13 @@ const GithubGlobe = () => {
       height: 400 * 2,
       phi: 0,
       theta: 0.3,
-      dark: 1,
+      dark: 0,
       diffuse: 1.2,
       mapSamples: 16000,
-      mapBrightness: 6,
-      baseColor: [0.3, 0.3, 0.3],
-      markerColor: [0.1, 0.8, 1],
-      glowColor: [0.2, 0.2, 0.2],
+      mapBrightness: 3,
+      baseColor: [0.1, 0.1, 0.1],
+      markerColor: [0.023, 0.713, 0.831],
+      glowColor: [0.05, 0.05, 0.05],
       markers: [
         { location: [23.8103, 90.4125], size: 0.1 }, // Dhaka
         { location: [37.7749, -122.4194], size: 0.05 }, // SF
@@ -63,11 +63,12 @@ const GithubGlobe = () => {
   }, []);
 
   return (
-    <div className="w-full flex items-center justify-center opacity-70 group-hover:opacity-100 transition-opacity duration-700">
+    <div className="w-full h-full flex flex-col items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity duration-700 relative">
+      <div className="absolute w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-cyan-500/20 blur-[60px] rounded-full pointer-events-none" />
       <canvas
         ref={canvasRef}
         style={{ width: "100%", height: "auto", maxWidth: 300, aspectRatio: "1/1" }}
-        className="drop-shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+        className="relative z-10 drop-shadow-[0_0_20px_rgba(6,182,212,0.3)]"
       />
     </div>
   );
