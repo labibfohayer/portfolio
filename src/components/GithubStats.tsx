@@ -3,9 +3,7 @@
 import { motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
-import createGlobe from "cobe";
-import { Terminal, Github } from "lucide-react";
+import { Terminal } from "lucide-react";
 
 const GitHubCalendar = dynamic(() => import("react-github-calendar").then(mod => mod.GitHubCalendar), {
   ssr: false,
@@ -29,50 +27,6 @@ const TerminalWindow = ({ children, title }: { children: React.ReactNode, title:
     </div>
   </div>
 );
-
-const GithubGlobe = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    let phi = 0;
-    if (!canvasRef.current) return;
-    const globe = createGlobe(canvasRef.current, {
-      devicePixelRatio: 2,
-      width: 400 * 2,
-      height: 400 * 2,
-      phi: 0,
-      theta: 0.3,
-      dark: 0,
-      diffuse: 1.2,
-      mapSamples: 16000,
-      mapBrightness: 3,
-      baseColor: [0.1, 0.1, 0.1],
-      markerColor: [0.023, 0.713, 0.831],
-      glowColor: [0.05, 0.05, 0.05],
-      markers: [
-        { location: [23.8103, 90.4125], size: 0.1 }, // Dhaka
-        { location: [37.7749, -122.4194], size: 0.05 }, // SF
-        { location: [51.5074, -0.1278], size: 0.05 }, // London
-      ],
-      onRender: (state) => {
-        state.phi = phi;
-        phi += 0.005;
-      },
-    });
-    return () => globe.destroy();
-  }, []);
-
-  return (
-    <div className="w-full h-full flex flex-col items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity duration-700 relative">
-      <div className="absolute w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-cyan-500/20 blur-[60px] rounded-full pointer-events-none" />
-      <canvas
-        ref={canvasRef}
-        style={{ width: "100%", height: "auto", maxWidth: 300, aspectRatio: "1/1" }}
-        className="relative z-10 drop-shadow-[0_0_20px_rgba(6,182,212,0.3)]"
-      />
-    </div>
-  );
-};
 
 export default function GithubStats() {
   const customTheme = {
@@ -117,8 +71,8 @@ export default function GithubStats() {
           </p>
         </motion.div>
 
-        {/* Top 3 Column Grid */}
-        <div className="grid lg:grid-cols-3 gap-6 items-stretch mb-12">
+        {/* 2 Column Grid for Terminals */}
+        <div className="grid lg:grid-cols-2 gap-6 items-stretch mb-12 max-w-5xl mx-auto">
           
           {/* Left: Overall Stats */}
           <motion.div
@@ -134,21 +88,6 @@ export default function GithubStats() {
                   alt="GitHub Stats" 
                   className="w-full h-auto drop-shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:drop-shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-500"
                 />
-              </TerminalWindow>
-            </Tilt>
-          </motion.div>
-
-          {/* Middle: 3D Globe */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="w-full lg:col-span-1 h-full min-h-[300px]"
-          >
-            <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} scale={1.02} transitionSpeed={2000} className="h-full">
-              <TerminalWindow title="~/open_source_network.exe">
-                <GithubGlobe />
               </TerminalWindow>
             </Tilt>
           </motion.div>
