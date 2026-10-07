@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Lock } from "lucide-react";
 
 const barcodePattern = [1, 2, 1, 1, 3, 1, 2, 1, 1, 1, 2, 3, 1, 2, 1, 1, 2, 1, 3, 1, 1, 2, 1, 1, 2, 3, 1, 2, 1];
 
@@ -32,6 +34,9 @@ export default function Footer() {
           <div className="text-center md:text-right text-[10px] font-bold text-neutral-500 tracking-widest uppercase flex flex-col gap-1 w-full md:w-auto">
             <p className="text-cyan-400 animate-pulse">{time}</p>
             <p>&copy; {new Date().getFullYear()} ALL RIGHTS RESERVED.</p>
+            <Link href="/admin" className="text-neutral-600 hover:text-cyan-400 mt-2 transition-colors flex items-center justify-center md:justify-end gap-1.5 group">
+              <Lock size={10} className="group-hover:text-cyan-400 transition-colors" /> ADMIN LOGIN
+            </Link>
           </div>
         </div>
 
