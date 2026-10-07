@@ -22,7 +22,8 @@ export default function Blog() {
       });
   }, []);
 
-  if (!loading && posts.length === 0) return null; // Don't show blog section if no posts
+  // Removed the early return so the section header always shows
+  // if (!loading && posts.length === 0) return null;
 
   return (
     <section id="blog" className="py-32 relative z-10 bg-[black]">
