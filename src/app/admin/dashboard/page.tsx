@@ -2,13 +2,25 @@
 
 import { Activity, FolderKanban, Mail, Eye } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export default function DashboardOverview() {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('/api/dashboard')
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) setData(result);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
   const stats = [
-    { label: "Total Projects", value: "12", icon: FolderKanban, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
-    { label: "Unread Messages", value: "3", icon: Mail, color: "text-pink-400", bg: "bg-pink-500/10", border: "border-pink-500/30" },
-    { label: "Profile Views", value: "1.2k", icon: Eye, color: "text-green-400", bg: "bg-green-500/10", border: "border-green-500/30" },
-    { label: "System Status", value: "ONLINE", icon: Activity, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
+    { label: "Total Projects", value: data ? data.stats.totalProjects : "-", icon: FolderKanban, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
+    { label: "Unread Messages", value: data ? data.stats.unreadMessages : "-", icon: Mail, color: "text-pink-400", bg: "bg-pink-500/10", border: "border-pink-500/30" },
+    { label: "System Status", value: data ? data.stats.profileViews : "Loading...", icon: Activity, color: "text-green-400", bg: "bg-green-500/10", border: "border-green-500/30" },
+    { label: "Database Connection", value: "ONLINE", icon: Activity, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
   ];
 
   return (
@@ -42,7 +54,7 @@ export default function DashboardOverview() {
         ))}
       </div>
 
-      {/* Recent Activity (Mock) */}
+      {/* Recent Activity */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -52,19 +64,19 @@ export default function DashboardOverview() {
         <h2 className="text-sm font-bold tracking-widest text-white uppercase border-b border-white/10 pb-4">Recent Activity</h2>
         
         <div className="flex flex-col gap-4">
-          {[
-            { msg: "New message received from 'John Doe'", time: "2 hours ago", type: "msg" },
-            { msg: "Project 'BD Mess' was updated", time: "1 day ago", type: "sys" },
-            { msg: "System successfully backed up", time: "2 days ago", type: "sys" },
-          ].map((activity, i) => (
-            <div key={i} className="flex items-start gap-4">
-              <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${activity.type === 'msg' ? 'bg-pink-500 shadow-[0_0_8px_#ec4899]' : 'bg-cyan-500 shadow-[0_0_8px_#06b6d4]'}`} />
-              <div>
-                <p className="text-sm text-neutral-200">{activity.msg}</p>
-                <p className="text-xs text-neutral-500 mt-1">{activity.time}</p>
+          {!data ? (
+            <p className="text-neutral-500 font-mono text-sm animate-pulse">Loading live activity logs...</p>
+          ) : (
+            data.activity.map((activity: any, i: number) => (
+              <div key={i} className="flex items-start gap-4">
+                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${activity.type === 'msg' ? 'bg-pink-500 shadow-[0_0_8px_#ec4899]' : 'bg-cyan-500 shadow-[0_0_8px_#06b6d4]'}`} />
+                <div>
+                  <p className="text-sm text-neutral-200">{activity.msg}</p>
+                  <p className="text-xs text-neutral-500 mt-1">{activity.time}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </motion.div>
 
