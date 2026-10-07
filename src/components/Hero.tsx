@@ -84,6 +84,17 @@ function Particles() {
 }
 
 export default function Hero() {
+  const [resumeLink, setResumeLink] = useState("#");
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.settings?.resumeLink) {
+          setResumeLink(data.settings.resumeLink);
+        }
+      });
+  }, []);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
@@ -187,6 +198,16 @@ export default function Hero() {
               >
                 VIEW MY WORK
                 <ArrowRight size={16} strokeWidth={3} />
+              </a>
+            </MagneticButton>
+            <MagneticButton>
+              <a
+                href={resumeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full border border-cyan-500/50 text-cyan-400 font-extrabold uppercase tracking-widest text-xs transition-colors hover:bg-cyan-500/10"
+              >
+                DOWNLOAD RESUME
               </a>
             </MagneticButton>
           </motion.div>
