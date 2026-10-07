@@ -124,9 +124,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-cyan-500/30 text-xs md:text-[10px] font-bold tracking-widest text-neutral-300 uppercase shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-cyan-500/30 text-xs md:text-[10px] font-bold tracking-widest text-neutral-300 uppercase shadow-[0_0_15px_rgba(var(--theme-rgb),0.15)]"
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+            <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(var(--theme-rgb),0.8)]" />
             BUILDING AUTONOMOUS AI & MODERN SYSTEMS
           </motion.div>
 
@@ -183,7 +183,7 @@ export default function Hero() {
             <MagneticButton>
               <a
                 href="#projects"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-cyan-500 text-black font-extrabold uppercase tracking-widest text-xs transition-colors shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:bg-cyan-400"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-cyan-500 text-black font-extrabold uppercase tracking-widest text-xs transition-colors shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)] hover:bg-cyan-400"
               >
                 VIEW MY WORK
                 <ArrowRight size={16} strokeWidth={3} />
@@ -211,7 +211,7 @@ export default function Hero() {
           <img 
             src="/profile-transparent.png" 
             alt="Md. Labib Fohayer" 
-            className="relative z-10 w-auto h-[90%] md:h-[95%] object-contain object-bottom drop-shadow-[0_0_30px_rgba(6,182,212,0.4)] pointer-events-none"
+            className="relative z-10 w-auto h-[90%] md:h-[95%] object-contain object-bottom drop-shadow-[0_0_30px_rgba(var(--theme-rgb),0.4)] pointer-events-none"
             style={{ transform: "translateZ(30px)" }}
           />
           
@@ -232,32 +232,32 @@ export default function Hero() {
       <div className="w-full border-t border-white/10 bg-black py-8 z-20">
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10 text-center">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.3)]">
               <Counter to={10} suffix="X+" />
             </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">EXECUTION VELOCITY</p>
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(var(--theme-rgb),0.8)]" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.3)]">
               <Counter to={70} suffix="%+" />
             </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">COST COMPRESSION</p>
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(var(--theme-rgb),0.8)]" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.3)]">
               <Counter to={24} suffix="/7" />
             </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">AUTONOMOUS WORKFLOWS</p>
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(var(--theme-rgb),0.8)]" />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-col items-center justify-center">
-            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <h4 className="text-3xl md:text-4xl font-display font-bold text-shine mb-1 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.3)]">
               <Counter to={100} suffix="%" />
             </h4>
             <p className="text-[8px] md:text-[10px] text-neutral-500 tracking-widest uppercase mb-2">PRODUCTION RESILIENCE</p>
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(var(--theme-rgb),0.8)]" />
           </motion.div>
         </div>
       </div>

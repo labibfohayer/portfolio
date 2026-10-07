@@ -55,7 +55,7 @@ function AnimatedBackground({ type }: { type: string }) {
           {[...Array(8)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,1)]"
+              className="absolute w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(var(--theme-rgb),1)]"
               animate={{ 
                 y: [Math.random() * 100, Math.random() * -100], 
                 x: [Math.random() * 50, Math.random() * -50],
@@ -75,7 +75,7 @@ function AnimatedBackground({ type }: { type: string }) {
     case "WEB":
       return (
         <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000 overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.1)_1px,transparent_1px)] bg-[size:40px_40px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-rgb),0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-rgb),0.1)_1px,transparent_1px)] bg-[size:40px_40px]" />
           <motion.div 
             animate={{ y: [-100, 500] }} 
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -130,7 +130,7 @@ export default function Services() {
             <Bot size={12} className="text-cyan-500" /> WHAT I DO
           </div>
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 uppercase tracking-tighter">
-            CORE <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">CAPABILITIES</span>
+            CORE <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">CAPABILITIES</span>
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-transparent rounded-full" />
         </motion.div>
@@ -148,7 +148,7 @@ export default function Services() {
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 className={`group relative overflow-hidden glass-card rounded-[2rem] flex flex-col p-6 md:p-8 transition-all duration-700 ease-in-out cursor-pointer border border-white/5 ${
-                  isActive ? "flex-[4] md:flex-[3] border-cyan-500/50 shadow-[0_0_40px_rgba(6,182,212,0.2)] bg-cyan-950/10" 
+                  isActive ? "flex-[4] md:flex-[3] border-cyan-500/50 shadow-[0_0_40px_rgba(var(--theme-rgb),0.2)] bg-cyan-950/10" 
                   : isAnyHovered ? "flex-[0.8] md:flex-[0.6] opacity-50 blur-[1px]" 
                   : "flex-1"
                 }`}

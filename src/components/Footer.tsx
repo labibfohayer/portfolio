@@ -26,7 +26,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-end md:items-end w-full gap-8 md:gap-6 mb-12">
           <div className="text-center md:text-left w-full md:w-auto">
             <h3 className="text-2xl md:text-3xl font-display font-bold text-white uppercase tracking-tighter">MD. LABIB FOHAYER</h3>
-            <p className="text-[9px] md:text-[10px] text-cyan-500 font-bold tracking-widest uppercase mt-2 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">FOUNDER & CEO @ WEBPULSE AUTOMATION</p>
+            <p className="text-[9px] md:text-[10px] text-cyan-500 font-bold tracking-widest uppercase mt-2 drop-shadow-[0_0_5px_rgba(var(--theme-rgb),0.5)]">FOUNDER & CEO @ WEBPULSE AUTOMATION</p>
           </div>
           
           <div className="text-center md:text-right text-[10px] font-bold text-neutral-500 tracking-widest uppercase flex flex-col gap-1 w-full md:w-auto">

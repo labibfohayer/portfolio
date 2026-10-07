@@ -43,7 +43,7 @@ export default function Skills() {
             <motion.div 
               animate={{ rotate: 360 }}
               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              className="w-full h-full bg-[conic-gradient(from_0deg,transparent_0deg,transparent_300deg,rgba(6,182,212,0.3)_360deg)] origin-center"
+              className="w-full h-full bg-[conic-gradient(from_0deg,transparent_0deg,transparent_300deg,rgba(var(--theme-rgb),0.3)_360deg)] origin-center"
             />
           </div>
 
@@ -57,7 +57,7 @@ export default function Skills() {
             {[...Array(8)].map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,1)]"
+                className="absolute w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(var(--theme-rgb),1)]"
                 initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
                 animate={{
                   x: Math.cos((i * 45) * Math.PI / 180) * 300,
@@ -78,12 +78,12 @@ export default function Skills() {
           {/* Core Node (Feature 4 Pulse) */}
           <motion.div 
             whileHover={{ scale: 1.1 }}
-            animate={{ boxShadow: ["0 0 20px rgba(6,182,212,0.2)", "0 0 60px rgba(6,182,212,0.6)", "0 0 20px rgba(6,182,212,0.2)"] }}
+            animate={{ boxShadow: ["0 0 20px rgba(var(--theme-rgb),0.2)", "0 0 60px rgba(var(--theme-rgb),0.6)", "0 0 20px rgba(var(--theme-rgb),0.2)"] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute z-30 w-32 h-32 rounded-full glass flex flex-col items-center justify-center border-cyan-500/80 shadow-[0_0_50px_rgba(6,182,212,0.6)] cursor-crosshair bg-black/80"
+            className="absolute z-30 w-32 h-32 rounded-full glass flex flex-col items-center justify-center border-cyan-500/80 shadow-[0_0_50px_rgba(var(--theme-rgb),0.6)] cursor-crosshair bg-black/80"
           >
             <Shield className="text-cyan-400 mb-1" size={24} />
-            <span className="text-[10px] font-bold tracking-widest text-cyan-400 uppercase text-center leading-tight drop-shadow-[0_0_8px_rgba(6,182,212,1)]">SYSTEM<br/>CORE</span>
+            <span className="text-[10px] font-bold tracking-widest text-cyan-400 uppercase text-center leading-tight drop-shadow-[0_0_8px_rgba(var(--theme-rgb),1)]">SYSTEM<br/>CORE</span>
           </motion.div>
 
           {/* Floating Skill Nodes (Feature 3: Hover to pause and laser) */}
@@ -105,8 +105,8 @@ export default function Skills() {
                   <div 
                     className={`absolute top-1/2 left-1/2 h-[2px] w-[300px] origin-left pointer-events-none opacity-0 group-hover/node${i}:opacity-100 transition-opacity duration-300 z-0`}
                     style={{
-                      background: 'linear-gradient(to right, rgba(6,182,212,0.8), rgba(6,182,212,0))',
-                      filter: "drop-shadow(0 0 8px #06b6d4)",
+                      background: 'linear-gradient(to right, rgba(var(--theme-rgb),0.8), rgba(var(--theme-rgb),0))',
+                      filter: "drop-shadow(0 0 8px rgb(var(--theme-rgb)))",
                       transform: `translateY(-50%) rotate(${angle + 180}deg)`
                     }}
                   />
@@ -124,10 +124,10 @@ export default function Skills() {
         </div>
 
         {/* Tech Stack Marquee */}
-        <div className="w-full mt-20 border-y border-cyan-500/20 py-4 overflow-hidden bg-cyan-900/5 shadow-[0_0_30px_rgba(6,182,212,0.05)]">
+        <div className="w-full mt-20 border-y border-cyan-500/20 py-4 overflow-hidden bg-cyan-900/5 shadow-[0_0_30px_rgba(var(--theme-rgb),0.05)]">
           <div className="flex gap-8 whitespace-nowrap animate-marquee">
             {[...allSkills, ...allSkills, ...allSkills].map((skill, i) => (
-              <span key={i} className="text-sm font-bold tracking-widest text-neutral-400 uppercase hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] transition-all cursor-pointer">
+              <span key={i} className="text-sm font-bold tracking-widest text-neutral-400 uppercase hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(var(--theme-rgb),0.8)] transition-all cursor-pointer">
                 // {skill}
               </span>
             ))}

@@ -62,7 +62,7 @@ export default function Contact() {
               <div className="mt-10 mb-8 p-4 rounded-2xl glass-card border border-white/10 bg-black/40 flex items-center gap-5 max-w-sm relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative">
-                  <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-cyan-500/50 relative shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                  <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-cyan-500/50 relative shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">
                     <img src="/blog/blog-2-inner-2.jpg" alt="Labib" className="w-full h-full object-cover" />
                   </div>
                   <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-black rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
@@ -72,7 +72,7 @@ export default function Contact() {
                   <p className="text-[9px] text-cyan-400 font-bold uppercase tracking-widest mt-1">Status: Available for Work</p>
                 </div>
                 {/* Scanner Line Effect on Hover */}
-                <div className="absolute left-0 top-0 h-full w-1 bg-cyan-400 opacity-0 group-hover:opacity-100 group-hover:shadow-[0_0_15px_rgba(6,182,212,1)] transition-opacity" />
+                <div className="absolute left-0 top-0 h-full w-1 bg-cyan-400 opacity-0 group-hover:opacity-100 group-hover:shadow-[0_0_15px_rgba(var(--theme-rgb),1)] transition-opacity" />
               </div>
             </div>
 
@@ -81,7 +81,7 @@ export default function Contact() {
                 href="https://wa.me/8801580506445" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 px-8 py-5 rounded-full bg-cyan-500 text-black font-extrabold tracking-widest uppercase hover:bg-cyan-400 transition-colors shadow-[0_0_30px_rgba(6,182,212,0.3)]"
+                className="flex items-center justify-center gap-3 px-8 py-5 rounded-full bg-cyan-500 text-black font-extrabold tracking-widest uppercase hover:bg-cyan-400 transition-colors shadow-[0_0_30px_rgba(var(--theme-rgb),0.3)]"
               >
                 <MessageCircle fill="currentColor" size={20} />
                 WHATSAPP ME
@@ -107,21 +107,21 @@ export default function Contact() {
             <form className="space-y-6 relative z-10" onSubmit={onSubmit}>
               <div className="space-y-2 group">
                 <label className="text-[10px] font-bold text-neutral-500 tracking-widest uppercase group-focus-within:text-cyan-400 transition-colors">YOUR NAME</label>
-                <input type="text" name="name" required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all placeholder:text-neutral-700" placeholder="John Doe" />
+                <input type="text" name="name" required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)] transition-all placeholder:text-neutral-700" placeholder="John Doe" />
               </div>
               <div className="space-y-2 group">
                 <label className="text-[10px] font-bold text-neutral-500 tracking-widest uppercase group-focus-within:text-cyan-400 transition-colors">YOUR EMAIL</label>
-                <input type="email" name="email" required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all placeholder:text-neutral-700" placeholder="john@example.com" />
+                <input type="email" name="email" required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)] transition-all placeholder:text-neutral-700" placeholder="john@example.com" />
               </div>
               <div className="space-y-2 group">
                 <label className="text-[10px] font-bold text-neutral-500 tracking-widest uppercase group-focus-within:text-cyan-400 transition-colors">PROJECT DETAILS</label>
-                <textarea name="message" rows={5} required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all resize-none placeholder:text-neutral-700" placeholder="Tell me about your vision..." />
+                <textarea name="message" rows={5} required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)] transition-all resize-none placeholder:text-neutral-700" placeholder="Tell me about your vision..." />
               </div>
               
               <button 
                 type="submit"
                 disabled={isSubmitting} 
-                className="relative w-full py-5 rounded-xl bg-cyan-500 text-black font-extrabold tracking-widest uppercase overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed hover:bg-cyan-400 transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.8)]"
+                className="relative w-full py-5 rounded-xl bg-cyan-500 text-black font-extrabold tracking-widest uppercase overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed hover:bg-cyan-400 transition-colors shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)] hover:shadow-[0_0_30px_rgba(var(--theme-rgb),0.8)]"
               >
                 {/* Cyberpunk Laser Scan Shine Effect */}
                 <div className="absolute top-0 -left-[100%] h-full w-[30%] z-0 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 group-hover:left-[200%] transition-all duration-1000 ease-in-out" />

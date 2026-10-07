@@ -65,7 +65,7 @@ export default function Navbar() {
               href="https://wa.me/8801580506445" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold tracking-wider hover:bg-cyan-500 hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold tracking-wider hover:bg-cyan-500 hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(var(--theme-rgb),0.15)]"
             >
               <Diamond size={14} className="fill-current" />
               LET'S TALK

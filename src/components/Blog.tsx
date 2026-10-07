@@ -60,7 +60,7 @@ export default function Blog() {
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
             LATEST <br />
-            <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">THOUGHTS.</span>
+            <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">THOUGHTS.</span>
           </h2>
           <p className="text-neutral-400 text-sm max-w-xl mx-auto mt-6 leading-relaxed">
             Articles on tech, automation, and the journey of building startups.
@@ -97,7 +97,7 @@ export default function Blog() {
                     </div>
 
                     {/* Data Stream Border (Bottom) */}
-                    <div className="absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out origin-left shadow-[0_0_10px_rgba(6,182,212,0.8)] z-20" />
+                    <div className="absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out origin-left shadow-[0_0_10px_rgba(var(--theme-rgb),0.8)] z-20" />
 
                     <div className="flex justify-between items-start mb-10 relative z-10">
                       <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] tracking-widest uppercase font-bold rounded-full group-hover:bg-cyan-500/20 transition-colors backdrop-blur-md">
@@ -119,7 +119,7 @@ export default function Blog() {
                     </div>
 
                     {/* Subtle Radial Glow on Hover */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.15),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--theme-rgb),0.15),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />
                   </Link>
                 </Tilt>
               </motion.div>

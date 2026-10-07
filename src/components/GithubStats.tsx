@@ -11,7 +11,7 @@ const GitHubCalendar = dynamic(() => import("react-github-calendar").then(mod =>
 });
 
 const TerminalWindow = ({ children, title }: { children: React.ReactNode, title: string }) => (
-  <div className="w-full h-full rounded-2xl overflow-hidden border border-cyan-500/20 bg-black/80 shadow-[0_0_30px_rgba(6,182,212,0.05)] backdrop-blur-md flex flex-col group hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] transition-all duration-500">
+  <div className="w-full h-full rounded-2xl overflow-hidden border border-cyan-500/20 bg-black/80 shadow-[0_0_30px_rgba(var(--theme-rgb),0.05)] backdrop-blur-md flex flex-col group hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(var(--theme-rgb),0.15)] transition-all duration-500">
     <div className="flex items-center px-4 py-2.5 bg-cyan-950/30 border-b border-cyan-500/20 group-hover:bg-cyan-900/30 transition-colors">
       <div className="flex gap-1.5">
         <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
@@ -31,7 +31,7 @@ const TerminalWindow = ({ children, title }: { children: React.ReactNode, title:
 export default function GithubStats() {
   const customTheme = {
     light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
-    dark: ['#0f172a', '#164e63', '#0891b2', '#06b6d4', '#22d3ee']
+    dark: ['#0f172a', '#164e63', '#0891b2', 'rgb(var(--theme-rgb))', '#22d3ee']
   };
 
   const username = "labibfohayer";
@@ -47,7 +47,7 @@ export default function GithubStats() {
     <section id="github-stats" className="py-32 relative z-10 bg-[black]">
       
       {/* Background Cyber Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-rgb),0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-rgb),0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
         <motion.div
@@ -64,7 +64,7 @@ export default function GithubStats() {
             OPEN SOURCE
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
-            GLOBAL <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">CONTRIBUTIONS</span>
+            GLOBAL <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">CONTRIBUTIONS</span>
           </h2>
           <p className="text-neutral-400 text-sm max-w-xl mx-auto mt-6 leading-relaxed">
             Tracking my engineering impact across open-source ecosystems, global commits, and continuous deployment streaks.
@@ -86,7 +86,7 @@ export default function GithubStats() {
                 <img 
                   src={statsUrl} 
                   alt="GitHub Stats" 
-                  className="w-full h-auto drop-shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:drop-shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-500"
+                  className="w-full h-auto drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.1)] group-hover:drop-shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)] transition-all duration-500"
                 />
               </TerminalWindow>
             </Tilt>
@@ -106,7 +106,7 @@ export default function GithubStats() {
                   <img 
                     src={streakUrl} 
                     alt="GitHub Streak" 
-                    className="w-full h-auto drop-shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:drop-shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-500"
+                    className="w-full h-auto drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.1)] group-hover:drop-shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)] transition-all duration-500"
                   />
                 </TerminalWindow>
               </Tilt>
@@ -117,7 +117,7 @@ export default function GithubStats() {
                   <img 
                     src={langsUrl} 
                     alt="Top Languages" 
-                    className="w-full h-auto drop-shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:drop-shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-500"
+                    className="w-full h-auto drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.1)] group-hover:drop-shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)] transition-all duration-500"
                   />
                 </TerminalWindow>
               </Tilt>
@@ -135,15 +135,15 @@ export default function GithubStats() {
           className="relative group w-full max-w-[1000px] mx-auto"
         >
           {/* Animated Neon Running Border Effect */}
-          <div className="absolute -inset-[2px] rounded-3xl bg-[linear-gradient(90deg,#06b6d4,transparent,#06b6d4)] bg-[length:200%_100%] animate-[slide_3s_linear_infinite] opacity-30 group-hover:opacity-100 blur-[2px] transition-all duration-500" />
+          <div className="absolute -inset-[2px] rounded-3xl bg-[linear-gradient(90deg,rgb(var(--theme-rgb)),transparent,rgb(var(--theme-rgb)))] bg-[length:200%_100%] animate-[slide_3s_linear_infinite] opacity-30 group-hover:opacity-100 blur-[2px] transition-all duration-500" />
           <div className="absolute -inset-[2px] rounded-3xl bg-cyan-500 opacity-0 group-hover:opacity-20 blur-[10px] transition-all duration-500" />
           
           <div className="relative glass-card p-6 md:p-10 rounded-3xl border border-white/10 overflow-hidden flex flex-col items-center bg-black/90 backdrop-blur-xl">
             <h3 className="text-xl font-display font-bold mb-8 text-white text-center flex items-center gap-3 tracking-widest uppercase">
-              <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(6,182,212,0.8)]" /> 
+              <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(var(--theme-rgb),0.8)]" /> 
               CONTRIBUTION HEATMAP
             </h3>
-            <div className="w-full overflow-x-auto pb-4 flex justify-center text-neutral-300 drop-shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+            <div className="w-full overflow-x-auto pb-4 flex justify-center text-neutral-300 drop-shadow-[0_0_10px_rgba(var(--theme-rgb),0.2)]">
               <GitHubCalendar 
                 username={username} 
                 colorScheme="dark"

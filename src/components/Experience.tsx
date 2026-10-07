@@ -80,7 +80,7 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
           background: useMotionTemplate`
             radial-gradient(
               650px circle at ${mouseX}px ${mouseY}px,
-              rgba(6, 182, 212, 0.15),
+              rgba(var(--theme-rgb), 0.15),
               transparent 80%
             )
           `,
@@ -90,7 +90,7 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
       <div className="flex flex-wrap justify-between items-center gap-4 mb-8 relative z-10">
         {/* Animated Glowing Badge */}
         <div className="relative inline-flex overflow-hidden rounded-full p-[1px]">
-          <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#06b6d4_50%,#000000_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,rgb(var(--theme-rgb))_50%,#000000_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-cyan-950/80 px-3 py-1.5 text-[10px] font-bold tracking-widest uppercase text-cyan-400 backdrop-blur-3xl border border-cyan-500/20 group-hover:border-transparent transition-all duration-500">
             {exp.company}
           </span>
@@ -118,7 +118,7 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
             style={{ transitionDelay: `${i * 100}ms` }}
           >
             <div className="mt-1.5 shrink-0">
-              <div className="w-1.5 h-1.5 rotate-45 bg-cyan-500/50 group-hover:bg-cyan-400 group-hover:shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-500" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-cyan-500/50 group-hover:bg-cyan-400 group-hover:shadow-[0_0_10px_rgba(var(--theme-rgb),0.8)] transition-all duration-500" />
             </div>
             <span className="text-sm text-neutral-400 group-hover:text-white transition-colors duration-500">{bullet}</span>
           </div>
@@ -131,7 +131,7 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
           <span className="text-[10px] text-neutral-500 tracking-widest uppercase block mb-1 group-hover:text-cyan-500 transition-colors">ROLE:</span>
           <span className="text-xs font-bold text-white tracking-widest uppercase group-hover:text-cyan-100 transition-colors">{exp.role}</span>
         </div>
-        <div className="flex items-center gap-2 text-neutral-600 group-hover:text-cyan-400 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)]">
+        <div className="flex items-center gap-2 text-neutral-600 group-hover:text-cyan-400 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(var(--theme-rgb),1)]">
           <ShieldCheck size={18} className="group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500" />
           <span className="text-[10px] font-bold tracking-widest uppercase">VERIFIED</span>
         </div>
@@ -156,7 +156,7 @@ export default function Experience() {
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
               WHAT I'VE BUILT <br />
-              <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">& SOLVED.</span>
+              <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">& SOLVED.</span>
             </h2>
           </motion.div>
         </div>

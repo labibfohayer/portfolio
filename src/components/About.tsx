@@ -57,7 +57,7 @@ function HoverGlowCard({ children, className = "", delay = 0 }: { children: Reac
         <div
           className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition duration-300 group-hover:opacity-100 z-10"
           style={{
-            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(6,182,212,0.15), transparent 40%)`,
+            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(var(--theme-rgb),0.15), transparent 40%)`,
           }}
         />
         <div
@@ -91,7 +91,7 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6 shadow-[0_0_15px_rgba(var(--theme-rgb),0.1)]">
               <ShieldCheck size={12} className="text-cyan-500 animate-pulse" /> BIOGRAPHY & TARGET ARCHITECTURE
             </div>
             <h2 className="text-5xl md:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9]">
@@ -107,7 +107,7 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="w-full md:w-[400px]"
           >
-            <h3 className="text-3xl text-cyan-500 font-serif italic mb-2 drop-shadow-[0_0_10px_rgba(6,182,212,0.3)]">Driven by Passion & Resilience.</h3>
+            <h3 className="text-3xl text-cyan-500 font-serif italic mb-2 drop-shadow-[0_0_10px_rgba(var(--theme-rgb),0.3)]">Driven by Passion & Resilience.</h3>
             <p className="text-sm text-neutral-400">
               Specialized in engineering robust automation pipelines and high-performance web platforms that replace manual friction with resilient, self-operating intelligence.
             </p>
@@ -132,7 +132,7 @@ export default function About() {
                 </h3>
                 <div className="space-y-4 text-neutral-400 text-sm md:text-base leading-relaxed">
                   <p>
-                    My journey into tech wasn't conventional. It was driven by pure passion and resilience—transitioning from working hard as a <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] font-medium">delivery rider</span> and salesman to establishing my own tech agency, <strong className="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] text-lg">Webpulse Automation</strong>.
+                    My journey into tech wasn't conventional. It was driven by pure passion and resilience—transitioning from working hard as a <span className="text-cyan-300 drop-shadow-[0_0_8px_rgba(var(--theme-rgb),0.8)] font-medium">delivery rider</span> and salesman to establishing my own tech agency, <strong className="text-cyan-400 drop-shadow-[0_0_8px_rgba(var(--theme-rgb),0.8)] text-lg">Webpulse Automation</strong>.
                   </p>
                   <p>
                     I didn't take the traditional route. By collaborating with advanced AI assistants, I've accelerated my development capabilities to architect systems that compress execution timelines. Instead of relying on slow, manual cycles, I build digital ecosystems that operate autonomously.
@@ -144,7 +144,7 @@ export default function About() {
               </div>
 
               <div className="mt-12 pt-8 border-t border-white/10 flex items-start gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20 shadow-[0_0_15px_rgba(var(--theme-rgb),0.2)]">
                   <GraduationCap className="text-cyan-500" size={24} />
                 </div>
                 <div>
@@ -162,7 +162,7 @@ export default function About() {
             {/* Glowing Timeline Connector */}
             <div className="absolute left-[24px] top-8 bottom-8 w-[2px] bg-gradient-to-b from-cyan-500/0 via-cyan-500/30 to-cyan-500/0 hidden md:block overflow-hidden">
               <motion.div 
-                className="absolute top-0 w-full h-[150px] bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,1)] z-10"
+                className="absolute top-0 w-full h-[150px] bg-cyan-400 shadow-[0_0_15px_rgba(var(--theme-rgb),1)] z-10"
                 animate={{ top: ["-50%", "150%"] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               />
@@ -174,7 +174,7 @@ export default function About() {
                   className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-cyan-400 z-20"
                   style={{ top: `${top}%` }}
                   animate={{ 
-                    boxShadow: ["0 0 0px rgba(6,182,212,0)", "0 0 20px rgba(6,182,212,1)", "0 0 0px rgba(6,182,212,0)"],
+                    boxShadow: ["0 0 0px rgba(var(--theme-rgb),0)", "0 0 20px rgba(var(--theme-rgb),1)", "0 0 0px rgba(var(--theme-rgb),0)"],
                     scale: [1, 1.5, 1]
                   }}
                   transition={{ duration: 3, repeat: Infinity, delay: i * 0.8, ease: "easeInOut" }}
@@ -188,7 +188,7 @@ export default function About() {
                   <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 01
                   </span>
-                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(var(--theme-rgb),0.1)]">
                     <Counter to={10} suffix="X FASTER" />
                   </span>
                 </div>
@@ -205,7 +205,7 @@ export default function About() {
                   <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 02
                   </span>
-                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(var(--theme-rgb),0.1)]">
                     <Counter to={70} suffix="% SAVINGS" />
                   </span>
                 </div>
@@ -222,7 +222,7 @@ export default function About() {
                   <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 03
                   </span>
-                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                  <span className="px-2 py-1 bg-cyan-500/10 text-cyan-500 text-[10px] font-bold rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(var(--theme-rgb),0.1)]">
                     <Counter to={99.9} decimals={1} suffix="% RELIABLE" />
                   </span>
                 </div>
@@ -241,7 +241,7 @@ export default function About() {
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[500%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_270deg,rgba(6,182,212,1)_360deg)] z-0 origin-center"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[500%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_270deg,rgba(var(--theme-rgb),1)_360deg)] z-0 origin-center"
           />
           
           <div className="relative z-10 w-full h-full bg-black/90 backdrop-blur-2xl rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]">
@@ -250,7 +250,7 @@ export default function About() {
                 <Zap size={12} className="animate-pulse" /> CORE ENGINEERING PHILOSOPHY
               </span>
               <h4 className="text-2xl md:text-3xl font-bold font-display uppercase tracking-wider text-white">
-                "Turning ideas and resilience into <span className="text-shine drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]">high-impact</span> digital solutions that eliminate operational friction and scale effortlessly."
+                "Turning ideas and resilience into <span className="text-shine drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.8)]">high-impact</span> digital solutions that eliminate operational friction and scale effortlessly."
               </h4>
             </div>
             
@@ -261,7 +261,7 @@ export default function About() {
                 <div className="absolute inset-0 rounded-full border border-cyan-500 animate-pulse opacity-40 delay-150" />
                 
                 <MagneticButton>
-                  <a href="https://wa.me/8801580506445" className="relative flex items-center gap-3 px-8 py-4 bg-black border border-cyan-500/50 text-cyan-400 text-sm font-bold tracking-widest uppercase rounded-full hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all overflow-hidden group/btn">
+                  <a href="https://wa.me/8801580506445" className="relative flex items-center gap-3 px-8 py-4 bg-black border border-cyan-500/50 text-cyan-400 text-sm font-bold tracking-widest uppercase rounded-full hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_30px_rgba(var(--theme-rgb),0.6)] transition-all overflow-hidden group/btn">
                     {/* Hover Light Sweep inside button */}
                     <div className="absolute inset-0 -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                     

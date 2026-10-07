@@ -29,7 +29,7 @@ export default function FloatingMusic() {
   return (
     <motion.button
       onClick={togglePlay}
-      className="fixed bottom-6 left-6 z-[100] w-14 h-14 rounded-full glass-card flex items-center justify-center text-cyan-400 hover:text-white hover:bg-cyan-500/20 transition-all border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+      className="fixed bottom-6 left-6 z-[100] w-14 h-14 rounded-full glass-card flex items-center justify-center text-cyan-400 hover:text-white hover:bg-cyan-500/20 transition-all border border-cyan-500/30 shadow-[0_0_20px_rgba(var(--theme-rgb),0.15)]"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       title="Toggle Focus Music"

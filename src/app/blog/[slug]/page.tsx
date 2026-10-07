@@ -140,7 +140,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               if (idx === 1 && paragraphs.length > 2) {
                 return (
                   <p key={idx} className="leading-relaxed mb-10 pl-6 border-l-2 border-transparent relative bg-gradient-to-r from-cyan-950/30 to-transparent py-4 pr-4 rounded-r-2xl text-white font-medium">
-                    <span className="absolute left-[-2px] top-0 w-[2px] h-full bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,1)]" />
+                    <span className="absolute left-[-2px] top-0 w-[2px] h-full bg-cyan-400 shadow-[0_0_15px_rgba(var(--theme-rgb),1)]" />
                     {p}
                   </p>
                 );

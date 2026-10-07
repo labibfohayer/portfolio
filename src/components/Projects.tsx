@@ -114,7 +114,7 @@ export default function Projects() {
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
               ARCHITECTING <br />
-              <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">DIGITAL ECOSYSTEMS</span>
+              <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">DIGITAL ECOSYSTEMS</span>
             </h2>
           </div>
           <p className="text-neutral-400 text-sm max-w-sm leading-relaxed">
@@ -144,7 +144,7 @@ export default function Projects() {
                   transitionSpeed={2500}
                   className="h-full"
                 >
-                  <div className="glass-card rounded-[2rem] overflow-hidden group flex flex-col relative bg-cyan-950/5 border border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] transition-all duration-500 h-full">
+                  <div className="glass-card rounded-[2rem] overflow-hidden group flex flex-col relative bg-cyan-950/5 border border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(var(--theme-rgb),0.15)] transition-all duration-500 h-full">
                     
                     {/* Top Image Section (Zoom Reveal on Hover) */}
                     <div className="w-full h-64 md:h-80 relative overflow-hidden bg-black/60 border-b border-white/5">
@@ -210,7 +210,7 @@ export default function Projects() {
                       {/* Footer Magnetic Buttons */}
                       <div className="flex items-center justify-between mt-auto">
                         <MagneticButton>
-                          <a href={project.liveUrl} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold tracking-widest text-[10px] uppercase transition-colors shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                          <a href={project.liveUrl} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold tracking-widest text-[10px] uppercase transition-colors shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)]">
                             LIVE DEMO <ArrowUpRight size={14} strokeWidth={3} />
                           </a>
                         </MagneticButton>

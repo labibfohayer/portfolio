@@ -56,7 +56,7 @@ export default function Chatbot() {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-24 right-6 w-80 sm:w-96 glass-card rounded-2xl border border-cyan-500/30 overflow-hidden z-[100] shadow-[0_0_30px_rgba(6,182,212,0.15)] flex flex-col"
+            className="fixed bottom-24 right-6 w-80 sm:w-96 glass-card rounded-2xl border border-cyan-500/30 overflow-hidden z-[100] shadow-[0_0_30px_rgba(var(--theme-rgb),0.15)] flex flex-col"
           >
             {/* Header */}
             <div className="bg-slate-900 p-4 border-b border-white/10 flex justify-between items-center">
@@ -124,7 +124,7 @@ export default function Chatbot() {
 
       <motion.button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-[100] w-14 h-14 rounded-full bg-cyan-600 flex items-center justify-center text-white hover:bg-cyan-500 transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+        className="fixed bottom-6 right-6 z-[100] w-14 h-14 rounded-full bg-cyan-600 flex items-center justify-center text-white hover:bg-cyan-500 transition-all shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)]"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >

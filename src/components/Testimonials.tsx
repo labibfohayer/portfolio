@@ -67,7 +67,7 @@ const reviews = [
 ];
 
 const ReviewCard = ({ review }: { review: typeof reviews[0] }) => (
-  <div className="w-[350px] md:w-[450px] shrink-0 glass-card p-8 md:p-10 rounded-[2rem] relative flex flex-col group border-t-2 border-t-cyan-500/30 border-white/5 hover:border-cyan-500/50 transition-colors bg-black/60 backdrop-blur-xl hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] h-full">
+  <div className="w-[350px] md:w-[450px] shrink-0 glass-card p-8 md:p-10 rounded-[2rem] relative flex flex-col group border-t-2 border-t-cyan-500/30 border-white/5 hover:border-cyan-500/50 transition-colors bg-black/60 backdrop-blur-xl hover:shadow-[0_0_30px_rgba(var(--theme-rgb),0.15)] h-full">
     
     {/* Giant Watermark Quote */}
     <Quote className="absolute top-10 right-8 w-24 h-24 text-cyan-500/5 group-hover:text-cyan-500/10 transition-colors -rotate-12" strokeWidth={1} />
@@ -92,7 +92,7 @@ const ReviewCard = ({ review }: { review: typeof reviews[0] }) => (
       <div className="relative shrink-0">
         <div className="absolute inset-0 border-2 border-dashed border-cyan-500/40 rounded-full animate-[spin_6s_linear_infinite]" />
         <div className="absolute inset-0 border border-cyan-400/20 rounded-full animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
-        <div className="w-12 h-12 rounded-full bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-display font-bold text-lg shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+        <div className="w-12 h-12 rounded-full bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-display font-bold text-lg shadow-[0_0_15px_rgba(var(--theme-rgb),0.3)]">
           {review.name.charAt(0)}
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function Testimonials() {
     <section id="testimonials" className="py-32 relative z-10 bg-[black] overflow-hidden">
       
       {/* Background Cyber Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-rgb),0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-rgb),0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
         <motion.div
@@ -124,7 +124,7 @@ export default function Testimonials() {
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
             TRUSTED BY <br />
-            <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">INDUSTRY LEADERS</span>
+            <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">INDUSTRY LEADERS</span>
           </h2>
         </motion.div>
       </div>

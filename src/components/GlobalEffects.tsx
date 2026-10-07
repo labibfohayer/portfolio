@@ -78,7 +78,7 @@ export default function GlobalEffects() {
           x: mousePosition.x - 16,
           y: mousePosition.y - 16,
           scale: isHovering ? 1.5 : 1,
-          backgroundColor: isHovering ? "rgba(6, 182, 212, 0.1)" : "transparent"
+          backgroundColor: isHovering ? "rgba(var(--theme-rgb), 0.1)" : "transparent"
         }}
         transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
       />
@@ -87,7 +87,7 @@ export default function GlobalEffects() {
       <motion.div
         className="fixed top-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none z-[0] hidden md:block"
         style={{
-          background: "radial-gradient(circle, rgba(6, 182, 212, 0.03) 0%, rgba(0, 0, 0, 0) 70%)"
+          background: "radial-gradient(circle, rgba(var(--theme-rgb), 0.03) 0%, rgba(0, 0, 0, 0) 70%)"
         }}
         animate={{
           x: mousePosition.x - 300,
