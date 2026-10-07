@@ -39,7 +39,7 @@ export default function ThemeSwitcher() {
       {/* Floating Toggle Button */}
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 z-[100] w-12 h-12 rounded-full glass flex items-center justify-center text-neutral-400 hover:text-cyan-400 hover:scale-110 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] border-cyan-500/20 hover:border-cyan-500/80 group"
+        className="fixed bottom-24 left-6 z-[100] w-12 h-12 rounded-full glass flex items-center justify-center text-neutral-400 hover:text-cyan-400 hover:scale-110 transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] border-cyan-500/20 hover:border-cyan-500/80 group"
       >
         <Palette size={20} className="group-hover:animate-spin-slow" />
       </button>
@@ -51,7 +51,7 @@ export default function ThemeSwitcher() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed bottom-20 left-6 z-[100] p-4 glass-card rounded-2xl flex flex-col gap-3 min-w-[150px]"
+            className="fixed bottom-40 left-6 z-[100] p-4 glass-card rounded-2xl flex flex-col gap-3 min-w-[150px]"
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-[10px] font-bold text-neutral-400 tracking-widest">SYSTEM THEME</span>
