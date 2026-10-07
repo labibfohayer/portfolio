@@ -10,9 +10,15 @@ export async function POST(req: Request) {
     const validPassword = process.env.ADMIN_PASSWORD || "LabibSadiya";
 
     if (username === validUsername && password === validPassword) {
-      // Set a simple auth cookie (expires in 1 day)
-      cookies().set('admin_auth', 'true', { maxAge: 60 * 60 * 24 });
-      return NextResponse.json({ success: true });
+      // Return a Set-Cookie header instead of using cookies().set for better compatibility
+      const response = NextResponse.json({ success: true });
+      response.cookies.set({
+        name: 'admin_auth',
+        value: 'true',
+        maxAge: 60 * 60 * 24,
+        path: '/',
+      });
+      return response;
     }
 
     return NextResponse.json({ success: false, message: "Invalid credentials" }, { status: 401 });
