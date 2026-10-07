@@ -11,6 +11,7 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-signature" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://labibfohayer.com"),
   title: "Md. Labib Fohayer | Founder & AI Automation Engineer",
   description: "Award-winning interactive portfolio of Md. Labib Fohayer. Built for Scale & Precision.",
   openGraph: {
