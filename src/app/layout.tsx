@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import GlobalEffects from "@/components/GlobalEffects";
 import EasterEgg from "@/components/EasterEgg";
+import Preloader from "@/components/Preloader";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -44,6 +46,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body className={cn(spaceGrotesk.variable, outfit.variable, greatVibes.variable, "font-sans antialiased bg-black text-neutral-200 min-h-screen selection:bg-cyan-600/30 selection:text-cyan-200 overflow-x-hidden")}>
+        <Preloader />
+        <ThemeSwitcher />
         <GlobalEffects />
         <EasterEgg />
         {children}
