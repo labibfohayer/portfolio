@@ -12,20 +12,30 @@ export default function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    // Simulate authentication for now
-    setTimeout(() => {
-      if (username === "admin" && password === "admin123") {
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      
+      const data = await res.json();
+      
+      if (data.success) {
         router.push("/admin/dashboard");
       } else {
-        setError("Invalid credentials. Try admin / admin123");
-        setIsLoading(false);
+        setError(data.message || "Invalid credentials.");
       }
-    }, 1000);
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
