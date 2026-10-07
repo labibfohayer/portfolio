@@ -1,15 +1,23 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Code2, CheckCircle2 } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import MagneticButton from "./ui/MagneticButton";
 
-import siteData from "@/data.json";
-
-const projects = siteData.projects;
-
 export default function Projects() {
+  const [projects, setProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setProjects(data.projects);
+        }
+      });
+  }, []);
   return (
     <section id="projects" className="py-32 relative z-10 bg-[black]">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">

@@ -2,28 +2,34 @@
 
 import { useState, useEffect } from "react";
 import { Save, Plus, Trash2, Edit2, CheckCircle2, Loader2 } from "lucide-react";
-import siteData from "@/data.json";
 
 export default function ProjectsManager() {
-  const [projects, setProjects] = useState(siteData.projects);
+  const [projects, setProjects] = useState<any[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
-  
-  // This is a minimal visual editor for the projects array.
-  // In a full production app, you'd have a nice modal/form for this.
+
+  useEffect(() => {
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setProjects(data.projects);
+        }
+      });
+  }, []);
   
   const handleSave = async () => {
     setIsSaving(true);
     setSaveStatus(null);
     try {
-      const res = await fetch("/api/admin/projects", {
+      const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ projects }),
       });
       const data = await res.json();
       if (data.success) {
-        setSaveStatus("Success! Your website is rebuilding. Changes will be live in ~30 seconds.");
+        setSaveStatus("Success! Database updated instantly.");
       } else {
         setSaveStatus(`Error: ${data.message}`);
       }
