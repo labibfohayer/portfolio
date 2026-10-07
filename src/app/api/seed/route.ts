@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
 import Project from "@/models/Project";
 
-const projects = [
+const defaultProjects = [
   {
     id: "01", title: "WEBPULSE AUTOMATION", role: "AGENCY PLATFORM & AUTOMATION",
     desc: "A scalable tech agency platform offering custom web development and smart workflow automations to help businesses scale effortlessly.",
@@ -44,9 +44,12 @@ const projects = [
 export async function GET() {
   try {
     await connectToDatabase();
+    
+    // Clear and insert
     await Project.deleteMany({});
-    await Project.insertMany(projects);
-    return NextResponse.json({ success: true, message: `Successfully inserted ${projects.length} projects into MongoDB.` });
+    await Project.insertMany(defaultProjects);
+
+    return NextResponse.json({ success: true, message: "Database successfully seeded with 6 projects!" });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
