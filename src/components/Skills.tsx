@@ -112,10 +112,13 @@ export default function Skills() {
                   />
                   
                   {/* Floating Content */}
-                  <motion.div className="relative z-10 glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 animate-[spin_40s_linear_infinite_reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform whitespace-nowrap bg-black/80">
+                  <div 
+                    className="relative z-10 glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform whitespace-nowrap bg-black/80"
+                    style={{ animation: "spin 40s linear infinite reverse" }}
+                  >
                     <node.icon size={12} className="text-cyan-400" />
                     <span className="text-[10px] font-bold text-white tracking-widest uppercase">{node.name}</span>
-                  </motion.div>
+                  </div>
                 </div>
               );
             })}

@@ -6,17 +6,68 @@ import { ArrowUpRight, BookOpen } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import Link from "next/link";
 
+const defaultPosts = [
+  {
+    title: "How I Automated 80% of Client Support with Python & AI",
+    date: "Oct 15, 2026",
+    category: "AI Automation",
+    readTime: "5 min read",
+    slug: "automated-client-support-ai",
+    featured: true,
+    coverImage: "/blog/blog-1.jpg",
+    excerpt: "Customer support is the backbone of any business, but handling repetitive queries can drain a team's energy. At Webpulse Automation, I noticed many of our clients were struggling...",
+    createdAt: "2026-10-15T00:00:00Z"
+  },
+  {
+    title: "From Delivery Rider to Tech Founder: My Journey",
+    date: "Sep 28, 2026",
+    category: "Entrepreneurship",
+    readTime: "8 min read",
+    slug: "delivery-rider-to-tech-founder",
+    featured: false,
+    coverImage: "/blog/blog-2.jpg",
+    excerpt: "A few years ago, my daily routine consisted of navigating city traffic as a delivery rider and working as a salesman. Life was a constant grind, but I had a burning passion for technology...",
+    createdAt: "2026-09-28T00:00:00Z"
+  },
+  {
+    title: "Scaling Full-Stack Apps with Next.js & Supabase",
+    date: "Aug 10, 2026",
+    category: "Web Development",
+    readTime: "6 min read",
+    slug: "scaling-nextjs-supabase",
+    featured: false,
+    coverImage: "/blog/blog-3-new.jpg",
+    excerpt: "When building 'Hisab App' (a financial tracker) and 'Ponyopuri' (an e-commerce storefront), speed and scalability were my top priorities. That's why I chose Next.js and Supabase...",
+    createdAt: "2026-08-10T00:00:00Z"
+  },
+  {
+    title: "The Future of Business: AI-Powered Customer Support",
+    date: "Jul 22, 2026",
+    category: "Technology",
+    readTime: "4 min read",
+    slug: "ai-powered-customer-support",
+    featured: true,
+    coverImage: "/blog/blog-4.jpg",
+    excerpt: "Imagine this: It's 3:00 AM, and a potential customer visits your website with a question. By the time your team wakes up to reply at 9:00 AM, the customer has already bought from a competitor...",
+    createdAt: "2026-07-22T00:00:00Z"
+  }
+];
+
 export default function Blog() {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<any[]>(defaultPosts);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/blogs')
       .then(res => res.json())
       .then(data => {
-        if (data.success) {
-          // Only show published blogs
-          setPosts(data.blogs.filter((b: any) => b.published !== false));
+        if (data.success && data.blogs.length > 0) {
+          // Combine DB blogs with default blogs, avoiding duplicates by slug
+          const dbBlogs = data.blogs.filter((b: any) => b.published !== false);
+          const allSlugs = new Set(dbBlogs.map((b: any) => b.slug));
+          const uniqueDefaults = defaultPosts.filter((b) => !allSlugs.has(b.slug));
+          
+          setPosts([...dbBlogs, ...uniqueDefaults]);
         }
         setLoading(false);
       });
