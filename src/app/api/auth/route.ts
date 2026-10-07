@@ -6,8 +6,8 @@ export async function POST(req: Request) {
     const { username, password } = await req.json();
 
     // Default fallback if not set in Vercel
-    const validUsername = process.env.ADMIN_USERNAME || "labib";
-    const validPassword = process.env.ADMIN_PASSWORD || "labib2024";
+    const validUsername = process.env.ADMIN_USERNAME || "Labib";
+    const validPassword = process.env.ADMIN_PASSWORD || "LabibSadiya";
 
     if (username === validUsername && password === validPassword) {
       // Set a simple auth cookie (expires in 1 day)
