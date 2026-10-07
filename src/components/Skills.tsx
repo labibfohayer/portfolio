@@ -87,12 +87,7 @@ export default function Skills() {
           </motion.div>
 
           {/* Floating Skill Nodes (Feature 3: Hover to pause and laser) */}
-          <motion.div 
-            className="absolute w-[600px] h-[600px] z-20"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-            whileHover={{ animationPlayState: "paused" }}
-          >
+          <div className="absolute w-[600px] h-[600px] animate-[spin_40s_linear_infinite] group-hover/orbit:[animation-play-state:paused] z-20">
             {nodes.map((node, i) => {
               const radius = 300;
               const angle = (i * 360) / nodes.length;
@@ -116,19 +111,15 @@ export default function Skills() {
                     }}
                   />
                   
-                  {/* Floating Content - Counter Rotate to stay perfectly horizontal */}
-                  <motion.div 
-                    className="relative z-10 glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 cursor-pointer hover:bg-cyan-900/40 hover:scale-110 whitespace-nowrap bg-black/80"
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                  >
+                  {/* Floating Content */}
+                  <motion.div className="relative z-10 glass-card px-4 py-2 rounded-full border-cyan-500/50 flex items-center gap-2 animate-[spin_40s_linear_infinite_reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer hover:bg-cyan-900/40 hover:scale-110 transition-transform whitespace-nowrap bg-black/80">
                     <node.icon size={12} className="text-cyan-400" />
                     <span className="text-[10px] font-bold text-white tracking-widest uppercase">{node.name}</span>
                   </motion.div>
                 </div>
               );
             })}
-          </motion.div>
+          </div>
 
         </div>
 
