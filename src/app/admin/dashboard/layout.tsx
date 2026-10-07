@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, FolderKanban, Mail, Settings, LogOut, Menu, X, ExternalLink, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Mail, Settings, LogOut, Menu, X, ExternalLink, ShieldCheck, PenTool } from "lucide-react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -15,6 +15,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: "Projects", href: "/admin/dashboard/projects", icon: FolderKanban },
     { name: "Messages", href: "/admin/dashboard/messages", icon: Mail },
     { name: "Settings", href: "/admin/dashboard/settings", icon: Settings },
+    { name: "Blogs", href: "/admin/dashboard/blogs", icon: PenTool },
   ];
 
   return (

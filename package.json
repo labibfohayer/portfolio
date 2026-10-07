@@ -20,6 +20,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-github-calendar": "^5.0.9",
+    "react-markdown": "^10.1.0",
     "react-parallax-tilt": "^1.7.346",
     "react-simple-typewriter": "^5.0.1",
     "tailwind-merge": "^3.7.0"
