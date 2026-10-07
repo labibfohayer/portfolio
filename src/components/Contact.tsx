@@ -14,14 +14,17 @@ export default function Contact() {
     setResult("");
 
     const formData = new FormData(event.currentTarget);
-    // Obfuscated to bypass Netlify's aggressive secret scanner
-    const key = "62b50c68-" + "98a4-" + "4fa0-" + "97d0-" + "631b3844ba08";
-    formData.append("access_key", key);
+    const payload = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/messages", {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
       const data = await response.json();
       if (data.success) {
