@@ -11,6 +11,9 @@ export default function SettingsManager() {
     facebookUrl: "",
     behanceUrl: "",
     instagramUrl: "",
+    twitterUrl: "",
+    youtubeUrl: "",
+    tiktokUrl: "",
   });
   
   const [loading, setLoading] = useState(true);
@@ -130,6 +133,18 @@ export default function SettingsManager() {
           <div className="flex flex-col gap-2">
             <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Instagram URL</label>
             <input type="text" name="instagramUrl" value={settings.instagramUrl} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">X (Twitter) URL</label>
+            <input type="text" name="twitterUrl" value={settings.twitterUrl} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">YouTube URL</label>
+            <input type="text" name="youtubeUrl" value={settings.youtubeUrl} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">TikTok URL</label>
+            <input type="text" name="tiktokUrl" value={settings.tiktokUrl} onChange={handleChange} className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50" />
           </div>
         </div>
 

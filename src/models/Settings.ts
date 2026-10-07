@@ -9,6 +9,9 @@ const SettingsSchema = new mongoose.Schema(
     facebookUrl: { type: String, default: "https://facebook.com" },
     behanceUrl: { type: String, default: "https://behance.net" },
     instagramUrl: { type: String, default: "https://instagram.com" },
+    twitterUrl: { type: String, default: "https://x.com" },
+    youtubeUrl: { type: String, default: "https://youtube.com" },
+    tiktokUrl: { type: String, default: "https://tiktok.com" },
     theme: { type: String, default: "cyan" }, // For future expansion
     profileViews: { type: Number, default: 0 },
   },
