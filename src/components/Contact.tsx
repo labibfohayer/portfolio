@@ -121,10 +121,10 @@ export default function Contact() {
               <button 
                 type="submit"
                 disabled={isSubmitting} 
-                className="relative w-full py-5 rounded-xl bg-white text-black font-extrabold tracking-widest uppercase overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed hover:bg-neutral-200 transition-colors shadow-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+                className="relative w-full py-5 rounded-xl bg-cyan-500 text-black font-extrabold tracking-widest uppercase overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed hover:bg-cyan-400 transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.8)]"
               >
                 {/* Cyberpunk Laser Scan Shine Effect */}
-                <div className="absolute top-0 -left-[100%] h-full w-[30%] z-0 block transform -skew-x-12 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent opacity-0 group-hover:opacity-100 group-hover:left-[200%] transition-all duration-1000 ease-in-out" />
+                <div className="absolute top-0 -left-[100%] h-full w-[30%] z-0 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 group-hover:left-[200%] transition-all duration-1000 ease-in-out" />
                 
                 <span className="relative z-10 flex items-center justify-center gap-2 group-hover:scale-105 transition-transform duration-300">
                   {isSubmitting ? (
