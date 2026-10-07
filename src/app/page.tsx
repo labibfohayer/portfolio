@@ -4,9 +4,7 @@ import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Services from "@/components/Services";
 import Projects from "@/components/Projects";
-import GithubStats from "@/components/GithubStats";
 import Experience from "@/components/Experience";
-import Testimonials from "@/components/Testimonials";
 import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -33,8 +31,6 @@ export default function Home() {
       <Skills />
       <Services />
       <Experience />
-      <GithubStats />
-      <Testimonials />
       <Blog />
       <Contact />
       <Footer />
