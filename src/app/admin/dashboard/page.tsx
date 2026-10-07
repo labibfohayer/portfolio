@@ -19,7 +19,7 @@ export default function DashboardOverview() {
   const stats = [
     { label: "Total Projects", value: data ? data.stats.totalProjects : "-", icon: FolderKanban, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
     { label: "Unread Messages", value: data ? data.stats.unreadMessages : "-", icon: Mail, color: "text-pink-400", bg: "bg-pink-500/10", border: "border-pink-500/30" },
-    { label: "System Status", value: data ? data.stats.profileViews : "Loading...", icon: Activity, color: "text-green-400", bg: "bg-green-500/10", border: "border-green-500/30" },
+    { label: "Profile Views", value: data ? data.stats.profileViews : "-", icon: Eye, color: "text-green-400", bg: "bg-green-500/10", border: "border-green-500/30" },
     { label: "Database Connection", value: "ONLINE", icon: Activity, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500/30" },
   ];
 

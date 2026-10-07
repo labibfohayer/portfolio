@@ -10,6 +10,7 @@ const SettingsSchema = new mongoose.Schema(
     behanceUrl: { type: String, default: "https://behance.net" },
     instagramUrl: { type: String, default: "https://instagram.com" },
     theme: { type: String, default: "cyan" }, // For future expansion
+    profileViews: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

@@ -15,10 +15,12 @@ import Chatbot from "@/components/Chatbot";
 import CommandPalette from "@/components/CommandPalette";
 import TechMarquee from "@/components/TechMarquee";
 import SocialSidebar from "@/components/SocialSidebar";
+import PageTracker from "@/components/PageTracker";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[black] selection:bg-cyan-500/30 selection:text-white">
+      <PageTracker />
       <CommandPalette />
       <FloatingMusic />
       <Chatbot />

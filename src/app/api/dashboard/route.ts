@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
 import Project from "@/models/Project";
 import Message from "@/models/Message";
+import Settings from "@/models/Settings";
 
 export async function GET() {
   try {
@@ -10,8 +11,9 @@ export async function GET() {
     const totalProjects = await Project.countDocuments();
     const unreadMessages = await Message.countDocuments({ read: false });
     
-    // We don't have a real tracking system yet, so we return a placeholder or 0
-    const profileViews = "Active"; 
+    // Fetch profile views from settings
+    const settings = await Settings.findOne({ type: "global" }).lean();
+    const profileViews = settings?.profileViews || 0;
 
     // Fetch the 4 most recent messages for the activity log
     const recentMessages = await Message.find()
