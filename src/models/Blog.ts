@@ -7,6 +7,7 @@ const BlogSchema = new mongoose.Schema(
     excerpt: { type: String, required: true },
     content: { type: String, required: true },
     coverImage: { type: String, default: "" },
+    innerImages: { type: [String], default: [] },
     published: { type: Boolean, default: true },
   },
   { timestamps: true }

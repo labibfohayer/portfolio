@@ -153,7 +153,81 @@ export default function BlogsManager() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 mt-2">
+          <div className="flex flex-col gap-2 mt-4">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Inner Header Image 1 (Inside Blog Post)</label>
+            <div className="flex items-center gap-4">
+              {currentBlog.innerImages?.[0] && (
+                <img src={currentBlog.innerImages[0]} alt="Inner 1" className="w-16 h-12 rounded object-cover border border-cyan-500/30" />
+              )}
+              <input 
+                type="file" 
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target?.result as string;
+                    img.onload = () => {
+                      const canvas = document.createElement("canvas");
+                      const ctx = canvas.getContext("2d")!;
+                      let width = img.width; let height = img.height; const maxDim = 1200;
+                      if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; } else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
+                      canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
+                      const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+                      setCurrentBlog(prev => {
+                        const newInner = [...(prev.innerImages || [])];
+                        newInner[0] = compressedBase64;
+                        return { ...prev, innerImages: newInner };
+                      });
+                    };
+                  };
+                }}
+                className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-neutral-400 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-cyan-500/20 file:text-cyan-400 hover:file:bg-cyan-500/30"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Inner Header Image 2 (Optional, for Split View)</label>
+            <div className="flex items-center gap-4">
+              {currentBlog.innerImages?.[1] && (
+                <img src={currentBlog.innerImages[1]} alt="Inner 2" className="w-16 h-12 rounded object-cover border border-cyan-500/30" />
+              )}
+              <input 
+                type="file" 
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target?.result as string;
+                    img.onload = () => {
+                      const canvas = document.createElement("canvas");
+                      const ctx = canvas.getContext("2d")!;
+                      let width = img.width; let height = img.height; const maxDim = 1200;
+                      if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; } else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
+                      canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
+                      const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+                      setCurrentBlog(prev => {
+                        const newInner = [...(prev.innerImages || [])];
+                        newInner[1] = compressedBase64;
+                        return { ...prev, innerImages: newInner };
+                      });
+                    };
+                  };
+                }}
+                className="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-neutral-400 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-cyan-500/20 file:text-cyan-400 hover:file:bg-cyan-500/30"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 mt-4 border-t border-white/10 pt-4">
             <input 
               type="checkbox" 
               id="published"
