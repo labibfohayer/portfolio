@@ -1,0 +1,40 @@
+diff --git a/src/app/api/content/route.ts b/src/app/api/content/route.ts
+--- a/src/app/api/content/route.ts
++++ b/src/app/api/content/route.ts
+@@ -134,9 +134,9 @@ export async function POST(req: Request) {
+     if (body.items.length === 0) {
+-      return NextResponse.json(
+-        {
+-          success: false,
+-          message: "The 'items' array must not be empty",
+-        },
+-        { status: 400 }
+-      );
++      return NextResponse.json({
++        success: true,
++        count: 0,
++        message: "No items to update",
++      });
+     }
+ 
+     // 4. Validate Each Item in the Batch
+diff --git a/tests/unit/test-content-api.mjs b/tests/unit/test-content-api.mjs
+--- a/tests/unit/test-content-api.mjs
++++ b/tests/unit/test-content-api.mjs
+@@ -334,11 +334,13 @@ async function runTests() {
+-    await test("3.4 Rejects empty 'items' array with 400", async () => {
++    await test("3.4 Accepts empty 'items' array with 200 and count: 0", async () => {
+       const req = createMockRequest("http://localhost:3000/api/content", {
+         method: "POST",
+         headers: authHeaders,
+         body: JSON.stringify({ items: [] }),
+       });
+       const res = await route.POST(req);
+-      assert.strictEqual(res.status, 400, "Empty items array should be rejected");
++      assert.strictEqual(res.status, 200, "Empty items array should return HTTP 200");
+       const body = await res.json();
+-      assert.strictEqual(body.success, false);
++      assert.strictEqual(body.success, true);
++      assert.strictEqual(body.count, 0);
++      assert.strictEqual(body.message, "No items to update");
+     });
