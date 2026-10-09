@@ -12,6 +12,9 @@ const SettingsSchema = new mongoose.Schema(
     twitterUrl: { type: String, default: "https://x.com" },
     youtubeUrl: { type: String, default: "https://youtube.com" },
     tiktokUrl: { type: String, default: "https://tiktok.com" },
+    profilePicture: { type: String, default: "/profile-ceo.jpg" },
+    whatsappNumber: { type: String, default: "8801580506445" },
+    emailAddress: { type: String, default: "hello@labib.com" },
     theme: { type: String, default: "cyan" }, // For future expansion
     profileViews: { type: Number, default: 0 },
   },

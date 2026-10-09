@@ -14,6 +14,9 @@ export default function SettingsManager() {
     twitterUrl: "",
     youtubeUrl: "",
     tiktokUrl: "",
+    profilePicture: "",
+    whatsappNumber: "",
+    emailAddress: "",
   });
   
   const [loading, setLoading] = useState(true);
@@ -88,13 +91,50 @@ export default function SettingsManager() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        {/* Resume Settings */}
+        {/* Personal & Contact Settings */}
         <div className="glass-card p-6 rounded-2xl border border-white/10 flex flex-col gap-4">
           <div className="flex items-center gap-2 border-b border-white/10 pb-4 mb-2">
             <FileText size={16} className="text-cyan-500" />
-            <h2 className="font-bold tracking-widest text-white uppercase text-sm">Resume / CV</h2>
+            <h2 className="font-bold tracking-widest text-white uppercase text-sm">Personal & Contact Info</h2>
           </div>
+          
           <div className="flex flex-col gap-2">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Profile Picture URL (e.g. Imgur link or /profile.jpg)</label>
+            <input 
+              type="text" 
+              name="profilePicture"
+              value={settings.profilePicture} 
+              onChange={handleChange}
+              placeholder="https://..."
+              className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">WhatsApp Number (e.g. 8801...)</label>
+            <input 
+              type="text" 
+              name="whatsappNumber"
+              value={settings.whatsappNumber} 
+              onChange={handleChange}
+              placeholder="88015..."
+              className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Email Address</label>
+            <input 
+              type="text" 
+              name="emailAddress"
+              value={settings.emailAddress} 
+              onChange={handleChange}
+              placeholder="hello@example.com"
+              className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+            />
+          </div>
+          
+          <div className="flex flex-col gap-2 mt-2">
             <label className="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Resume Link (Google Drive / PDF URL)</label>
             <input 
               type="text" 

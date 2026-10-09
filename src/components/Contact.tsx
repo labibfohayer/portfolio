@@ -1,12 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MessageCircle, Send, Loader2 } from "lucide-react";
 
 export default function Contact() {
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [settings, setSettings] = useState({
+    whatsappNumber: "8801580506445",
+    emailAddress: "labibfohayer@gmail.com"
+  });
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.settings) {
+          setSettings(prev => ({ ...prev, ...data.settings }));
+        }
+      });
+  }, []);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -81,7 +95,7 @@ export default function Contact() {
 
             <div className="mt-4 flex flex-col sm:flex-row gap-4">
               <a 
-                href="https://wa.me/8801580506445" 
+                href={`https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, '')}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 px-8 py-5 rounded-full bg-cyan-500 text-black font-extrabold tracking-widest uppercase hover:bg-cyan-400 transition-colors shadow-[0_0_30px_rgba(var(--theme-rgb),0.3)]"
@@ -90,7 +104,7 @@ export default function Contact() {
                 WHATSAPP ME
               </a>
               <a 
-                href="mailto:labibfohayer@gmail.com"
+                href={`mailto:${settings.emailAddress}`}
                 className="flex items-center justify-center gap-3 px-8 py-5 rounded-full glass-card text-white font-extrabold tracking-widest uppercase transition-colors hover:bg-white/5"
               >
                 <Mail size={20} />

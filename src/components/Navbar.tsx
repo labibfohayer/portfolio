@@ -17,6 +17,20 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [settings, setSettings] = useState({
+    profilePicture: "/profile-ceo.jpg",
+    whatsappNumber: "8801580506445"
+  });
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.settings) {
+          setSettings(prev => ({ ...prev, ...data.settings }));
+        }
+      });
+  }, []);
 
   return (
     <>
@@ -32,7 +46,7 @@ export default function Navbar() {
           <Link href="#home" className="flex items-center gap-3 z-50 group">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border border-cyan-500/30 group-hover:border-cyan-400 transition-colors">
               <div className="absolute inset-0 bg-cyan-500/20 blur-md rounded-full -z-10" />
-              <img src="/profile-ceo.jpg" alt="Labib" className="w-full h-full object-cover" />
+              <img src={settings.profilePicture} alt="Labib" className="w-full h-full object-cover" />
             </div>
             <div className="hidden md:flex flex-col">
               <span className="text-sm font-bold tracking-widest text-white leading-tight flex items-center gap-2">
@@ -62,7 +76,7 @@ export default function Navbar() {
           {/* Right Action */}
           <div className="hidden md:flex items-center gap-4">
             <a 
-              href="https://wa.me/8801580506445" 
+              href={`https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, '')}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold tracking-wider hover:bg-cyan-500 hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(var(--theme-rgb),0.15)]"
