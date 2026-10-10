@@ -127,10 +127,10 @@ export default function Hero() {
 
       {/* Vertical Social Sidebar moved to global component */}
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-12 items-center pt-10 pb-12 z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col-reverse xl:grid xl:grid-cols-2 gap-10 xl:gap-12 items-center flex-grow pt-4 pb-12 z-10">
         
         {/* Left Content */}
-        <div className="space-y-6 z-10 w-full">
+        <div className="space-y-6 z-10 w-full flex flex-col items-center xl:items-start text-center xl:text-left">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -157,12 +157,12 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="font-display font-bold leading-[1.1] tracking-tight uppercase cursor-default"
           >
-            <h1 className="text-[12vw] xl:text-[6.5rem] text-white glitch-hover" data-text="MD LABIB">
+            <h1 className="text-5xl sm:text-[10vw] xl:text-[6.5rem] text-white">
               MD LABIB
             </h1>
-            <h1 className="text-[12vw] xl:text-[6.5rem]">
-              <span className="text-white glitch-hover" data-text="FOHAY">FOHAY</span>
-              <span className="text-gradient-flow glitch-hover" data-text="ER">ER</span>
+            <h1 className="text-5xl sm:text-[10vw] xl:text-[6.5rem]">
+              <span className="text-white">FOHAY</span>
+              <span className="text-gradient-flow">ER</span>
             </h1>
           </motion.div>
 
@@ -170,13 +170,13 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="pt-4"
+            className="pt-4 flex flex-col items-center xl:items-start"
           >
-            <h2 className="text-xl md:text-2xl font-bold text-cyan-500 uppercase tracking-widest mb-2 h-8">
+            <h2 className="text-lg md:text-2xl font-bold text-cyan-500 uppercase tracking-widest mb-2 h-8">
               <Typewriter />
             </h2>
             
-            <h3 className="text-2xl md:text-3xl italic text-neutral-300 font-serif mb-6 mt-2">
+            <h3 className="text-xl md:text-3xl italic text-neutral-300 font-serif mb-6 mt-2">
               Built for Scale & Precision.
             </h3>
             
@@ -189,7 +189,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-wrap gap-4 pt-4"
+            className="flex flex-wrap justify-center xl:justify-start gap-4 pt-4"
           >
             <MagneticButton>
               <a
@@ -221,7 +221,7 @@ export default function Hero() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative h-[300px] sm:h-[400px] xl:h-[600px] w-full flex flex-col justify-center items-center xl:justify-end xl:items-end mt-8 xl:mt-0 [perspective:1000px] z-10"
+          className="relative h-[320px] sm:h-[450px] xl:h-[600px] w-full flex flex-col justify-center items-center xl:justify-end xl:items-end mt-4 xl:mt-0 [perspective:1000px] z-10"
         >
           {/* Glowing Aura behind image */}
           <div 
