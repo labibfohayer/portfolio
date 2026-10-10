@@ -19,7 +19,7 @@ export default function Projects() {
       });
   }, []);
   return (
-    <section id="projects" className="py-32 relative z-10 bg-[black]">
+    <section id="projects" className="py-20 md:py-32 relative z-10 bg-[black]">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

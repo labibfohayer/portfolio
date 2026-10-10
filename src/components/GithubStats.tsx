@@ -44,7 +44,7 @@ export default function GithubStats() {
   const streakUrl = `https://streak-stats.demolab.com/?user=${username}&background=00000000&border=00000000&hide_border=true&stroke=06b6d4&ring=06b6d4&fire=06b6d4&currStreakNum=06b6d4&currStreakLabel=a3a3a3&sideNums=a3a3a3&sideLabels=a3a3a3&dates=a3a3a3`;
 
   return (
-    <section id="github-stats" className="py-32 relative z-10 bg-[black]">
+    <section id="github-stats" className="py-20 md:py-32 relative z-10 bg-[black]">
       
       {/* Background Cyber Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-rgb),0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-rgb),0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />

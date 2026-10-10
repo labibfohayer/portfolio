@@ -77,7 +77,7 @@ function HoverGlowCard({ children, className = "", delay = 0 }: { children: Reac
 
 export default function About() {
   return (
-    <section id="about" className="py-32 relative bg-black">
+    <section id="about" className="py-20 md:py-32 relative bg-black">
       {/* Background elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-900/10 blur-[120px] rounded-full pointer-events-none" />
 

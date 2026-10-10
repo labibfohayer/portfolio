@@ -107,7 +107,7 @@ const ReviewCard = ({ review }: { review: typeof reviews[0] }) => (
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-32 relative z-10 bg-[black] overflow-hidden">
+    <section id="testimonials" className="py-20 md:py-32 relative z-10 bg-[black] overflow-hidden">
       
       {/* Background Cyber Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-rgb),0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-rgb),0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />

@@ -21,7 +21,7 @@ const nodes = [
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-32 relative z-10 overflow-hidden border-t border-white/5 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/10 via-[black] to-[black]">
+    <section id="skills" className="py-20 md:py-32 relative z-10 overflow-hidden border-t border-white/5 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/10 via-[black] to-[black]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
         
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-8">
@@ -36,7 +36,7 @@ export default function Skills() {
         </p>
 
         {/* Live Interactive Console UI */}
-        <div className="relative w-full max-w-4xl h-[600px] flex items-center justify-center group/orbit">
+        <div className="relative w-full max-w-4xl h-[350px] sm:h-[450px] md:h-[600px] flex items-center justify-center group/orbit scale-50 sm:scale-75 md:scale-100">
           
           {/* Radar Scanner Beam (Feature 1) */}
           <div className="absolute w-[600px] h-[600px] rounded-full overflow-hidden pointer-events-none z-0 mix-blend-screen">

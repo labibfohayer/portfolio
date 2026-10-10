@@ -142,7 +142,7 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-32 relative z-10 bg-black">
+    <section id="experience" className="py-20 md:py-32 relative z-10 bg-black">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">

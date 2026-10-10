@@ -118,7 +118,7 @@ export default function Services() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   return (
-    <section id="services" className="py-32 relative z-10">
+    <section id="services" className="py-20 md:py-32 relative z-10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
