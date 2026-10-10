@@ -19,7 +19,10 @@ export default function Projects() {
       });
   }, []);
 
-  const { scrollYProgress } = useScroll({ target: targetRef });
+  const { scrollYProgress } = useScroll({ 
+    target: targetRef,
+    offset: ["start start", "end end"]
+  });
   
   // Total slides = Intro Slide + All Projects
   const totalSlides = projects.length > 0 ? projects.length + 1 : 1;
