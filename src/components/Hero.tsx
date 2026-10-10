@@ -127,10 +127,10 @@ export default function Hero() {
 
       {/* Vertical Social Sidebar moved to global component */}
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid xl:grid-cols-2 gap-12 items-center flex-grow pt-10 pb-20">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col xl:grid xl:grid-cols-2 gap-12 items-center flex-grow pt-10 pb-20 relative">
         
         {/* Left Content */}
-        <div className="space-y-6 z-10">
+        <div className="space-y-6 z-10 w-full relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -221,7 +221,7 @@ export default function Hero() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative h-[400px] xl:h-[600px] w-full flex flex-col justify-end items-center md:items-end mt-12 md:mt-0 [perspective:1000px]"
+          className="absolute right-[-15%] bottom-10 opacity-30 pointer-events-none xl:pointer-events-auto xl:opacity-100 xl:relative xl:right-0 xl:bottom-0 h-[450px] xl:h-[600px] w-[80%] xl:w-full flex flex-col justify-end items-end mt-0 [perspective:1000px] z-0 xl:z-10"
         >
           {/* Glowing Aura behind image */}
           <div 
@@ -241,7 +241,7 @@ export default function Hero() {
             initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
             animate={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
             transition={{ duration: 2, ease: "easeInOut", delay: 1 }}
-            className="relative z-20 -mt-10 mr-10 font-signature text-5xl md:text-6xl text-cyan-400 rotate-[-5deg] pointer-events-none drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]"
+            className="relative z-20 -mt-10 mr-10 font-signature text-4xl sm:text-5xl xl:text-6xl text-cyan-400 rotate-[-5deg] pointer-events-none drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]"
             style={{ transform: "translateZ(80px)" }}
           >
             Labib Fohayer
