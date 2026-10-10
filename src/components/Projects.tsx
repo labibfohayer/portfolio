@@ -24,6 +24,7 @@ export default function Projects() {
   // Total slides = Intro Slide + All Projects
   const totalSlides = projects.length > 0 ? projects.length + 1 : 1;
   const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${(totalSlides - 1) * 100}vw`]);
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   if (projects.length === 0) {
     return (
@@ -45,7 +46,7 @@ export default function Projects() {
         {/* Top Progress Bar */}
         <motion.div 
           className="absolute top-0 left-0 h-1 bg-cyan-500 z-50 shadow-[0_0_15px_rgba(6,182,212,0.8)]"
-          style={{ width: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]) }}
+          style={{ width: progressWidth }}
         />
 
         <motion.div style={{ x }} className="flex h-full items-center">
