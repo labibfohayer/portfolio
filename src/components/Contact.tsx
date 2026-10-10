@@ -105,6 +105,8 @@ export default function Contact() {
               </a>
               <a 
                 href={`mailto:${settings.emailAddress}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 px-8 py-5 rounded-full glass-card text-white font-extrabold tracking-widest uppercase transition-colors hover:bg-white/5"
               >
                 <Mail size={20} />
