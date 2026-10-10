@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Code2, CheckCircle2, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Code2, CheckCircle2 } from "lucide-react";
+import Tilt from "react-parallax-tilt";
 import MagneticButton from "./ui/MagneticButton";
 
 export default function Projects() {
   const [projects, setProjects] = useState<any[]>([]);
-  const targetRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     fetch('/api/projects')
@@ -18,143 +18,146 @@ export default function Projects() {
         }
       });
   }, []);
-
-  const { scrollYProgress } = useScroll({ 
-    target: targetRef,
-    offset: ["start start", "end end"]
-  });
-  
-  // Total slides = Intro Slide + All Projects
-  const totalSlides = projects.length > 0 ? projects.length + 1 : 1;
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${(totalSlides - 1) * 100}vw`]);
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
-  if (projects.length === 0) {
-    return (
-      <div className="h-screen bg-black flex items-center justify-center text-cyan-500 font-mono text-sm animate-pulse">
-        Initializing Project Ecosystem...
-      </div>
-    );
-  }
-
   return (
-    <section 
-      id="projects" 
-      ref={targetRef} 
-      className="relative z-10 bg-black"
-      style={{ height: `${totalSlides * 100}vh` }}
-    >
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center bg-black">
-        
-        {/* Top Progress Bar */}
-        <motion.div 
-          className="absolute top-0 left-0 h-1 bg-cyan-500 z-50 shadow-[0_0_15px_rgba(6,182,212,0.8)]"
-          style={{ width: progressWidth }}
-        />
-
-        <motion.div style={{ x }} className="flex h-full items-center">
-          
-          {/* Slide 0: Intro Slide */}
-          <div className="w-screen h-screen flex-shrink-0 flex flex-col justify-center px-6 md:px-24 bg-gradient-to-r from-black via-cyan-950/10 to-black">
-            <div className="max-w-7xl mx-auto w-full">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-cyan-400 uppercase mb-8 shadow-[0_0_15px_rgba(var(--theme-rgb),0.2)]">
-                <Code2 size={14} className="text-cyan-500" /> SELECTED WORK
-              </div>
-              <h2 className="text-5xl md:text-7xl lg:text-[9rem] font-display font-black uppercase tracking-tighter leading-[0.85] text-white">
-                ARCHITECTING <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-800 drop-shadow-[0_0_30px_rgba(var(--theme-rgb),0.5)]">
-                  DIGITAL <br/> ECOSYSTEMS
-                </span>
-              </h2>
-              <div className="mt-12 flex items-center gap-6">
-                <p className="text-neutral-400 text-lg md:text-2xl font-mono border-l-2 border-cyan-500/50 pl-6 max-w-xl">
-                  Keep scrolling down to explore high-performance systems engineered for scale.
-                </p>
-                <motion.div 
-                  animate={{ x: [0, 10, 0] }} 
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="w-12 h-12 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-500 hidden md:flex"
-                >
-                  <ChevronRight size={24} />
-                </motion.div>
-              </div>
+    <section id="projects" className="py-32 relative z-10 bg-[black]">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-8"
+        >
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6">
+              <Code2 size={12} className="text-cyan-500" /> SELECTED WORK
             </div>
+            <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
+              ARCHITECTING <br />
+              <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">DIGITAL ECOSYSTEMS</span>
+            </h2>
           </div>
-
-          {/* Project Slides */}
-          {projects.map((project, index) => (
-            <div key={project.id} className="w-screen h-screen flex-shrink-0 flex items-center justify-center p-6 md:p-24 relative overflow-hidden group border-l border-white/5">
-              
-              {/* Background Big Text (Watermark) */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none z-0 overflow-hidden">
-                <h1 className="text-[25vw] font-display font-black text-cyan-500 whitespace-nowrap">
-                  0{index + 1}
-                </h1>
-              </div>
-
-              <div className="max-w-7xl w-full grid md:grid-cols-2 gap-12 lg:gap-24 items-center relative z-10">
-                
-                {/* Left: Project Image */}
-                <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/10 group-hover:border-cyan-500/40 transition-colors duration-700 bg-black shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                   {project.image && (
-                     <img 
-                       src={project.image} 
-                       alt={project.title}
-                       className="w-full h-full object-contain p-8 transform group-hover:scale-110 transition-transform duration-1000 ease-out"
-                     />
-                   )}
-                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80" />
-                   
-                   <div className="absolute bottom-8 left-8 flex flex-wrap gap-2 pr-8">
-                      {project.tags?.map((tag: string, i: number) => (
-                        <span key={i} className="px-4 py-2 rounded-full border border-cyan-500/30 text-[10px] font-bold text-cyan-400 tracking-widest uppercase bg-black/80 backdrop-blur-md shadow-[0_0_10px_rgba(6,182,212,0.2)]">
-                          {tag}
-                        </span>
-                      ))}
-                   </div>
-                </div>
-
-                {/* Right: Content */}
-                <div className="flex flex-col">
-                  <h4 className="text-cyan-500 font-mono font-bold tracking-widest text-[12px] uppercase mb-6 flex items-center gap-3">
-                    <span className="w-12 h-px bg-cyan-500/50" />
-                    PROJECT 0{index + 1} // {project.role}
-                  </h4>
-                  
-                  <h3 className="text-4xl md:text-5xl lg:text-6xl font-display font-black text-white uppercase tracking-wider mb-6 leading-tight group-hover:text-cyan-50 transition-colors">
-                    {project.title}
-                  </h3>
-                  
-                  <p className="text-neutral-400 text-sm md:text-base leading-relaxed mb-8 max-w-xl">
-                    {project.description}
-                  </p>
-
-                  <ul className="flex flex-col gap-4 mb-12">
-                    {project.features?.map((feature: string, i: number) => (
-                      <li key={i} className="flex items-start gap-3 text-sm text-neutral-300">
-                        <CheckCircle2 size={18} className="text-cyan-500 shrink-0 mt-0.5 shadow-[0_0_10px_rgba(6,182,212,0.5)] rounded-full" />
-                        <span className="leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex items-center gap-6 mt-auto">
-                    <MagneticButton>
-                      <a 
-                        href={project.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="px-10 py-5 rounded-full bg-cyan-500 text-black font-black tracking-widest text-[11px] uppercase hover:bg-cyan-400 transition-colors flex items-center gap-3 shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.6)]"
-                      >
-                        EXPLORE PLATFORM <ArrowUpRight size={18} />
-                      </a>
-                    </MagneticButton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+          <p className="text-neutral-400 text-sm max-w-sm leading-relaxed">
+            A selection of modern web applications, management platforms, and high-performance digital systems engineered for scale and speed.
+          </p>
         </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, idx) => {
+            return (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: (idx % 3) * 0.1 }}
+                className="h-full"
+              >
+                <Tilt 
+                  glareEnable={true} 
+                  glareMaxOpacity={0.15} 
+                  glareColor="cyan" 
+                  glarePosition="all" 
+                  tiltMaxAngleX={5} 
+                  tiltMaxAngleY={5} 
+                  scale={1.02}
+                  transitionSpeed={2500}
+                  className="h-full"
+                >
+                  <div className="glass-card rounded-[2rem] overflow-hidden group flex flex-col relative bg-cyan-950/5 border border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(var(--theme-rgb),0.15)] transition-all duration-500 h-full">
+                    
+                    {/* Top Image Section (Zoom Reveal on Hover) */}
+                    <div className="w-full h-64 md:h-80 relative overflow-hidden bg-black/60 border-b border-white/5">
+                      <div className="absolute top-4 left-4 z-20">
+                        <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white tracking-widest uppercase flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" /> FEATURED APP
+                        </span>
+                      </div>
+                      <div className="absolute top-4 right-4 z-20 text-4xl font-display font-bold text-cyan-500 opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                        {project.id}
+                      </div>
+                      
+                      {project.image && (
+                        <div className="absolute inset-0 z-10 overflow-hidden flex items-center justify-center p-4">
+                          <img 
+                            src={project.image} 
+                            alt={project.title} 
+                            className="w-full h-full object-contain object-center opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out drop-shadow-2xl"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[black] via-transparent to-transparent opacity-90" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="p-8 flex flex-col flex-grow relative z-20 bg-gradient-to-b from-transparent to-black/50">
+                      <h4 className="text-cyan-500 font-bold tracking-widest text-[10px] uppercase mb-2">
+                        {project.role}
+                      </h4>
+                      
+                      <h3 className="text-2xl font-display font-bold text-white uppercase tracking-wider mb-4 leading-tight group-hover:text-cyan-300 transition-colors">
+                        {project.title}
+                      </h3>
+                      
+                      <p className="text-neutral-400 text-sm leading-relaxed mb-6 flex-grow">
+                        {project.desc}
+                      </p>
+                      
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {project.tech.map((t) => (
+                          <span key={t} className="text-[10px] font-bold text-cyan-300/70 tracking-widest uppercase bg-cyan-950/30 px-3 py-1.5 rounded-full border border-cyan-500/20 group-hover:border-cyan-500/50 group-hover:text-cyan-300 transition-colors">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="w-full h-px bg-white/10 mb-6" />
+
+                      <div className="space-y-4 mb-10">
+                        <h5 className="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mb-4 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> KEY CONTRIBUTIONS
+                        </h5>
+                        {project.contributions.map((contribution, i) => (
+                          <div key={i} className="flex items-start gap-3">
+                            <CheckCircle2 size={16} className="text-cyan-500 shrink-0 mt-0.5" />
+                            <p className="text-xs text-neutral-300 leading-relaxed">
+                              {contribution}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Footer Magnetic Buttons */}
+                      <div className="flex items-center justify-between mt-auto">
+                        <MagneticButton>
+                          <a href={project.liveUrl} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold tracking-widest text-[10px] uppercase transition-colors shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)]">
+                            LIVE DEMO <ArrowUpRight size={14} strokeWidth={3} />
+                          </a>
+                        </MagneticButton>
+                        
+                        <div className="flex items-center gap-3">
+                          <MagneticButton>
+                            <a href={project.githubUrl} className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 hover:text-white hover:border-cyan-500/50 hover:bg-cyan-950/50 transition-colors">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                                <path d="M9 18c-4.51 2-5-2-7-2" />
+                              </svg>
+                            </a>
+                          </MagneticButton>
+                          <MagneticButton>
+                            <a href={project.liveUrl} className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 hover:text-white hover:border-cyan-500/50 hover:bg-cyan-950/50 transition-colors">
+                              <ArrowUpRight size={16} />
+                            </a>
+                          </MagneticButton>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </Tilt>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
