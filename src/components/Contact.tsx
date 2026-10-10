@@ -2,13 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, Send, Loader2 } from "lucide-react";
 
 export default function Contact() {
+  const [result, setResult] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [settings, setSettings] = useState({
     whatsappNumber: "8801580506445",
     emailAddress: "labibfohayer@gmail.com"
   });
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   useEffect(() => {
     fetch('/api/settings')
@@ -20,7 +24,7 @@ export default function Contact() {
       });
   }, []);
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -28,12 +32,42 @@ export default function Contact() {
     const email = formData.get("email") as string;
     const message = formData.get("message") as string;
 
-    const subject = encodeURIComponent(`Contact from ${name}`);
-    const body = encodeURIComponent(`From: ${name} (${email})\n\n${message}`);
-    const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${settings.emailAddress}&su=${subject}&body=${body}`;
+    if (!emailRegex.test(email)) {
+      setResult("Please enter a valid, existing email address.");
+      setTimeout(() => setResult(""), 5000);
+      return;
+    }
 
-    window.open(mailtoUrl, "_blank");
-    (event.target as HTMLFormElement).reset();
+    setIsSubmitting(true);
+    setResult("");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "62b50c68-98a4-4fa0-97d0-631b3844ba08",
+          name,
+          email,
+          message,
+        }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setResult("Email sent successfully!");
+        (event.target as HTMLFormElement).reset();
+      } else {
+        setResult(data.message || "Failed to send email.");
+      }
+    } catch (error) {
+      setResult("Something went wrong! Please try again.");
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setResult(""), 5000);
+    }
   };
 
   return (
@@ -111,15 +145,30 @@ export default function Contact() {
               
               <button 
                 type="submit"
-                className="relative w-full py-5 rounded-xl bg-cyan-500 text-black font-extrabold tracking-widest uppercase overflow-hidden group hover:bg-cyan-400 transition-colors shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)] hover:shadow-[0_0_30px_rgba(var(--theme-rgb),0.8)]"
+                disabled={isSubmitting}
+                className="relative w-full py-5 rounded-xl bg-cyan-500 text-black font-extrabold tracking-widest uppercase overflow-hidden group hover:bg-cyan-400 disabled:opacity-70 disabled:cursor-not-allowed transition-colors shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)] hover:shadow-[0_0_30px_rgba(var(--theme-rgb),0.8)]"
               >
                 {/* Cyberpunk Laser Scan Shine Effect */}
                 <div className="absolute top-0 -left-[100%] h-full w-[30%] z-0 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 group-hover:left-[200%] transition-all duration-1000 ease-in-out" />
                 
                 <span className="relative z-10 flex items-center justify-center gap-2 group-hover:scale-105 transition-transform duration-300">
-                  EMAIL ME <Mail size={18} className="ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  {isSubmitting ? (
+                    <>SENDING <Loader2 size={18} className="animate-spin ml-2" /></>
+                  ) : (
+                    <>EMAIL ME <Mail size={18} className="ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                  )}
                 </span>
               </button>
+
+              {result && (
+                <motion.p 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`text-center text-xs font-bold tracking-widest uppercase mt-4 ${result.includes("successfully") ? "text-cyan-400" : "text-red-400"}`}
+                >
+                  {result}
+                </motion.p>
+              )}
             </form>
           </motion.div>
         </div>
