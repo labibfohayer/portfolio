@@ -7,12 +7,12 @@ export default function SocialSidebar() {
   const [settings, setSettings] = useState({
     githubUrl: "https://github.com/labibfohayer",
     linkedinUrl: "https://linkedin.com/in/labib-fohayer",
-    facebookUrl: "https://www.facebook.com/labib.fohayer",
+    facebookUrl: "https://www.facebook.com/labibfohayer",
     behanceUrl: "https://www.behance.net/labibfohayer",
-    instagramUrl: "https://www.instagram.com/labib.fohayer/",
+    instagramUrl: "https://www.instagram.com/labibfohayer/",
     twitterUrl: "https://x.com/labibfohayer",
-    youtubeUrl: "https://youtube.com/@UCSU3yYxc6X9eToQjXKPQt6w",
-    tiktokUrl: "https://tiktok.com/@labib.fohayer",
+    youtubeUrl: "https://www.youtube.com/@LabibFohayer",
+    tiktokUrl: "https://tiktok.com/@labibfohayer",
   });
 
   useEffect(() => {
