@@ -63,6 +63,7 @@ const personSchema = {
     "https://linktr.ee/labibfohayer",
     "https://gravatar.com/labibfohayer",
     "https://www.linkedin.com/in/labib-fohayer",
+    "https://www.facebook.com/labibfohayer",
     "https://github.com/labibfohayer",
     "https://www.youtube.com/@LabibFohayer",
     "https://x.com/labibfohayer",
