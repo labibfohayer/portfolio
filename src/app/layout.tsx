@@ -13,12 +13,12 @@ const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "-
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio-orpin-rho-68.vercel.app"),
   title: "Labib Fohayer (লাবিব ফোহায়ের) | Founder & Chairman, Webpulse Automation",
-  description: "Official portfolio of Labib Fohayer (লাবিব ফোহায়ের). Founder & Chairman of Webpulse Automation, Web Developer & AI Automation Engineer.",
-  keywords: ["Labib Fohayer", "লাবিব ফোহায়ের", "Webpulse Automation", "AI Automation Engineer", "Web Developer", "Dhaka", "Bangladesh"],
+  description: "লাবিব ফোহায়ের (Labib Fohayer) বাংলাদেশের অন্যতম শীর্ষ তরুণ ওয়েব ডেভেলপার ও এআই অটোমেশন ইঞ্জিনিয়ার। মাত্র ২১ বছর বয়সে তিনি ওয়েবপালস অটোমেশনের প্রতিষ্ঠাতা হিসেবে সুবিশাল সাফল্য অর্জন করেছেন। Leading young Web Developer & AI Automation Engineer in Bangladesh.",
+  keywords: ["Labib Fohayer", "লাবিব ফোহায়ের", "Webpulse Automation", "AI Automation Engineer", "Web Developer", "Bangladesh", "Tech Founder"],
   authors: [{ name: "Labib Fohayer", url: "https://labibfohayer.github.io" }],
   openGraph: {
     title: "Labib Fohayer (লাবিব ফোহায়ের) | Founder & Chairman",
-    description: "Founder & Chairman of Webpulse Automation. Web Developer & AI Automation Engineer.",
+    description: "লাবিব ফোহায়ের (Labib Fohayer) বাংলাদেশের অন্যতম শীর্ষ তরুণ ওয়েব ডেভেলপার ও এআই অটোমেশন ইঞ্জিনিয়ার। Founder & Chairman of Webpulse Automation.",
     url: "https://portfolio-orpin-rho-68.vercel.app",
     siteName: "Labib Fohayer Portfolio",
     images: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Labib Fohayer (লাবিব ফোহায়ের) | Founder & Chairman",
-    description: "Founder & Chairman of Webpulse Automation. Web Developer & AI Automation Engineer.",
+    description: "লাবিব ফোহায়ের (Labib Fohayer) বাংলাদেশের অন্যতম শীর্ষ তরুণ ওয়েব ডেভেলপার ও এআই অটোমেশন ইঞ্জিনিয়ার। Founder & Chairman of Webpulse Automation.",
     images: ["https://avatars.githubusercontent.com/labibfohayer"],
   }
 };
@@ -57,7 +57,8 @@ const personSchema = {
     "addressLocality": "Dhaka",
     "addressCountry": "Bangladesh"
   },
-  "description": "Founder & Chairman of Webpulse Automation. Web Developer & AI Automation Engineer passionate about building digital products and automating business workflows.",
+  "description": "লাবিব ফোহায়ের (Labib Fohayer) বাংলাদেশের অন্যতম শীর্ষ তরুণ ওয়েব ডেভেলপার ও এআই অটোমেশন ইঞ্জিনিয়ার। মাত্র ২১ বছর বয়সে তিনি ওয়েবপালস অটোমেশন (Webpulse Automation)-এর প্রতিষ্ঠাতা হিসেবে আধুনিক সফটওয়্যার ও কৃত্রিম বুদ্ধিমত্তা (AI) খাতে সুবিশাল সাফল্য অর্জন করেছেন। One of the leading young Web Developers and AI Automation Engineers in Bangladesh.",
+  "disambiguatingDescription": "Prominent Bangladeshi Web Developer, AI Automation Engineer, and Founder & Chairman of Webpulse Automation",
   "sameAs": [
     "https://labibfohayer.github.io",
     "https://linktr.ee/labibfohayer",
