@@ -2,11 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Mail, MessageCircle, Send, Loader2 } from "lucide-react";
+import { Mail, MessageCircle, Send, Loader2, Zap, CheckCircle2, Plus } from "lucide-react";
+
+const serviceOptions = [
+  "AI Automation & Bots",
+  "Full-Stack Web App",
+  "E-Commerce System",
+  "Custom Consulting"
+];
 
 export default function Contact() {
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [settings, setSettings] = useState({
     whatsappNumber: "8801580506445",
     emailAddress: "labibfohayer@gmail.com"
@@ -24,19 +32,31 @@ export default function Contact() {
       });
   }, []);
 
+  const toggleService = (service: string) => {
+    setSelectedServices(prev => 
+      prev.includes(service) ? prev.filter(s => s !== service) : [...prev, service]
+    );
+  };
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const formData = new FormData(formElement);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
-    const message = formData.get("message") as string;
+    const rawMessage = formData.get("message") as string;
 
     if (!emailRegex.test(email)) {
       setResult("Please enter a valid, existing email address.");
       setTimeout(() => setResult(""), 5000);
       return;
     }
+
+    const servicesContext = selectedServices.length > 0 
+      ? `\n\n[Selected Services: ${selectedServices.join(", ")}]` 
+      : "";
+    const finalMessage = rawMessage + servicesContext;
 
     setIsSubmitting(true);
     setResult("");
@@ -52,13 +72,14 @@ export default function Contact() {
           access_key: "62b50c68-98a4-4fa0-97d0-631b3844ba08",
           name,
           email,
-          message,
+          message: finalMessage,
         }),
       });
       const data = await response.json();
       if (data.success) {
         setResult("Email sent successfully!");
-        (event.target as HTMLFormElement).reset();
+        formElement.reset();
+        setSelectedServices([]);
       } else {
         setResult(data.message || "Failed to send email.");
       }
@@ -108,7 +129,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full">
+            <div className="mt-4 flex flex-col gap-4 w-full">
               <a 
                 href={`https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, '')}`} 
                 target="_blank" 
@@ -118,6 +139,12 @@ export default function Contact() {
                 <MessageCircle fill="currentColor" size={18} />
                 WHATSAPP ME
               </a>
+
+              {/* Response Time Trust Badge (Below WhatsApp CTA) */}
+              <div className="flex items-center gap-2 text-[11px] font-mono text-cyan-300/90 bg-cyan-950/30 border border-cyan-500/20 px-3.5 py-2 rounded-full w-fit">
+                <Zap size={13} className="text-cyan-400 animate-pulse shrink-0" />
+                <span>⚡ Average response time: <strong className="text-white">Under 2 hours</strong> • Direct Founder Consultation</span>
+              </div>
             </div>
           </motion.div>
 
@@ -125,7 +152,7 @@ export default function Contact() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="glass-card rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-12 relative overflow-hidden w-full"
+            className="glass-card rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-12 relative overflow-hidden w-full bg-[#070b0e]/95 border border-white/10"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] -z-10" />
             
@@ -138,9 +165,42 @@ export default function Contact() {
                 <label className="text-[10px] font-bold text-neutral-500 tracking-widest uppercase group-focus-within:text-cyan-400 transition-colors">YOUR EMAIL</label>
                 <input type="email" name="email" required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)] transition-all placeholder:text-neutral-700" placeholder="john@example.com" />
               </div>
+
+              {/* Interactive Service Selector Pills */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-neutral-400 tracking-widest uppercase flex items-center justify-between">
+                  <span>WHAT ARE YOU LOOKING TO BUILD?</span>
+                  <span className="text-[9px] font-mono text-cyan-400 font-normal">OPTIONAL QUICK-SELECT</span>
+                </label>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {serviceOptions.map((service) => {
+                    const isSelected = selectedServices.includes(service);
+                    return (
+                      <button
+                        key={service}
+                        type="button"
+                        onClick={() => toggleService(service)}
+                        className={`text-xs font-mono px-3 py-1.5 rounded-xl border transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
+                          isSelected
+                            ? "bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.25)] scale-[1.02]"
+                            : "bg-white/5 border-white/10 text-neutral-400 hover:border-white/20 hover:text-white"
+                        }`}
+                      >
+                        {isSelected ? (
+                          <CheckCircle2 size={12} className="text-cyan-400 shrink-0" />
+                        ) : (
+                          <Plus size={12} className="text-neutral-500 shrink-0" />
+                        )}
+                        <span>{service}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="space-y-2 group">
                 <label className="text-[10px] font-bold text-neutral-500 tracking-widest uppercase group-focus-within:text-cyan-400 transition-colors">PROJECT DETAILS</label>
-                <textarea name="message" rows={5} required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)] transition-all resize-none placeholder:text-neutral-700" placeholder="Tell me about your vision..." />
+                <textarea name="message" rows={5} required className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(var(--theme-rgb),0.3)] transition-all resize-none placeholder:text-neutral-700" placeholder="Tell me about your vision, timeline, and architectural requirements..." />
               </div>
               
               <button 
@@ -159,6 +219,14 @@ export default function Contact() {
                   )}
                 </span>
               </button>
+
+              {/* Response Time Trust Badge (Below Form Submit) */}
+              <div className="text-center pt-2">
+                <span className="text-[11px] font-mono text-neutral-400 inline-flex items-center gap-1.5">
+                  <Zap size={12} className="text-cyan-400 animate-pulse" />
+                  Average response time: <strong className="text-cyan-300">Under 2 hours</strong> • Direct Founder Consultation
+                </span>
+              </div>
 
               {result && (
                 <motion.p 

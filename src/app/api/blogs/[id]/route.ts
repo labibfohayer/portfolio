@@ -3,8 +3,9 @@ import connectToDatabase from "@/lib/mongodb";
 import Blog from "@/models/Blog";
 
 // Update a blog
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const data = await req.json();
     
     // Auto-generate slug if title changed and no slug provided
@@ -13,7 +14,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 
     await connectToDatabase();
-    const updatedBlog = await Blog.findByIdAndUpdate(params.id, data, { new: true });
+    const updatedBlog = await Blog.findByIdAndUpdate(id, data, { new: true });
     
     if (!updatedBlog) return NextResponse.json({ success: false, message: "Blog not found" }, { status: 404 });
     
@@ -24,10 +25,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 // Delete a blog
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     await connectToDatabase();
-    const deletedBlog = await Blog.findByIdAndDelete(params.id);
+    const deletedBlog = await Blog.findByIdAndDelete(id);
     
     if (!deletedBlog) return NextResponse.json({ success: false, message: "Blog not found" }, { status: 404 });
     

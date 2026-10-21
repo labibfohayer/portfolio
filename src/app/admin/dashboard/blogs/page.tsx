@@ -144,7 +144,7 @@ export default function BlogsManager() {
                       ctx.drawImage(img, 0, 0, width, height);
                       
                       const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
-                      setCurrentBlog(prev => ({ ...prev, coverImage: compressedBase64 }));
+                      setCurrentBlog((prev: any) => ({ ...prev, coverImage: compressedBase64 }));
                     };
                   };
                 }}
@@ -177,7 +177,7 @@ export default function BlogsManager() {
                       if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; } else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
                       canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
                       const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
-                      setCurrentBlog(prev => {
+                      setCurrentBlog((prev: any) => {
                         const newInner = [...(prev.innerImages || [])];
                         newInner[0] = compressedBase64;
                         return { ...prev, innerImages: newInner };
@@ -214,7 +214,7 @@ export default function BlogsManager() {
                       if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; } else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
                       canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
                       const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
-                      setCurrentBlog(prev => {
+                      setCurrentBlog((prev: any) => {
                         const newInner = [...(prev.innerImages || [])];
                         newInner[1] = compressedBase64;
                         return { ...prev, innerImages: newInner };

@@ -62,7 +62,6 @@ export default function Blog() {
       .then(res => res.json())
       .then(data => {
         if (data.success && data.blogs.length > 0) {
-          // Combine DB blogs with default blogs, avoiding duplicates by slug
           const dbBlogs = data.blogs.filter((b: any) => b.published !== false);
           const allSlugs = new Set(dbBlogs.map((b: any) => b.slug));
           const uniqueDefaults = defaultPosts.filter((b) => !allSlugs.has(b.slug));
@@ -70,11 +69,11 @@ export default function Blog() {
           setPosts([...dbBlogs, ...uniqueDefaults]);
         }
         setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
       });
   }, []);
-
-  // Removed the early return so the section header always shows
-  // if (!loading && posts.length === 0) return null;
 
   return (
     <section id="blog" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative z-10 bg-[black] overflow-hidden w-full max-w-full">
@@ -85,24 +84,28 @@ export default function Blog() {
           viewport={{ once: true }}
           className="mb-12 sm:mb-20 flex flex-col items-center text-center"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6 bg-cyan-950/20">
-            <BookOpen size={12} className="text-cyan-500 animate-pulse" /> KNOWLEDGE BASE
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6 bg-cyan-950/20 backdrop-blur-md">
+            <BookOpen size={12} className="text-cyan-400 animate-pulse" /> KNOWLEDGE BASE
           </div>
           <h2 className="text-3xl sm:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
             LATEST <br />
             <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">THOUGHTS.</span>
           </h2>
           <p className="text-neutral-400 text-xs sm:text-sm max-w-xl mx-auto mt-4 sm:mt-6 leading-relaxed">
-            Articles on tech, automation, and the journey of building startups.
+            Articles on tech, architecture, automation workflows, and the founder journey of building production platforms.
           </p>
         </motion.div>
 
         {loading ? (
-          <div className="text-center text-cyan-500 animate-pulse font-mono">Loading articles...</div>
+          <div className="text-center text-cyan-400 animate-pulse font-mono py-12 text-sm">
+            [SYS_LOG] Loading engineering articles...
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full items-stretch">
             {posts.map((post, idx) => {
               const isWide = idx === 0 || idx === 3;
+              const postDate = post.date || (post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'RECENT');
+              const postReadTime = post.readTime || '5 min read';
               
               return (
                 <motion.div
@@ -111,53 +114,55 @@ export default function Blog() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: idx * 0.1, duration: 0.5 }}
-                  className={isWide ? "lg:col-span-2 w-full" : "lg:col-span-1 w-full"}
+                  className={`${isWide ? "lg:col-span-2" : "lg:col-span-1"} w-full flex flex-col`}
                 >
-                  <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} scale={1} transitionSpeed={2000} className="h-full w-full">
-                    <Link href={`/blog/${post.slug}`} className="glass-card p-6 sm:p-8 md:p-10 rounded-[1.5rem] sm:rounded-[2rem] relative h-full flex flex-col justify-between group border border-white/5 hover:border-cyan-500/30 transition-all duration-500 cursor-pointer block bg-black/40 hover:bg-black/60 overflow-hidden w-full">
-                      
+                  <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} scale={1} transitionSpeed={2000} className="h-full w-full flex flex-col">
+                    <Link 
+                      href={`/blog/${post.slug}`} 
+                      className="p-6 sm:p-8 rounded-2xl relative h-full flex flex-col justify-between group bg-black/40 backdrop-blur-md border border-white/10 hover:border-cyan-500/30 transition-all duration-300 cursor-pointer overflow-hidden w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+                    >
+                      {/* Ambient Cover Overlay on Hover */}
                       {post.coverImage && (
-                        <div className="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
+                        <div className="absolute inset-0 z-0 overflow-hidden rounded-2xl pointer-events-none">
                           <img 
                             src={post.coverImage} 
                             alt={post.title}
-                            className="w-full h-full object-cover opacity-0 group-hover:opacity-30 scale-110 group-hover:scale-100 transition-all duration-700 ease-out mix-blend-luminosity"
+                            className="w-full h-full object-cover opacity-0 group-hover:opacity-10 scale-105 group-hover:scale-100 transition-all duration-700 ease-out mix-blend-luminosity"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         </div>
                       )}
 
-                      <div className="absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out origin-left shadow-[0_0_10px_rgba(var(--theme-rgb),0.8)] z-20" />
-
-                      <div>
-                        <div className="flex justify-between items-start mb-8 relative z-10">
-                          <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] tracking-widest uppercase font-bold rounded-full group-hover:bg-cyan-500/20 transition-colors backdrop-blur-md">
-                            {post.category || "Article"}
-                          </span>
-                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-950/50 transition-all duration-300 backdrop-blur-md">
-                            <ArrowUpRight className="text-neutral-500 group-hover:text-cyan-400 group-hover:scale-125 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300" size={18} />
-                          </div>
+                      {/* Card Content Stack: Title -> Excerpt */}
+                      <div className="relative z-10 flex flex-col">
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <h3 className={`font-display font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug ${isWide ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
+                            {post.title}
+                          </h3>
+                          <ArrowUpRight className="text-neutral-500 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 mt-1" size={18} />
                         </div>
                         
-                        <h3 className={`font-display font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors relative z-10 leading-tight ${isWide ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl'}`}>
-                          {post.title}
-                        </h3>
-                        
-                        <p className="text-sm text-neutral-400 mb-6 relative z-10 leading-relaxed line-clamp-3">
+                        <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed font-normal">
                           {post.excerpt}
                         </p>
                       </div>
 
-                      <div className="mt-auto flex items-center justify-between text-[10px] font-mono tracking-widest font-bold uppercase text-neutral-500 pt-6 border-t border-white/5 group-hover:border-cyan-500/20 transition-colors relative z-10">
-                        <span className="group-hover:text-cyan-400 transition-colors">
-                          {post.date || (post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent')}
-                        </span>
-                        <span className="group-hover:text-cyan-400 transition-colors">
-                          {post.readTime || '5 min read'}
-                        </span>
+                      {/* Minimal Metadata Footer */}
+                      <div className="border-t border-white/5 pt-4 mt-4 flex items-center justify-between text-xs text-neutral-400 font-mono tracking-wider uppercase relative z-10">
+                        <div className="flex items-center gap-2">
+                          <span>{postDate}</span>
+                          <span className="text-neutral-600">•</span>
+                          <span>{postReadTime}</span>
+                        </div>
+                        {post.category && (
+                          <span className="text-cyan-400/80 group-hover:text-cyan-300 transition-colors font-medium">
+                            {post.category}
+                          </span>
+                        )}
                       </div>
 
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--theme-rgb),0.15),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />
+                      {/* Subtle hover radial glow */}
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--theme-rgb),0.08),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
                     </Link>
                   </Tilt>
                 </motion.div>

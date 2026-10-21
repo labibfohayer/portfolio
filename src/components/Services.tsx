@@ -1,6 +1,10 @@
 "use client";
 
+import { useRef } from "react";
 import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { 
   Bot, 
   Layout, 
@@ -8,12 +12,13 @@ import {
   ShoppingCart, 
   CheckCircle2, 
   ArrowRight, 
-  Sparkles,
-  Layers,
-  Zap,
-  Activity,
-  Cpu
+  Sparkles 
 } from "lucide-react";
+
+// Register ScrollTrigger safely for Next.js SSR / Client
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const services = [
   { 
@@ -128,7 +133,7 @@ function AnimatedBackground({ type }: { type: string }) {
   }
 }
 
-function ServiceCard({ service, idx }: { service: typeof services[0]; idx: number }) {
+function ServiceCard({ service }: { service: typeof services[0] }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -139,13 +144,9 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: idx * 0.1 }}
+    <div
       onMouseMove={handleMouseMove}
-      className="group relative rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 flex flex-col justify-between h-auto min-h-[300px] bg-[#070b0e]/95 border border-white/10 hover:border-cyan-500/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_40px_rgba(var(--theme-rgb),0.18)] backdrop-blur-xl overflow-hidden"
+      className="group relative rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 flex flex-col justify-between h-full min-h-[480px] bg-[#070b0e]/95 border border-white/10 hover:border-cyan-500/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_40px_rgba(var(--theme-rgb),0.18)] backdrop-blur-xl overflow-hidden pointer-events-auto"
     >
       {/* Interactive Radial Spotlight Hover */}
       <motion.div
@@ -165,7 +166,7 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
       <AnimatedBackground type={service.bgType} />
 
       {/* Content Container (flex-col justify-between h-full ensures zero empty void) */}
-      <div className="relative z-10 flex flex-col justify-between h-full space-y-5">
+      <div className="relative z-10 flex flex-col justify-between h-full space-y-4">
         
         {/* Top Header Section */}
         <div>
@@ -194,8 +195,8 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
         </div>
 
         {/* Middle Deliverables Checklist */}
-        <div className="pt-4 border-t border-white/10 space-y-2.5">
-          <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5 mb-2">
+        <div className="pt-3 border-t border-white/10 space-y-2">
+          <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5 mb-1.5">
             <Sparkles size={11} className="text-cyan-400" /> CORE DELIVERABLES
           </div>
           {service.features.map((feature, fIdx) => (
@@ -206,8 +207,8 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
           ))}
         </div>
 
-        {/* Bottom Enriched Area (Eliminates Empty Space completely) */}
-        <div className="pt-4 border-t border-white/10 space-y-3.5 mt-auto">
+        {/* Bottom Enriched Area */}
+        <div className="pt-3 border-t border-white/10 space-y-3 mt-auto">
           
           {/* Sub-Feature Pill Group / Tech Stack */}
           <div>
@@ -232,18 +233,15 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
               <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-wider">
                 {service.stats.label}
               </span>
-              <span className="text-base font-bold font-mono text-white text-cyan-300">
+              <span className="text-base font-bold font-mono text-cyan-300">
                 {service.stats.value}
               </span>
             </div>
             {/* Visual Capacity Bar */}
             <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <motion.div 
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-400 rounded-full"
-                initial={{ width: "0%" }}
-                whileInView={{ width: `${service.stats.capacity}%` }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.2 }}
+              <div 
+                className="h-full bg-gradient-to-r from-cyan-500 to-blue-400 rounded-full transition-all duration-700"
+                style={{ width: `${service.stats.capacity}%` }}
               />
             </div>
           </div>
@@ -256,34 +254,145 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
                 {service.status}
               </span>
             </div>
-            <div className="flex items-center gap-1 text-[10px] font-mono text-cyan-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+            <a 
+              href="#contact"
+              className="flex items-center gap-1 text-[10px] font-mono text-cyan-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 font-bold"
+            >
               <span>EXPLORE</span>
               <ArrowRight size={12} />
-            </div>
+            </a>
           </div>
 
         </div>
 
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 export default function Services() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useGSAP(() => {
+    // Dynamic horizontal center calculation for each card relative to the container
+    const getDeltaX = (card: HTMLElement, container: HTMLElement) => {
+      const cRect = container.getBoundingClientRect();
+      const kRect = card.getBoundingClientRect();
+      const currentX = (gsap.getProperty(card, "x") as number) || 0;
+      const naturalCardCenterX = (kRect.left - currentX) + kRect.width / 2;
+      const containerCenterX = cRect.left + cRect.width / 2;
+      return containerCenterX - naturalCardCenterX;
+    };
+
+    const mm = gsap.matchMedia();
+
+    // ==========================================
+    // 1. DESKTOP (min-width: 1024px): Pinned Center-Stacked to 4-Column Spread
+    // ==========================================
+    mm.add("(min-width: 1024px)", () => {
+      const cards = cardRefs.current.filter(Boolean) as HTMLElement[];
+      const container = cardsContainerRef.current;
+      if (!container || cards.length === 0 || !sectionRef.current) return;
+
+      // Card deck tilts and subtle 3D flip angles
+      const tilts = [-6, -2, 2, 6];
+      const rotateYs = [-15, -7, 7, 15];
+
+      // Set initial stacked z-indices (Card 1 on top, Card 4 at bottom)
+      cards.forEach((card, i) => {
+        gsap.set(card, { 
+          zIndex: 4 - i,
+          transformPerspective: 1200,
+          transformOrigin: "center center",
+          willChange: "transform"
+        });
+      });
+
+      // Pinned Timeline with scrub
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=220%",
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        }
+      });
+
+      // Animate from center-stacked deck to 4-column spread
+      cards.forEach((card, i) => {
+        tl.fromTo(
+          card,
+          {
+            x: () => getDeltaX(card, container),
+            rotation: tilts[i],
+            rotateY: rotateYs[i],
+            scale: 0.92,
+            transformPerspective: 1200,
+            force3D: true,
+          },
+          {
+            x: 0,
+            rotation: 0,
+            rotateY: 0,
+            scale: 1,
+            ease: "power2.out",
+            duration: 1,
+          },
+          0
+        );
+      });
+    });
+
+    // ==========================================
+    // 2. MOBILE & TABLET (max-width: 1023px): Responsive Grid (No horizontal overflow)
+    // ==========================================
+    mm.add("(max-width: 1023px)", () => {
+      const cards = cardRefs.current.filter(Boolean) as HTMLElement[];
+      if (cards.length === 0 || !cardsContainerRef.current) return;
+
+      // Clear any desktop GSAP transforms completely
+      gsap.set(cards, {
+        clearProps: "all"
+      });
+
+      // Gentle vertical fade-in stagger when scrolled into view
+      gsap.from(cards, {
+        opacity: 0,
+        y: 35,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: cardsContainerRef.current,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        }
+      });
+    });
+
+    return () => {
+      mm.revert();
+    };
+  }, { scope: sectionRef });
+
   return (
-    <section id="services" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
-      {/* Background Ambience */}
+    <section 
+      ref={sectionRef} 
+      id="services" 
+      className="scroll-mt-28 md:scroll-mt-32 relative z-20 bg-black overflow-hidden w-full max-w-full flex flex-col justify-center py-16 sm:py-20 lg:py-0 lg:min-h-screen"
+    >
+      {/* Background Ambient Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-cyan-500/5 blur-[160px] pointer-events-none rounded-full" />
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full relative z-10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full relative z-10 my-auto">
         
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 sm:mb-20 flex flex-col items-center text-center"
-        >
+        <div className="mb-10 sm:mb-14 lg:mb-16 flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6 bg-cyan-950/20 backdrop-blur-md">
             <Bot size={12} className="text-cyan-400" /> ARCHITECTURAL COMPETENCIES
           </div>
@@ -294,12 +403,21 @@ export default function Services() {
             Enterprise-grade web systems, autonomous LLM agent networks, and resilient cloud architectures built with precision and zero technical debt.
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-transparent rounded-full mt-6" />
-        </motion.div>
+        </div>
 
-        {/* Core Capabilities 4-Column SaaS Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full items-stretch">
+        {/* 4-Column Cards Container with 3D Perspective */}
+        <div 
+          ref={cardsContainerRef}
+          className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full items-stretch [perspective:1200px]"
+        >
           {services.map((service, idx) => (
-            <ServiceCard key={service.id} service={service} idx={idx} />
+            <div 
+              key={service.id}
+              ref={(el) => { cardRefs.current[idx] = el; }}
+              className="w-full flex flex-col h-full [transform-style:preserve-3d] will-change-transform"
+            >
+              <ServiceCard service={service} />
+            </div>
           ))}
         </div>
 

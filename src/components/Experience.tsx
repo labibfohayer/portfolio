@@ -12,12 +12,14 @@ import {
   TrendingUp, 
   Calendar,
   Layers,
-  Sparkles
+  Sparkles,
+  Workflow
 } from "lucide-react";
 
 const experiences = [
   {
     id: "01",
+    phase: "PHASE 01",
     role: "FOUNDER & CEO",
     company: "WEBPULSE AUTOMATION",
     date: "2024 - Present",
@@ -26,16 +28,17 @@ const experiences = [
     problem: "Businesses faced heavy operational friction from manual customer handling, repetitive inquiry queues, and slow delivery velocities.",
     solution: "Engineered an event-driven multi-agent synthesis engine with autonomous LLM bots, webhook triggers, and high-performance Next.js architectures.",
     impact: "Reduced client query response times by 90%, automated complex B2B inquiry pipelines, and scaled operations across multiple enterprise clients.",
-    bullets: [
-      "Led full-stack development of enterprise web applications",
-      "Engineered automated chatbots reducing response times by 90%",
-      "Scaled business operations to serve multiple B2B clients"
+    bulletItems: [
+      { text: "Led full-stack development of enterprise web applications", highlight: null },
+      { text: "Engineered automated chatbots ", highlight: "reducing response times by 90%", postText: "" },
+      { text: "Scaled business operations to serve ", highlight: "multiple B2B enterprise clients", postText: "" }
     ],
     tech: ["Next.js", "Python", "FastAPI", "OpenAI / Claude", "Vercel"],
     metric: { value: "90%", label: "Faster Response Time" }
   },
   {
     id: "02",
+    phase: "PHASE 02",
     role: "AI AUTOMATION ENGINEER",
     company: "FREELANCE / CONSULTING",
     date: "2023 - Present",
@@ -44,16 +47,17 @@ const experiences = [
     problem: "Startups and small businesses were bogged down by manual data entry, fragmented third-party tools, and slow release cycles.",
     solution: "Integrated state-of-the-art OpenAI and Gemini APIs into bespoke web systems, creating self-healing web scrapers and automated serverless pipelines.",
     impact: "Successfully automated operations for 10+ businesses, eliminating 100+ weekly manual work hours with 99.9% pipeline reliability.",
-    bullets: [
-      "Integrated OpenAI/Gemini APIs into custom SaaS platforms",
-      "Built automated data scraping and processing pipelines",
-      "Optimized cloud deployments on Vercel and AWS"
+    bulletItems: [
+      { text: "Integrated ", highlight: "OpenAI/Gemini APIs", postText: " into custom SaaS platforms" },
+      { text: "Automated end-to-end data pipelines for ", highlight: "10+ BUSINESSES", postText: "" },
+      { text: "Optimized resilient cloud deployments on ", highlight: "Vercel and AWS Lambda", postText: "" }
     ],
     tech: ["OpenAI API", "Gemini", "Node.js", "AWS Lambda", "Puppeteer"],
     metric: { value: "10+", label: "Businesses Automated" }
   },
   {
     id: "03",
+    phase: "PHASE 03",
     role: "LEAD DEVELOPER",
     company: "BD MESS (PRODUCT)",
     date: "2023 - 2024",
@@ -62,16 +66,17 @@ const experiences = [
     problem: "Shared accommodations suffered from contentious manual ledger sheets, recurring meal calculation disputes, and delayed utility collections.",
     solution: "Designed and built an automated multi-variable ledger algorithm with real-time Firebase state sync and an intuitive mobile-first React UI.",
     impact: "Scaled to 500+ active residents with zero calculation disputes, sub-second ledger updates, and automated digital receipts.",
-    bullets: [
-      "Developed complex bill splitting algorithms",
-      "Implemented real-time notification systems",
-      "Designed a seamless mobile-first user interface"
+    bulletItems: [
+      { text: "Developed complex bill splitting algorithms with ", highlight: "zero drift", postText: "" },
+      { text: "Implemented real-time state sync for ", highlight: "500+ ACTIVE RESIDENTS", postText: "" },
+      { text: "Designed a high-conversion ", highlight: "mobile-first React interface", postText: "" }
     ],
     tech: ["React.js", "Firebase Realtime DB", "Tailwind CSS", "Algorithms"],
     metric: { value: "500+", label: "Active Residents" }
   },
   {
     id: "04",
+    phase: "PHASE 04",
     role: "E-COMMERCE ARCHITECT",
     company: "PONYOPURI",
     date: "2022 - 2023",
@@ -80,10 +85,10 @@ const experiences = [
     problem: "Standard multi-step checkout funnels in the local market resulted in high cart abandonment due to payment friction and login walls.",
     solution: "Architected a high-speed digital storefront with a zero-friction 'Order via WhatsApp' checkout flow, instant catalog search, and optimized SEO.",
     impact: "Boosted direct sales conversion rates by 40%, achieved sub-second page transitions, and streamlined product inventory management.",
-    bullets: [
-      "Implemented 'Order via WhatsApp' to boost local sales",
-      "Optimized frontend performance and SEO",
-      "Managed digital marketing and product inventory"
+    bulletItems: [
+      { text: "Engineered 1-tap WhatsApp checkout ", highlight: "boosting conversion by 40%", postText: "" },
+      { text: "Optimized frontend for ", highlight: "sub-second render speeds", postText: " & SEO" },
+      { text: "Streamlined inventory management with ", highlight: "zero transaction drift", postText: "" }
     ],
     tech: ["React", "Node.js", "WhatsApp Business API", "SEO Engine"],
     metric: { value: "+40%", label: "Conversion Rate" }
@@ -102,10 +107,11 @@ function TimelineCard({ exp, idx }: { exp: typeof experiences[0]; idx: number })
 
   return (
     <div className="relative group w-full">
-      {/* Timeline Node on Left Rail (Tablet & Desktop) */}
-      <div className="hidden md:flex absolute -left-[45px] top-8 z-20 items-center justify-center">
-        <div className="w-9 h-9 rounded-full bg-black border-2 border-cyan-500/40 group-hover:border-cyan-400 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(var(--theme-rgb),0.8)] transition-all duration-300 flex items-center justify-center">
-          <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 group-hover:animate-ping" />
+      {/* Timeline Node on Left Rail (Desktop & Tablet) */}
+      <div className="hidden md:flex absolute -left-[54px] top-8 z-20 items-center justify-center">
+        <div className="w-10 h-10 rounded-full bg-black border-2 border-cyan-400 shadow-[0_0_25px_rgba(var(--theme-rgb),0.6)] flex items-center justify-center relative group-hover:scale-110 group-hover:border-cyan-300 transition-all duration-300">
+          <div className="absolute inset-0 rounded-full bg-cyan-400/20 animate-ping opacity-60" />
+          <div className="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,1)]" />
         </div>
       </div>
 
@@ -115,7 +121,7 @@ function TimelineCard({ exp, idx }: { exp: typeof experiences[0]; idx: number })
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.5, delay: idx * 0.1 }}
         onMouseMove={handleMouseMove}
-        className="glass-card rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-10 relative overflow-hidden group border border-white/10 hover:border-cyan-500/40 transition-all duration-500 bg-[#070b0e]/90 hover:bg-[#080e13] backdrop-blur-xl w-full"
+        className="glass-card rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-10 relative overflow-hidden group border border-white/10 hover:border-cyan-500/40 transition-all duration-500 bg-[#070b0e]/95 hover:bg-[#080e13] backdrop-blur-xl w-full"
       >
         {/* Magnetic Spotlight Hover Effect */}
         <motion.div
@@ -149,11 +155,16 @@ function TimelineCard({ exp, idx }: { exp: typeof experiences[0]; idx: number })
               <span className="text-[10px] font-mono text-neutral-400 px-2.5 py-1 rounded-md bg-white/5 border border-white/5">
                 {exp.role}
               </span>
+
+              {/* Phase Marker */}
+              <span className="text-[9px] font-mono text-cyan-500/80 px-2 py-0.5 rounded bg-cyan-950/40 border border-cyan-500/20 hidden sm:inline">
+                {exp.phase}
+              </span>
             </div>
             
             <div className="flex items-center gap-3">
               {/* Metric Highlight Pill */}
-              <div className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-mono font-bold">
+              <div className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-mono font-bold shadow-[0_0_12px_rgba(6,182,212,0.15)]">
                 {exp.metric.value} <span className="text-[9px] text-neutral-400 font-normal">{exp.metric.label}</span>
               </div>
 
@@ -241,19 +252,27 @@ function TimelineCard({ exp, idx }: { exp: typeof experiences[0]; idx: number })
             </div>
           </div>
 
-          {/* 4. Bullets */}
+          {/* 4. Structured Impact Badges & Contributions */}
           <div className="pt-4 border-t border-white/10 space-y-3">
             <span className="text-[10px] font-mono font-bold tracking-widest text-neutral-400 uppercase flex items-center gap-1.5 mb-2">
-              <ShieldCheck size={12} className="text-cyan-400" /> KEY MILESTONE CONTRIBUTIONS
+              <ShieldCheck size={12} className="text-cyan-400" /> KEY MILESTONE CONTRIBUTIONS & IMPACT
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {exp.bullets.map((bullet, i) => (
+              {exp.bulletItems.map((bullet, i) => (
                 <div 
                   key={i} 
-                  className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/[0.02] border border-white/5"
+                  className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-cyan-500/30 transition-colors"
                 >
                   <CheckCircle2 size={13} className="text-cyan-400 mt-0.5 shrink-0" />
-                  <span className="text-xs text-neutral-300 leading-relaxed">{bullet}</span>
+                  <span className="text-xs text-neutral-300 leading-relaxed">
+                    {bullet.text}
+                    {bullet.highlight && (
+                      <span className="text-cyan-400 font-semibold px-1.5 py-0.5 rounded bg-cyan-950/50 border border-cyan-500/30 inline-block mx-0.5 shadow-sm">
+                        {bullet.highlight}
+                      </span>
+                    )}
+                    {bullet.postText}
+                  </span>
                 </div>
               ))}
             </div>
@@ -261,7 +280,7 @@ function TimelineCard({ exp, idx }: { exp: typeof experiences[0]; idx: number })
 
         </div>
 
-        {/* 5. Clean Non-Absolute Footer Bar (Eliminates overlap with bullets completely) */}
+        {/* 5. Clean Non-Absolute Footer Bar */}
         <div className="relative z-10 mt-8 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ROLE:</span>
@@ -322,8 +341,8 @@ export default function Experience() {
 
         {/* Connected Vertical Timeline Container */}
         <div className="relative w-full">
-          {/* Vertical Connecting Rail Line (Hidden on Mobile, Visible on md+) */}
-          <div className="hidden md:block absolute left-[26px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-cyan-500 via-cyan-500/30 to-transparent pointer-events-none" />
+          {/* Vertical Glowing Connecting Rail Line (Visible on md+) */}
+          <div className="hidden md:block absolute left-[19px] top-8 bottom-8 w-[2px] bg-gradient-to-b from-cyan-400 via-cyan-500/40 to-transparent pointer-events-none shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
 
           {/* Timeline Cards Stack */}
           <div className="space-y-8 md:space-y-12 md:pl-16 w-full">
