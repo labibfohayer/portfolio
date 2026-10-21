@@ -26,10 +26,14 @@ export default function Preloader() {
   const tensColRef = useRef<HTMLSpanElement>(null);
   const onesColRef = useRef<HTMLSpanElement>(null);
 
-  const lWrapperRef = useRef<HTMLDivElement>(null);
+  // Center Progress Bar refs
+  const barContainerRef = useRef<HTMLDivElement>(null);
   const barTrackRef = useRef<HTMLDivElement>(null);
-  const lVerticalRef = useRef<HTMLDivElement>(null);
-  const lHorizontalRef = useRef<HTMLDivElement>(null);
+  const fillBarRef = useRef<HTMLDivElement>(null);
+
+  // "LABIB" Geometric Name refs
+  const labibWrapperRef = useRef<HTMLDivElement>(null);
+  const lettersRef = useRef<(SVGPathElement | null)[]>([]);
 
   // Skip preloader on admin dashboard for instant workflow
   const isAdmin = pathname?.startsWith("/admin");
@@ -51,6 +55,14 @@ export default function Preloader() {
   useGSAP(() => {
     if (isAdmin) return;
 
+    // Initial state for "LABIB" letters (hidden until 100% completion)
+    gsap.set(lettersRef.current, {
+      opacity: 0,
+      scale: 0.65,
+      y: 12,
+      transformOrigin: "center center",
+    });
+
     const tl = gsap.timeline({
       onComplete: () => {
         // Unlock body scroll
@@ -71,7 +83,7 @@ export default function Preloader() {
     });
 
     // -------------------------------------------------------------
-    // FIX 1 & STEP A: Progress Fill & Counter (0s to 2.2s)
+    // STEP 1: Progress Fill & Rolling Counter (0s to 2.2s)
     // -------------------------------------------------------------
     const progressObj = { val: 0 };
     let lastVal = -1;
@@ -106,9 +118,9 @@ export default function Preloader() {
       0
     );
 
-    // 2. Center bar l-vertical fills from 0px to 200px (100%)
+    // 2. Center bar fills from 0px to 200px (100%)
     tl.fromTo(
-      lVerticalRef.current,
+      fillBarRef.current,
       { width: "0px" },
       {
         width: "200px",
@@ -119,55 +131,31 @@ export default function Preloader() {
     );
 
     // -------------------------------------------------------------
-    // FIX 2 - STEP B: Morph into Geometric "L" Shape (at 2.2s)
+    // STEP 2: Morph into Geometric "LABIB" Name (at 2.2s)
     // -------------------------------------------------------------
     // a) bar-track fades out immediately
     tl.to(
       barTrackRef.current,
       {
         opacity: 0,
-        duration: 0.1,
+        duration: 0.12,
         ease: "power1.out",
       },
       2.2
     );
 
-    // b) l-vertical width shrinks to 36px and height shoots up to 110px
+    // b) fill-bar dissolves smoothly as letters emerge
     tl.to(
-      lVerticalRef.current,
+      fillBarRef.current,
       {
-        width: 36,
-        height: 110,
-        duration: 0.45,
-        ease: "expo.out",
+        opacity: 0,
+        duration: 0.15,
+        ease: "power1.out",
       },
       2.2
     );
 
-    // c) l-horizontal expands out to 74px from left: 36px
-    tl.to(
-      lHorizontalRef.current,
-      {
-        width: 74,
-        duration: 0.45,
-        ease: "expo.out",
-      },
-      2.2
-    );
-
-    // d) Center the resulting 110px x 110px "L" shape perfectly in the screen
-    tl.to(
-      lWrapperRef.current,
-      {
-        x: 45,
-        y: 37,
-        duration: 0.45,
-        ease: "expo.out",
-      },
-      2.2
-    );
-
-    // e) Bottom-left counter slides down and disappears
+    // c) Bottom-left counter slides down and disappears
     tl.to(
       counterContainerRef.current,
       {
@@ -179,26 +167,35 @@ export default function Preloader() {
       2.2
     );
 
-    // -------------------------------------------------------------
-    // STEP C: Pause briefly for 0.15s (2.65s to 2.80s)
-    // -------------------------------------------------------------
+    // d) "LABIB" geometric letters emerge and assemble in center
+    tl.to(
+      lettersRef.current,
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "expo.out",
+        stagger: 0.05,
+      },
+      2.2
+    );
 
     // -------------------------------------------------------------
-    // STEP D: Massive Scale-Up & Website Reveal (at 2.80s)
+    // STEP 3: Short Pause (2.7s to 3.4s) & Massive Scale-Up Reveal (at 3.4s)
     // -------------------------------------------------------------
-    // Zoom "L" shape into camera (scale: 85)
+    // Zoom "LABIB" name into camera (scale: 90)
     tl.to(
-      lWrapperRef.current,
+      labibWrapperRef.current,
       {
-        scale: 85,
-        rotation: 0,
+        scale: 90,
         duration: 0.75,
         ease: "expo.inOut",
       },
-      2.8
+      3.4
     );
 
-    // Preloader overlay fades out in final 0.3s as white covers viewport
+    // Preloader overlay fades out in the final 0.3s as white engulfs screen
     tl.to(
       overlayRef.current,
       {
@@ -206,7 +203,7 @@ export default function Preloader() {
         duration: 0.3,
         ease: "power2.out",
       },
-      3.25
+      3.85
     );
   }, { scope: overlayRef, dependencies: [isAdmin] });
 
@@ -218,58 +215,77 @@ export default function Preloader() {
       className="fixed inset-0 z-[99999] bg-[#000000] overflow-hidden select-none pointer-events-auto"
       style={{ backgroundColor: "#000000" }}
     >
-      {/* Center Loader: Morphing Geometric "L" Shape */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+      {/* Center Container: Progress Bar & Morphing "LABIB" Name */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4">
+        {/* Initial Progress Bar (0s to 2.2s) */}
         <div
-          ref={lWrapperRef}
-          className="relative flex items-center justify-center will-change-transform"
-          style={{
-            position: "relative",
-            width: "200px",
-            height: "36px",
-            transformOrigin: "55px -19px",
-          }}
+          ref={barContainerRef}
+          className="relative flex items-center justify-center will-change-opacity"
+          style={{ width: "200px", height: "36px" }}
         >
-          {/* Gray Track Background */}
+          {/* Dark Gray Track */}
           <div
             ref={barTrackRef}
             className="absolute inset-0 bg-[#333333] will-change-opacity"
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "#333333",
-            }}
           />
 
-          {/* l-vertical: Left side vertical block */}
+          {/* Solid White Fill Bar */}
           <div
-            ref={lVerticalRef}
-            className="absolute bg-[#ffffff] will-change-[width,height]"
-            style={{
-              position: "absolute",
-              left: 0,
-              bottom: 0,
-              width: "0%",
-              height: "36px",
-              background: "#ffffff",
-              transformOrigin: "left bottom",
-            }}
+            ref={fillBarRef}
+            className="absolute left-0 bottom-0 bg-[#ffffff] will-change-[width,opacity]"
+            style={{ width: "0px", height: "36px" }}
           />
+        </div>
 
-          {/* l-horizontal: Right side horizontal block */}
-          <div
-            ref={lHorizontalRef}
-            className="absolute bg-[#ffffff] will-change-[width]"
-            style={{
-              position: "absolute",
-              left: "36px",
-              bottom: 0,
-              width: "0px",
-              height: "36px",
-              background: "#ffffff",
-              transformOrigin: "left bottom",
-            }}
-          />
+        {/* Geometric "LABIB" Name (Assembles at 2.2s, Scales 90x at 3.4s) */}
+        <div
+          ref={labibWrapperRef}
+          className="absolute flex items-center justify-center will-change-transform"
+          style={{ transformOrigin: "center center" }}
+        >
+          <svg
+            viewBox="0 0 274 64"
+            fill="#ffffff"
+            className="w-[274px] max-w-[85vw] h-auto will-change-transform"
+          >
+            {/* Letter: L */}
+            <path
+              ref={(el) => { if (el) lettersRef.current[0] = el; }}
+              d="M 0 0 H 14 V 50 H 46 V 64 H 0 Z"
+              className="will-change-transform"
+            />
+
+            {/* Letter: A */}
+            <path
+              ref={(el) => { if (el) lettersRef.current[1] = el; }}
+              fillRule="evenodd"
+              d="M 62 0 H 112 V 64 H 98 V 42 H 76 V 64 H 62 Z M 76 14 H 98 V 29 H 76 Z"
+              className="will-change-transform"
+            />
+
+            {/* Letter: B (First) */}
+            <path
+              ref={(el) => { if (el) lettersRef.current[2] = el; }}
+              fillRule="evenodd"
+              d="M 128 0 H 168 L 176 8 V 22 L 170 28 L 176 34 V 56 L 168 64 H 128 Z M 142 14 H 158 L 162 18 L 158 22 H 142 Z M 142 37 H 158 L 162 41 L 158 47 H 142 Z"
+              className="will-change-transform"
+            />
+
+            {/* Letter: I */}
+            <path
+              ref={(el) => { if (el) lettersRef.current[3] = el; }}
+              d="M 192 0 H 210 V 64 H 192 Z"
+              className="will-change-transform"
+            />
+
+            {/* Letter: B (Second) */}
+            <path
+              ref={(el) => { if (el) lettersRef.current[4] = el; }}
+              fillRule="evenodd"
+              d="M 226 0 H 266 L 274 8 V 22 L 268 28 L 274 34 V 56 L 266 64 H 226 Z M 240 14 H 256 L 260 18 L 256 22 H 240 Z M 240 37 H 256 L 260 41 L 256 47 H 240 Z"
+              className="will-change-transform"
+            />
+          </svg>
         </div>
       </div>
 
