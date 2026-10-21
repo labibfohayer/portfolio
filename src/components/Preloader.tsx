@@ -31,12 +31,24 @@ export default function Preloader() {
   const barTrackRef = useRef<HTMLDivElement>(null);
   const fillBarRef = useRef<HTMLDivElement>(null);
 
-  // "LABIB" Geometric Name refs
+  // "LABIB" Geometric Name ref
   const labibWrapperRef = useRef<HTMLDivElement>(null);
-  const lettersRef = useRef<(SVGPathElement | null)[]>([]);
 
   // Skip preloader on admin dashboard for instant workflow
   const isAdmin = pathname?.startsWith("/admin");
+
+  // Core cleanup and unlock helper
+  const completeAndUnlock = () => {
+    document.body.style.overflow = "";
+    if (overlayRef.current) {
+      overlayRef.current.style.display = "none";
+      overlayRef.current.style.pointerEvents = "none";
+    }
+    setIsLoading(false);
+    if (typeof window !== "undefined") {
+      ScrollTrigger.refresh();
+    }
+  };
 
   useEffect(() => {
     if (isAdmin) {
@@ -47,7 +59,13 @@ export default function Preloader() {
     // Lock page scroll immediately on mount
     document.body.style.overflow = "hidden";
 
+    // Bulletproof safety fallback: under no circumstances should preloader ever block page > 3.2s
+    const safetyTimer = setTimeout(() => {
+      completeAndUnlock();
+    }, 3200);
+
     return () => {
+      clearTimeout(safetyTimer);
       document.body.style.overflow = "";
     };
   }, [isAdmin]);
@@ -56,34 +74,22 @@ export default function Preloader() {
     if (isAdmin) return;
 
     // Initial state for "LABIB" letters (hidden until 100% completion)
-    gsap.set(lettersRef.current, {
+    gsap.set(".labib-letter", {
       opacity: 0,
-      scale: 0.65,
-      y: 12,
+      scale: 0.7,
+      y: 10,
       transformOrigin: "center center",
     });
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // Unlock body scroll
-        document.body.style.overflow = "";
-
-        // Completely hide overlay so website beneath is fully interactive
-        if (overlayRef.current) {
-          overlayRef.current.style.display = "none";
-          overlayRef.current.style.pointerEvents = "none";
-        }
-        setIsLoading(false);
-
-        // Refresh ScrollTrigger calculations for underlying sections
-        if (typeof window !== "undefined") {
-          ScrollTrigger.refresh();
-        }
+        completeAndUnlock();
       },
     });
 
     // -------------------------------------------------------------
-    // STEP 1: Progress Fill & Rolling Counter (0s to 2.2s)
+    // STEP 1: Progress Fill & Rolling Counter (0s to 1.3s)
+    // Snappy, high-energy roll
     // -------------------------------------------------------------
     const progressObj = { val: 0 };
     let lastVal = -1;
@@ -93,7 +99,7 @@ export default function Preloader() {
       progressObj,
       {
         val: 100,
-        duration: 2.2,
+        duration: 1.3,
         ease: "power2.inOut",
         onUpdate: () => {
           const current = Math.min(100, Math.floor(progressObj.val));
@@ -124,35 +130,35 @@ export default function Preloader() {
       { width: "0px" },
       {
         width: "200px",
-        duration: 2.2,
+        duration: 1.3,
         ease: "power2.inOut",
       },
       0
     );
 
     // -------------------------------------------------------------
-    // STEP 2: Morph into Geometric "LABIB" Name (at 2.2s)
+    // STEP 2: Morph into Geometric "LABIB" Name (at 1.3s)
     // -------------------------------------------------------------
-    // a) bar-track fades out immediately
+    // a) bar-track fades out
     tl.to(
       barTrackRef.current,
+      {
+        opacity: 0,
+        duration: 0.1,
+        ease: "power1.out",
+      },
+      1.3
+    );
+
+    // b) fill-bar dissolves smoothly
+    tl.to(
+      fillBarRef.current,
       {
         opacity: 0,
         duration: 0.12,
         ease: "power1.out",
       },
-      2.2
-    );
-
-    // b) fill-bar dissolves smoothly as letters emerge
-    tl.to(
-      fillBarRef.current,
-      {
-        opacity: 0,
-        duration: 0.15,
-        ease: "power1.out",
-      },
-      2.2
+      1.3
     );
 
     // c) Bottom-left counter slides down and disappears
@@ -161,49 +167,49 @@ export default function Preloader() {
       {
         yPercent: 110,
         opacity: 0,
-        duration: 0.4,
+        duration: 0.35,
         ease: "power2.in",
       },
-      2.2
+      1.3
     );
 
     // d) "LABIB" geometric letters emerge and assemble in center
     tl.to(
-      lettersRef.current,
+      ".labib-letter",
       {
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.5,
+        duration: 0.4,
         ease: "expo.out",
-        stagger: 0.05,
+        stagger: 0.04,
       },
-      2.2
+      1.3
     );
 
     // -------------------------------------------------------------
-    // STEP 3: Short Pause (2.7s to 3.4s) & Massive Scale-Up Reveal (at 3.4s)
+    // STEP 3: Short Pause (1.7s to 2.15s) & Massive Scale-Up Reveal (at 2.15s)
     // -------------------------------------------------------------
     // Zoom "LABIB" name into camera (scale: 90)
     tl.to(
       labibWrapperRef.current,
       {
         scale: 90,
-        duration: 0.75,
+        duration: 0.65,
         ease: "expo.inOut",
       },
-      3.4
+      2.15
     );
 
-    // Preloader overlay fades out in the final 0.3s as white engulfs screen
+    // Preloader overlay fades out in the final 0.25s as white engulfs screen
     tl.to(
       overlayRef.current,
       {
         opacity: 0,
-        duration: 0.3,
+        duration: 0.25,
         ease: "power2.out",
       },
-      3.85
+      2.55
     );
   }, { scope: overlayRef, dependencies: [isAdmin] });
 
@@ -217,7 +223,7 @@ export default function Preloader() {
     >
       {/* Center Container: Progress Bar & Morphing "LABIB" Name */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4">
-        {/* Initial Progress Bar (0s to 2.2s) */}
+        {/* Initial Progress Bar (0s to 1.3s) */}
         <div
           ref={barContainerRef}
           className="relative flex items-center justify-center will-change-opacity"
@@ -237,7 +243,7 @@ export default function Preloader() {
           />
         </div>
 
-        {/* Geometric "LABIB" Name (Assembles at 2.2s, Scales 90x at 3.4s) */}
+        {/* Geometric "LABIB" Name (Assembles at 1.3s, Scales 90x at 2.15s) */}
         <div
           ref={labibWrapperRef}
           className="absolute flex items-center justify-center will-change-transform"
@@ -250,40 +256,35 @@ export default function Preloader() {
           >
             {/* Letter: L */}
             <path
-              ref={(el) => { if (el) lettersRef.current[0] = el; }}
               d="M 0 0 H 14 V 50 H 46 V 64 H 0 Z"
-              className="will-change-transform"
+              className="labib-letter opacity-0 will-change-transform"
             />
 
             {/* Letter: A */}
             <path
-              ref={(el) => { if (el) lettersRef.current[1] = el; }}
               fillRule="evenodd"
               d="M 62 0 H 112 V 64 H 98 V 42 H 76 V 64 H 62 Z M 76 14 H 98 V 29 H 76 Z"
-              className="will-change-transform"
+              className="labib-letter opacity-0 will-change-transform"
             />
 
             {/* Letter: B (First) */}
             <path
-              ref={(el) => { if (el) lettersRef.current[2] = el; }}
               fillRule="evenodd"
               d="M 128 0 H 168 L 176 8 V 22 L 170 28 L 176 34 V 56 L 168 64 H 128 Z M 142 14 H 158 L 162 18 L 158 22 H 142 Z M 142 37 H 158 L 162 41 L 158 47 H 142 Z"
-              className="will-change-transform"
+              className="labib-letter opacity-0 will-change-transform"
             />
 
             {/* Letter: I */}
             <path
-              ref={(el) => { if (el) lettersRef.current[3] = el; }}
               d="M 192 0 H 210 V 64 H 192 Z"
-              className="will-change-transform"
+              className="labib-letter opacity-0 will-change-transform"
             />
 
             {/* Letter: B (Second) */}
             <path
-              ref={(el) => { if (el) lettersRef.current[4] = el; }}
               fillRule="evenodd"
               d="M 226 0 H 266 L 274 8 V 22 L 268 28 L 274 34 V 56 L 266 64 H 226 Z M 240 14 H 256 L 260 18 L 256 22 H 240 Z M 240 37 H 256 L 260 41 L 256 47 H 240 Z"
-              className="will-change-transform"
+              className="labib-letter opacity-0 will-change-transform"
             />
           </svg>
         </div>
