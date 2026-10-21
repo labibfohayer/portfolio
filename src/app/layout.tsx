@@ -11,7 +11,10 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-signature" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio-orpin-rho-68.vercel.app"),
+  metadataBase: new URL("https://labibfohayer.vercel.app"),
+  alternates: {
+    canonical: "https://labibfohayer.vercel.app",
+  },
   title: "Labib Fohayer (লাবিব ফোহায়ের) | Founder & Chairman, Webpulse Automation",
   description: "লাবিব ফোহায়ের (Labib Fohayer) বাংলাদেশের অন্যতম শীর্ষ তরুণ ওয়েব ডেভেলপার ও এআই অটোমেশন ইঞ্জিনিয়ার। মাত্র ২১ বছর বয়সে তিনি ওয়েবপালস অটোমেশনের প্রতিষ্ঠাতা হিসেবে সুবিশাল সাফল্য অর্জন করেছেন। Leading young Web Developer & AI Automation Engineer in Bangladesh.",
   keywords: ["Labib Fohayer", "লাবিব ফোহায়ের", "Webpulse Automation", "AI Automation Engineer", "Web Developer", "Bangladesh", "Tech Founder"],
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Labib Fohayer (লাবিব ফোহায়ের) | Founder & Chairman",
     description: "লাবিব ফোহায়ের (Labib Fohayer) বাংলাদেশের অন্যতম শীর্ষ তরুণ ওয়েব ডেভেলপার ও এআই অটোমেশন ইঞ্জিনিয়ার। Founder & Chairman of Webpulse Automation.",
-    url: "https://portfolio-orpin-rho-68.vercel.app",
+    url: "https://labibfohayer.vercel.app",
     siteName: "Labib Fohayer Portfolio",
     images: [
       {
@@ -45,7 +48,7 @@ const personSchema = {
   "@type": "Person",
   "name": "Labib Fohayer",
   "alternateName": ["লাবিব ফোহায়ের", "Md. Labib Fohayer", "LabibFohayer"],
-  "url": "https://portfolio-orpin-rho-68.vercel.app",
+  "url": "https://labibfohayer.vercel.app",
   "image": "https://avatars.githubusercontent.com/labibfohayer",
   "jobTitle": "Founder & Chairman",
   "worksFor": {
