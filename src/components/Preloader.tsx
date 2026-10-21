@@ -251,12 +251,12 @@ export default function Preloader() {
         >
           <div className="flex flex-row items-center justify-center text-center whitespace-nowrap drop-shadow-[0_0_35px_rgba(6,182,212,0.65)]">
             {/* LABIB FOHAYER */}
-            <span className="font-display font-black tracking-wider text-[clamp(1.15rem,4.2vw,2.4rem)] text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]">
-              LABIB <span className="text-cyan-400 drop-shadow-[0_0_25px_rgba(6,182,212,0.9)]">FOHAYER</span>
+            <span className="font-display font-black tracking-wider text-[clamp(1.15rem,4.2vw,2.4rem)] text-cyan-300 drop-shadow-[0_0_25px_rgba(6,182,212,0.9)]">
+              LABIB <span className="text-cyan-400 drop-shadow-[0_0_35px_rgba(6,182,212,1)]">FOHAYER</span>
             </span>
 
             {/* Divider */}
-            <span className="mx-2 sm:mx-4 text-cyan-400/60 font-light text-[clamp(1.15rem,4.2vw,2.4rem)]">
+            <span className="mx-2 sm:mx-4 text-cyan-400/80 font-light text-[clamp(1.15rem,4.2vw,2.4rem)] drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]">
               |
             </span>
 
