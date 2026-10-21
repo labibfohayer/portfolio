@@ -14,7 +14,7 @@ if (typeof window !== "undefined") {
 // Odometer digit reel arrays
 const hundreds = [0, 1];
 const tens = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-const ones = Array.from({ length: 10 }, () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).flat().concat([0]);
+const ones = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
 export default function Preloader() {
   const pathname = usePathname();
@@ -22,14 +22,14 @@ export default function Preloader() {
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const counterContainerRef = useRef<HTMLDivElement>(null);
-  const hundredsColRef = useRef<HTMLDivElement>(null);
-  const tensColRef = useRef<HTMLDivElement>(null);
-  const onesColRef = useRef<HTMLDivElement>(null);
+  const hundredsColRef = useRef<HTMLSpanElement>(null);
+  const tensColRef = useRef<HTMLSpanElement>(null);
+  const onesColRef = useRef<HTMLSpanElement>(null);
 
-  const lShapeContainerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const fillBarRef = useRef<HTMLDivElement>(null);
-  const verticalStemRef = useRef<HTMLDivElement>(null);
+  const lWrapperRef = useRef<HTMLDivElement>(null);
+  const barTrackRef = useRef<HTMLDivElement>(null);
+  const lVerticalRef = useRef<HTMLDivElement>(null);
+  const lHorizontalRef = useRef<HTMLDivElement>(null);
 
   // Skip preloader on admin dashboard for instant workflow
   const isAdmin = pathname?.startsWith("/admin");
@@ -53,113 +53,161 @@ export default function Preloader() {
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // 1. Unlock body scroll
+        // Unlock body scroll
         document.body.style.overflow = "";
-        
-        // 2. Hide overlay completely to prevent blocking any clicks
+
+        // Completely hide overlay so website beneath is fully interactive
         if (overlayRef.current) {
           overlayRef.current.style.display = "none";
           overlayRef.current.style.pointerEvents = "none";
         }
         setIsLoading(false);
 
-        // 3. Refresh ScrollTrigger calculations for underlying sections
+        // Refresh ScrollTrigger calculations for underlying sections
         if (typeof window !== "undefined") {
           ScrollTrigger.refresh();
         }
-      }
+      },
     });
 
-    // ==========================================
-    // STAGE 1: Progress Fill & Rolling Counter (0% to 100%)
-    // Duration: 2.3s, Ease: "power2.inOut"
-    // ==========================================
+    // -------------------------------------------------------------
+    // FIX 1 & STEP A: Progress Fill & Counter (0s to 2.2s)
+    // -------------------------------------------------------------
+    const progressObj = { val: 0 };
+    let lastVal = -1;
 
-    // 1. Fill horizontal bar from 0% to 100%
-    tl.to(fillBarRef.current, {
-      width: "100%",
-      duration: 2.3,
-      ease: "power2.inOut",
-    }, 0);
+    // 1. Counter animation (000 to 100)
+    tl.to(
+      progressObj,
+      {
+        val: 100,
+        duration: 2.2,
+        ease: "power2.inOut",
+        onUpdate: () => {
+          const current = Math.min(100, Math.floor(progressObj.val));
+          if (current === lastVal) return;
+          lastVal = current;
 
-    // 2. Roll Ones digit (Col 3) through all cycles to final 0
-    tl.to(onesColRef.current, {
-      yPercent: -(100 * 100 / 101),
-      duration: 2.3,
-      ease: "power2.inOut",
-    }, 0);
+          const h = Math.floor(current / 100);
+          const t = current === 100 ? 10 : Math.floor((current % 100) / 10);
+          const o = current === 100 ? 10 : current % 10;
 
-    // 3. Roll Tens digit (Col 2) from 0 to 0 (index 10)
-    tl.to(tensColRef.current, {
-      yPercent: -(100 * 10 / 11),
-      duration: 2.3,
-      ease: "power2.inOut",
-    }, 0);
+          if (hundredsColRef.current) {
+            hundredsColRef.current.style.transform = `translateY(-${h}em)`;
+          }
+          if (tensColRef.current) {
+            tensColRef.current.style.transform = `translateY(-${t}em)`;
+          }
+          if (onesColRef.current) {
+            onesColRef.current.style.transform = `translateY(-${o}em)`;
+          }
+        },
+      },
+      0
+    );
 
-    // 4. Roll Hundreds digit (Col 1) from 0 to 1 at the climax of Stage 1
-    tl.to(hundredsColRef.current, {
-      yPercent: -50,
-      duration: 0.35,
-      ease: "power2.out",
-    }, 2.0);
+    // 2. Center bar l-vertical fills from 0px to 200px (100%)
+    tl.fromTo(
+      lVerticalRef.current,
+      { width: "0px" },
+      {
+        width: "200px",
+        duration: 2.2,
+        ease: "power2.inOut",
+      },
+      0
+    );
 
-    // ==========================================
-    // STAGE 2: Morph Bar into Geometric "L" Shape (At 100%)
-    // Duration: ~0.45s, Ease: "expo.out"
-    // ==========================================
+    // -------------------------------------------------------------
+    // FIX 2 - STEP B: Morph into Geometric "L" Shape (at 2.2s)
+    // -------------------------------------------------------------
+    // a) bar-track fades out immediately
+    tl.to(
+      barTrackRef.current,
+      {
+        opacity: 0,
+        duration: 0.1,
+        ease: "power1.out",
+      },
+      2.2
+    );
 
-    // 5. Dark-gray track background turns transparent
-    tl.to(trackRef.current, {
-      opacity: 0,
-      duration: 0.15,
-      ease: "power1.out",
-    }, 2.35);
+    // b) l-vertical width shrinks to 36px and height shoots up to 110px
+    tl.to(
+      lVerticalRef.current,
+      {
+        width: 36,
+        height: 110,
+        duration: 0.45,
+        ease: "expo.out",
+      },
+      2.2
+    );
 
-    // 6. Make vertical stem visible and shoot upward from 40px to 160px
-    tl.set(verticalStemRef.current, {
-      opacity: 1,
-    }, 2.35);
+    // c) l-horizontal expands out to 74px from left: 36px
+    tl.to(
+      lHorizontalRef.current,
+      {
+        width: 74,
+        duration: 0.45,
+        ease: "expo.out",
+      },
+      2.2
+    );
 
-    tl.to(verticalStemRef.current, {
-      height: 160,
-      duration: 0.45,
-      ease: "expo.out",
-    }, 2.35);
+    // d) Center the resulting 110px x 110px "L" shape perfectly in the screen
+    tl.to(
+      lWrapperRef.current,
+      {
+        x: 45,
+        y: 37,
+        duration: 0.45,
+        ease: "expo.out",
+      },
+      2.2
+    );
 
-    // 7. Adjust horizontal leg to 180px for classic geometric L proportion
-    tl.to(fillBarRef.current, {
-      width: 180,
-      duration: 0.45,
-      ease: "expo.out",
-    }, 2.35);
+    // e) Bottom-left counter slides down and disappears
+    tl.to(
+      counterContainerRef.current,
+      {
+        yPercent: 110,
+        opacity: 0,
+        duration: 0.4,
+        ease: "power2.in",
+      },
+      2.2
+    );
 
-    // 8. Simultaneously, bottom-left "100" counter slides down & fades out
-    tl.to(counterContainerRef.current, {
-      yPercent: 100,
-      opacity: 0,
-      duration: 0.45,
-      ease: "power2.in",
-    }, 2.35);
+    // -------------------------------------------------------------
+    // STEP C: Pause briefly for 0.15s (2.65s to 2.80s)
+    // -------------------------------------------------------------
 
-    // ==========================================
-    // STAGE 3: Massive Scale-Up & Website Reveal
-    // Duration: ~0.7s, Ease: "expo.inOut"
-    // ==========================================
+    // -------------------------------------------------------------
+    // STEP D: Massive Scale-Up & Website Reveal (at 2.80s)
+    // -------------------------------------------------------------
+    // Zoom "L" shape into camera (scale: 85)
+    tl.to(
+      lWrapperRef.current,
+      {
+        scale: 85,
+        rotation: 0,
+        duration: 0.75,
+        ease: "expo.inOut",
+      },
+      2.8
+    );
 
-    // 9. Zoom/Scale the geometric "L" shape into camera (scale: 75)
-    tl.to(lShapeContainerRef.current, {
-      scale: 75,
-      duration: 0.7,
-      ease: "expo.inOut",
-    }, 2.85);
-
-    // 10. Fade out the entire preloader overlay as white engulfs the screen
-    tl.to(overlayRef.current, {
-      opacity: 0,
-      duration: 0.45,
-      ease: "power2.out",
-    }, 3.15);
-
+    // Preloader overlay fades out in final 0.3s as white covers viewport
+    tl.to(
+      overlayRef.current,
+      {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.out",
+      },
+      3.25
+    );
   }, { scope: overlayRef, dependencies: [isAdmin] });
 
   if (isAdmin || !isLoading) return null;
@@ -170,73 +218,174 @@ export default function Preloader() {
       className="fixed inset-0 z-[99999] bg-[#000000] overflow-hidden select-none pointer-events-auto"
       style={{ backgroundColor: "#000000" }}
     >
-      {/* Center Progress Bar & Morphing Geometric "L" Shape */}
+      {/* Center Loader: Morphing Geometric "L" Shape */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
         <div
-          ref={lShapeContainerRef}
-          className="relative w-[240px] h-[160px] flex items-end will-change-transform"
-          style={{ transformOrigin: "center center" }}
+          ref={lWrapperRef}
+          className="relative flex items-center justify-center will-change-transform"
+          style={{
+            position: "relative",
+            width: "200px",
+            height: "36px",
+            transformOrigin: "55px -19px",
+          }}
         >
-          {/* Dark Gray Track (240px x 40px at bottom) */}
+          {/* Gray Track Background */}
           <div
-            ref={trackRef}
-            className="absolute bottom-0 left-0 w-[240px] h-[40px] bg-[#333333] overflow-hidden"
-          >
-            {/* Solid White Fill Bar (Fills 0% to 100% in Stage 1) */}
-            <div
-              ref={fillBarRef}
-              className="h-full bg-white will-change-[width] origin-left"
-              style={{ width: "0%" }}
-            />
-          </div>
+            ref={barTrackRef}
+            className="absolute inset-0 bg-[#333333] will-change-opacity"
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#333333",
+            }}
+          />
 
-          {/* Vertical Stem of "L" (40px wide, shoots up to 160px height in Stage 2) */}
+          {/* l-vertical: Left side vertical block */}
           <div
-            ref={verticalStemRef}
-            className="absolute bottom-0 left-0 w-[40px] bg-white will-change-[height] origin-bottom z-20"
-            style={{ height: "40px", opacity: 0 }}
+            ref={lVerticalRef}
+            className="absolute bg-[#ffffff] will-change-[width,height]"
+            style={{
+              position: "absolute",
+              left: 0,
+              bottom: 0,
+              width: "0%",
+              height: "36px",
+              background: "#ffffff",
+              transformOrigin: "left bottom",
+            }}
+          />
+
+          {/* l-horizontal: Right side horizontal block */}
+          <div
+            ref={lHorizontalRef}
+            className="absolute bg-[#ffffff] will-change-[width]"
+            style={{
+              position: "absolute",
+              left: "36px",
+              bottom: 0,
+              width: "0px",
+              height: "36px",
+              background: "#ffffff",
+              transformOrigin: "left bottom",
+            }}
           />
         </div>
       </div>
 
-      {/* Bottom-Left Odometer Counter (000 to 100) */}
+      {/* Bottom-Left Rolling Odometer Counter (000 to 100) */}
       <div
         ref={counterContainerRef}
         className="absolute bottom-6 left-6 sm:bottom-8 sm:left-10 z-20 will-change-transform"
       >
-        <div className="flex items-center text-[clamp(4rem,10vw,8.5rem)] font-medium text-white leading-none tracking-tight font-sans tabular-nums select-none">
-          {/* Hundreds Digit Column (0 -> 1) */}
-          <div className="h-[1em] overflow-hidden relative inline-flex">
-            <div ref={hundredsColRef} className="flex flex-col will-change-transform">
+        <div
+          className="flex items-center text-[clamp(4rem,10vw,8.5rem)] font-medium text-white tracking-tight font-sans select-none"
+          style={{ lineHeight: "1em" }}
+        >
+          {/* Column 1: Hundreds [0, 1] */}
+          <span
+            style={{
+              height: "1em",
+              lineHeight: "1em",
+              overflow: "hidden",
+              display: "inline-block",
+              verticalAlign: "top",
+            }}
+          >
+            <span
+              ref={hundredsColRef}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                willChange: "transform",
+              }}
+            >
               {hundreds.map((d, i) => (
-                <span key={i} className="h-[1em] flex items-center justify-center leading-none">
+                <span
+                  key={i}
+                  style={{
+                    height: "1em",
+                    lineHeight: "1em",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {d}
                 </span>
               ))}
-            </div>
-          </div>
+            </span>
+          </span>
 
-          {/* Tens Digit Column (0 -> 9 -> 0) */}
-          <div className="h-[1em] overflow-hidden relative inline-flex">
-            <div ref={tensColRef} className="flex flex-col will-change-transform">
+          {/* Column 2: Tens [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0] */}
+          <span
+            style={{
+              height: "1em",
+              lineHeight: "1em",
+              overflow: "hidden",
+              display: "inline-block",
+              verticalAlign: "top",
+            }}
+          >
+            <span
+              ref={tensColRef}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                willChange: "transform",
+              }}
+            >
               {tens.map((d, i) => (
-                <span key={i} className="h-[1em] flex items-center justify-center leading-none">
+                <span
+                  key={i}
+                  style={{
+                    height: "1em",
+                    lineHeight: "1em",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {d}
                 </span>
               ))}
-            </div>
-          </div>
+            </span>
+          </span>
 
-          {/* Ones Digit Column (0 -> 9 rolling 10 times -> 0) */}
-          <div className="h-[1em] overflow-hidden relative inline-flex">
-            <div ref={onesColRef} className="flex flex-col will-change-transform">
+          {/* Column 3: Ones [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0] */}
+          <span
+            style={{
+              height: "1em",
+              lineHeight: "1em",
+              overflow: "hidden",
+              display: "inline-block",
+              verticalAlign: "top",
+            }}
+          >
+            <span
+              ref={onesColRef}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                willChange: "transform",
+              }}
+            >
               {ones.map((d, i) => (
-                <span key={i} className="h-[1em] flex items-center justify-center leading-none">
+                <span
+                  key={i}
+                  style={{
+                    height: "1em",
+                    lineHeight: "1em",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {d}
                 </span>
               ))}
-            </div>
-          </div>
+            </span>
+          </span>
         </div>
       </div>
     </div>
