@@ -31,8 +31,8 @@ export default function Preloader() {
   const barTrackRef = useRef<HTMLDivElement>(null);
   const fillBarRef = useRef<HTMLDivElement>(null);
 
-  // Brand Name Ref: "LABIB FOHAYER | PORTFOLIO"
-  const brandContainerRef = useRef<HTMLDivElement>(null);
+  // "LABIB" Geometric Name ref
+  const labibWrapperRef = useRef<HTMLDivElement>(null);
 
   // Skip preloader on admin dashboard for instant workflow
   const isAdmin = pathname?.startsWith("/admin");
@@ -49,7 +49,7 @@ export default function Preloader() {
       if (typeof window !== "undefined") {
         setTimeout(() => {
           ScrollTrigger.refresh();
-        }, 100);
+        }, 80);
       }
     } catch {
       // safe fallback
@@ -65,10 +65,10 @@ export default function Preloader() {
     // Lock page scroll immediately on mount
     document.body.style.overflow = "hidden";
 
-    // Fail-safe fallback timer (guarantees site is unlocked within 1.9s)
+    // Fail-safe fallback timer (guarantees site is unlocked)
     const safetyTimer = setTimeout(() => {
       completeAndUnlock();
-    }, 1900);
+    }, 2400);
 
     return () => {
       clearTimeout(safetyTimer);
@@ -79,11 +79,11 @@ export default function Preloader() {
   useGSAP(() => {
     if (isAdmin) return;
 
-    // Initial state for brand name
-    gsap.set(brandContainerRef.current, {
+    // Initial state for "LABIB" letters
+    gsap.set(".labib-letter", {
       opacity: 0,
-      scale: 0.9,
-      y: 12,
+      scale: 0.7,
+      y: 10,
       transformOrigin: "center center",
     });
 
@@ -94,7 +94,7 @@ export default function Preloader() {
     });
 
     // -------------------------------------------------------------
-    // STEP 1: Ultra-Fast Cyan Progress Fill & Rolling Counter (0s to 0.75s)
+    // STEP 1: Progress Fill & Rolling Counter (0s to 1.0s)
     // -------------------------------------------------------------
     const progressObj = { val: 0 };
     let lastVal = -1;
@@ -104,7 +104,7 @@ export default function Preloader() {
       progressObj,
       {
         val: 100,
-        duration: 0.75,
+        duration: 1.0,
         ease: "power2.inOut",
         onUpdate: () => {
           const current = Math.min(100, Math.floor(progressObj.val));
@@ -129,81 +129,92 @@ export default function Preloader() {
       0
     );
 
-    // 2. Cyan Progress bar fills across the track
+    // 2. Center bar fills from 0px to 200px (100%)
     tl.fromTo(
       fillBarRef.current,
-      { width: "0%" },
+      { width: "0px" },
       {
-        width: "100%",
-        duration: 0.75,
+        width: "200px",
+        duration: 1.0,
         ease: "power2.inOut",
       },
       0
     );
 
     // -------------------------------------------------------------
-    // STEP 2: Morph into "LABIB FOHAYER | PORTFOLIO" (at 0.75s)
+    // STEP 2: Morph into Geometric "LABIB" Name (at 1.0s)
     // -------------------------------------------------------------
-    // a) bar-track & fill dissolve
+    // a) bar-track fades out immediately
     tl.to(
-      barContainerRef.current,
+      barTrackRef.current,
       {
         opacity: 0,
-        scale: 0.95,
         duration: 0.1,
         ease: "power1.out",
       },
-      0.75
+      1.0
     );
 
-    // b) Bottom-left counter slides down and disappears
+    // b) fill-bar dissolves smoothly as letters emerge
+    tl.to(
+      fillBarRef.current,
+      {
+        opacity: 0,
+        duration: 0.12,
+        ease: "power1.out",
+      },
+      1.0
+    );
+
+    // c) Bottom-left counter slides down and disappears
     tl.to(
       counterContainerRef.current,
       {
         yPercent: 110,
         opacity: 0,
-        duration: 0.25,
+        duration: 0.3,
         ease: "power2.in",
       },
-      0.75
+      1.0
     );
 
-    // c) "LABIB FOHAYER | PORTFOLIO" emerges in glowing Cyan
+    // d) "LABIB" geometric letters emerge and assemble in center
     tl.to(
-      brandContainerRef.current,
+      ".labib-letter",
       {
         opacity: 1,
         scale: 1,
         y: 0,
         duration: 0.35,
         ease: "expo.out",
+        stagger: 0.04,
       },
-      0.75
+      1.0
     );
 
     // -------------------------------------------------------------
-    // STEP 3: Short Pause (1.1s to 1.35s) & Massive Zoom Reveal (at 1.35s)
+    // STEP 3: Directly Zoom In & Reveal Website (at 1.4s)
     // -------------------------------------------------------------
-    // Zoom brand name into camera
+    // Zoom "LABIB" name massively into camera
     tl.to(
-      brandContainerRef.current,
+      labibWrapperRef.current,
       {
-        scale: 70,
-        duration: 0.45,
+        scale: 90,
+        duration: 0.55,
         ease: "expo.inOut",
       },
-      1.35
+      1.4
     );
 
-    // Preloader overlay fades out in the final 0.2s as site is revealed
+    // Preloader overlay fades out as white engulfs screen
     tl.to(
       overlayRef.current,
       {
         opacity: 0,
-        duration: 0.2,
+        duration: 0.25,
         ease: "power2.out",
       },
-      1.6
+      1.7
     );
   }, { scope: overlayRef, dependencies: [isAdmin] });
 
@@ -213,68 +224,86 @@ export default function Preloader() {
     <div
       ref={overlayRef}
       onClick={completeAndUnlock}
-      className="fixed inset-0 z-[99999] bg-[#020710] overflow-hidden select-none pointer-events-auto cursor-pointer"
-      style={{ backgroundColor: "#020710" }}
+      className="fixed inset-0 z-[99999] bg-[#000000] overflow-hidden select-none pointer-events-auto cursor-pointer"
+      style={{ backgroundColor: "#000000" }}
       title="Click or tap to enter"
     >
-      {/* Sci-Fi Cyan Radial Aura & Tech Grid Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.18)_0%,_rgba(2,8,16,0.85)_60%,_#01050a_100%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
-
-      {/* Center Container: Cyan Progress Bar & "LABIB FOHAYER | PORTFOLIO" */}
+      {/* Center Container: Progress Bar & Morphing "LABIB" Name */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4">
-        {/* Initial Cyan Progress Bar (0s to 0.75s) */}
+        {/* Initial Progress Bar (0s to 1.0s) */}
         <div
           ref={barContainerRef}
-          className="relative flex items-center justify-center will-change-transform"
-          style={{ width: "240px", height: "32px" }}
+          className="relative flex items-center justify-center will-change-opacity"
+          style={{ width: "200px", height: "36px" }}
         >
-          {/* Dark Cyan-Tinted Track */}
+          {/* Dark Gray Track */}
           <div
             ref={barTrackRef}
-            className="absolute inset-0 bg-cyan-950/40 border border-cyan-500/25 rounded-full overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.1)] backdrop-blur-sm"
-          >
-            {/* Glowing Cyan Fill Bar */}
-            <div
-              ref={fillBarRef}
-              className="h-full bg-gradient-to-r from-cyan-600 via-cyan-400 to-cyan-300 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.85)] origin-left will-change-[width]"
-              style={{ width: "0%" }}
-            />
-          </div>
+            className="absolute inset-0 bg-[#333333] will-change-opacity"
+          />
+
+          {/* Solid White Fill Bar */}
+          <div
+            ref={fillBarRef}
+            className="absolute left-0 bottom-0 bg-[#ffffff] will-change-[width,opacity]"
+            style={{ width: "0px", height: "36px" }}
+          />
         </div>
 
-        {/* "LABIB FOHAYER | PORTFOLIO" Brand Showcase (Assembles at 0.75s, Zooms at 1.35s) */}
+        {/* Geometric "LABIB" Name (Assembles at 1.0s, Directly Zooms at 1.4s) */}
         <div
-          ref={brandContainerRef}
-          className="absolute flex items-center justify-center will-change-transform px-4 pointer-events-none"
+          ref={labibWrapperRef}
+          className="absolute flex items-center justify-center will-change-transform"
           style={{ transformOrigin: "center center" }}
         >
-          <div className="flex flex-row items-center justify-center text-center whitespace-nowrap drop-shadow-[0_0_35px_rgba(6,182,212,0.65)]">
-            {/* LABIB FOHAYER */}
-            <span className="font-display font-black tracking-wider text-[clamp(1.15rem,4.2vw,2.4rem)] text-cyan-300 drop-shadow-[0_0_25px_rgba(6,182,212,0.9)]">
-              LABIB <span className="text-cyan-400 drop-shadow-[0_0_35px_rgba(6,182,212,1)]">FOHAYER</span>
-            </span>
+          <svg
+            viewBox="0 0 274 64"
+            fill="#ffffff"
+            className="w-[274px] max-w-[85vw] h-auto will-change-transform"
+          >
+            {/* Letter: L */}
+            <path
+              d="M 0 0 H 14 V 50 H 46 V 64 H 0 Z"
+              className="labib-letter opacity-0 will-change-transform"
+            />
 
-            {/* Divider */}
-            <span className="mx-2 sm:mx-4 text-cyan-400/80 font-light text-[clamp(1.15rem,4.2vw,2.4rem)] drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]">
-              |
-            </span>
+            {/* Letter: A */}
+            <path
+              fillRule="evenodd"
+              d="M 62 0 H 112 V 64 H 98 V 42 H 76 V 64 H 62 Z M 76 14 H 98 V 29 H 76 Z"
+              className="labib-letter opacity-0 will-change-transform"
+            />
 
-            {/* PORTFOLIO */}
-            <span className="font-mono font-bold tracking-[0.2em] sm:tracking-[0.28em] text-[clamp(0.75rem,2.5vw,1.4rem)] text-cyan-300 uppercase border border-cyan-500/40 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md bg-cyan-950/50 backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.35)]">
-              PORTFOLIO
-            </span>
-          </div>
+            {/* Letter: B (First) */}
+            <path
+              fillRule="evenodd"
+              d="M 128 0 H 168 L 176 8 V 22 L 170 28 L 176 34 V 56 L 168 64 H 128 Z M 142 14 H 158 L 162 18 L 158 22 H 142 Z M 142 37 H 158 L 162 41 L 158 47 H 142 Z"
+              className="labib-letter opacity-0 will-change-transform"
+            />
+
+            {/* Letter: I */}
+            <path
+              d="M 192 0 H 210 V 64 H 192 Z"
+              className="labib-letter opacity-0 will-change-transform"
+            />
+
+            {/* Letter: B (Second) */}
+            <path
+              fillRule="evenodd"
+              d="M 226 0 H 266 L 274 8 V 22 L 268 28 L 274 34 V 56 L 266 64 H 226 Z M 240 14 H 256 L 260 18 L 256 22 H 240 Z M 240 37 H 256 L 260 41 L 256 47 H 240 Z"
+              className="labib-letter opacity-0 will-change-transform"
+            />
+          </svg>
         </div>
       </div>
 
-      {/* Bottom-Left Rolling Odometer Counter (000 to 100) in Cyan */}
+      {/* Bottom-Left Rolling Odometer Counter (000 to 100) in White */}
       <div
         ref={counterContainerRef}
         className="absolute bottom-6 left-6 sm:bottom-8 sm:left-10 z-20 will-change-transform"
       >
         <div
-          className="flex items-center text-[clamp(4rem,10vw,8.5rem)] font-bold text-cyan-400 tracking-tight font-sans select-none drop-shadow-[0_0_35px_rgba(6,182,212,0.5)]"
+          className="flex items-center text-[clamp(4rem,10vw,8.5rem)] font-medium text-white tracking-tight font-sans select-none"
           style={{ lineHeight: "1em" }}
         >
           {/* Column 1: Hundreds [0, 1] */}
