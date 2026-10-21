@@ -31,8 +31,8 @@ export default function Preloader() {
   const barTrackRef = useRef<HTMLDivElement>(null);
   const fillBarRef = useRef<HTMLDivElement>(null);
 
-  // "LABIB" Geometric Name ref
-  const labibWrapperRef = useRef<HTMLDivElement>(null);
+  // "LABIB FOHAYER | PORTFOLIO" ref
+  const brandContainerRef = useRef<HTMLDivElement>(null);
 
   // Skip preloader on admin dashboard for instant workflow
   const isAdmin = pathname?.startsWith("/admin");
@@ -79,11 +79,11 @@ export default function Preloader() {
   useGSAP(() => {
     if (isAdmin) return;
 
-    // Initial state for "LABIB" letters
-    gsap.set(".labib-letter", {
+    // Initial state for brand text
+    gsap.set(brandContainerRef.current, {
       opacity: 0,
-      scale: 0.7,
-      y: 10,
+      scale: 0.9,
+      y: 12,
       transformOrigin: "center center",
     });
 
@@ -142,7 +142,7 @@ export default function Preloader() {
     );
 
     // -------------------------------------------------------------
-    // STEP 2: Morph into Geometric "LABIB" Name (at 1.0s)
+    // STEP 2: Morph into "LABIB FOHAYER | PORTFOLIO" (at 1.0s)
     // -------------------------------------------------------------
     // a) bar-track fades out immediately
     tl.to(
@@ -155,7 +155,7 @@ export default function Preloader() {
       1.0
     );
 
-    // b) fill-bar dissolves smoothly as letters emerge
+    // b) fill-bar dissolves smoothly
     tl.to(
       fillBarRef.current,
       {
@@ -178,16 +178,15 @@ export default function Preloader() {
       1.0
     );
 
-    // d) "LABIB" geometric letters emerge and assemble in center
+    // d) "LABIB FOHAYER | PORTFOLIO" emerges in pure white
     tl.to(
-      ".labib-letter",
+      brandContainerRef.current,
       {
         opacity: 1,
         scale: 1,
         y: 0,
         duration: 0.35,
         ease: "expo.out",
-        stagger: 0.04,
       },
       1.0
     );
@@ -195,11 +194,11 @@ export default function Preloader() {
     // -------------------------------------------------------------
     // STEP 3: Directly Zoom In & Reveal Website (at 1.4s)
     // -------------------------------------------------------------
-    // Zoom "LABIB" name massively into camera
+    // Zoom "LABIB FOHAYER | PORTFOLIO" massively into camera
     tl.to(
-      labibWrapperRef.current,
+      brandContainerRef.current,
       {
-        scale: 90,
+        scale: 85,
         duration: 0.55,
         ease: "expo.inOut",
       },
@@ -228,7 +227,7 @@ export default function Preloader() {
       style={{ backgroundColor: "#000000" }}
       title="Click or tap to enter"
     >
-      {/* Center Container: Progress Bar & Morphing "LABIB" Name */}
+      {/* Center Container: Progress Bar & "LABIB FOHAYER | PORTFOLIO" */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4">
         {/* Initial Progress Bar (0s to 1.0s) */}
         <div
@@ -250,50 +249,28 @@ export default function Preloader() {
           />
         </div>
 
-        {/* Geometric "LABIB" Name (Assembles at 1.0s, Directly Zooms at 1.4s) */}
+        {/* "LABIB FOHAYER | PORTFOLIO" Brand Showcase (Assembles at 1.0s, Directly Zooms at 1.4s) */}
         <div
-          ref={labibWrapperRef}
-          className="absolute flex items-center justify-center will-change-transform"
+          ref={brandContainerRef}
+          className="absolute flex items-center justify-center will-change-transform px-4 pointer-events-none"
           style={{ transformOrigin: "center center" }}
         >
-          <svg
-            viewBox="0 0 274 64"
-            fill="#ffffff"
-            className="w-[274px] max-w-[85vw] h-auto will-change-transform"
-          >
-            {/* Letter: L */}
-            <path
-              d="M 0 0 H 14 V 50 H 46 V 64 H 0 Z"
-              className="labib-letter opacity-0 will-change-transform"
-            />
+          <div className="flex flex-row items-center justify-center text-center whitespace-nowrap text-white">
+            {/* LABIB FOHAYER */}
+            <span className="font-display font-black tracking-wider text-[clamp(1.15rem,4.2vw,2.4rem)] text-white">
+              LABIB FOHAYER
+            </span>
 
-            {/* Letter: A */}
-            <path
-              fillRule="evenodd"
-              d="M 62 0 H 112 V 64 H 98 V 42 H 76 V 64 H 62 Z M 76 14 H 98 V 29 H 76 Z"
-              className="labib-letter opacity-0 will-change-transform"
-            />
+            {/* Divider */}
+            <span className="mx-2 sm:mx-4 text-white/50 font-light text-[clamp(1.15rem,4.2vw,2.4rem)]">
+              |
+            </span>
 
-            {/* Letter: B (First) */}
-            <path
-              fillRule="evenodd"
-              d="M 128 0 H 168 L 176 8 V 22 L 170 28 L 176 34 V 56 L 168 64 H 128 Z M 142 14 H 158 L 162 18 L 158 22 H 142 Z M 142 37 H 158 L 162 41 L 158 47 H 142 Z"
-              className="labib-letter opacity-0 will-change-transform"
-            />
-
-            {/* Letter: I */}
-            <path
-              d="M 192 0 H 210 V 64 H 192 Z"
-              className="labib-letter opacity-0 will-change-transform"
-            />
-
-            {/* Letter: B (Second) */}
-            <path
-              fillRule="evenodd"
-              d="M 226 0 H 266 L 274 8 V 22 L 268 28 L 274 34 V 56 L 266 64 H 226 Z M 240 14 H 256 L 260 18 L 256 22 H 240 Z M 240 37 H 256 L 260 41 L 256 47 H 240 Z"
-              className="labib-letter opacity-0 will-change-transform"
-            />
-          </svg>
+            {/* PORTFOLIO */}
+            <span className="font-mono font-bold tracking-[0.2em] sm:tracking-[0.28em] text-[clamp(0.75rem,2.5vw,1.4rem)] text-white uppercase border border-white/30 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md bg-white/5 backdrop-blur-sm">
+              PORTFOLIO
+            </span>
+          </div>
         </div>
       </div>
 
