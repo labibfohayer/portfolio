@@ -77,7 +77,7 @@ export default function Blog() {
   // if (!loading && posts.length === 0) return null;
 
   return (
-    <section id="blog" className="py-16 sm:py-24 md:py-32 relative z-10 bg-[black] overflow-hidden w-full max-w-full">
+    <section id="blog" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative z-10 bg-[black] overflow-hidden w-full max-w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -114,7 +114,7 @@ export default function Blog() {
                   className={isWide ? "lg:col-span-2 w-full" : "lg:col-span-1 w-full"}
                 >
                   <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} scale={1} transitionSpeed={2000} className="h-full w-full">
-                    <Link href={`/blog/${post.slug}`} className="glass-card p-6 sm:p-8 md:p-10 rounded-[1.5rem] sm:rounded-[2rem] relative h-full flex flex-col group border border-white/5 hover:border-cyan-500/30 transition-all duration-500 cursor-pointer block bg-black/40 hover:bg-black/60 overflow-hidden w-full">
+                    <Link href={`/blog/${post.slug}`} className="glass-card p-6 sm:p-8 md:p-10 rounded-[1.5rem] sm:rounded-[2rem] relative h-full flex flex-col justify-between group border border-white/5 hover:border-cyan-500/30 transition-all duration-500 cursor-pointer block bg-black/40 hover:bg-black/60 overflow-hidden w-full">
                       
                       {post.coverImage && (
                         <div className="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
@@ -129,28 +129,32 @@ export default function Blog() {
 
                       <div className="absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out origin-left shadow-[0_0_10px_rgba(var(--theme-rgb),0.8)] z-20" />
 
-                      <div className="flex justify-between items-start mb-10 relative z-10">
-                        <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] tracking-widest uppercase font-bold rounded-full group-hover:bg-cyan-500/20 transition-colors backdrop-blur-md">
-                          Article
-                        </span>
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-950/50 transition-all duration-300 backdrop-blur-md">
-                          <ArrowUpRight className="text-neutral-500 group-hover:text-cyan-400 group-hover:scale-125 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300" size={18} />
+                      <div>
+                        <div className="flex justify-between items-start mb-8 relative z-10">
+                          <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] tracking-widest uppercase font-bold rounded-full group-hover:bg-cyan-500/20 transition-colors backdrop-blur-md">
+                            {post.category || "Article"}
+                          </span>
+                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-950/50 transition-all duration-300 backdrop-blur-md">
+                            <ArrowUpRight className="text-neutral-500 group-hover:text-cyan-400 group-hover:scale-125 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300" size={18} />
+                          </div>
                         </div>
+                        
+                        <h3 className={`font-display font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors relative z-10 leading-tight ${isWide ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl'}`}>
+                          {post.title}
+                        </h3>
+                        
+                        <p className="text-sm text-neutral-400 mb-6 relative z-10 leading-relaxed line-clamp-3">
+                          {post.excerpt}
+                        </p>
                       </div>
-                      
-                      <h3 className={`font-display font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors relative z-10 leading-tight ${isWide ? 'text-2xl md:text-4xl' : 'text-xl md:text-2xl'}`}>
-                        {post.title}
-                      </h3>
-                      
-                      <p className="text-sm text-neutral-400 mb-6 relative z-10 line-clamp-2">
-                        {post.excerpt}
-                      </p>
 
-                      <div className="mt-auto flex items-center justify-between text-[10px] tracking-widest font-bold uppercase text-neutral-500 pt-6 border-t border-white/5 group-hover:border-cyan-500/20 transition-colors relative z-10">
-                        <span className="group-hover:text-cyan-500/70 transition-colors">
-                          {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      <div className="mt-auto flex items-center justify-between text-[10px] font-mono tracking-widest font-bold uppercase text-neutral-500 pt-6 border-t border-white/5 group-hover:border-cyan-500/20 transition-colors relative z-10">
+                        <span className="group-hover:text-cyan-400 transition-colors">
+                          {post.date || (post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent')}
                         </span>
-                        <span className="group-hover:text-cyan-500/70 transition-colors">5 min read</span>
+                        <span className="group-hover:text-cyan-400 transition-colors">
+                          {post.readTime || '5 min read'}
+                        </span>
                       </div>
 
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--theme-rgb),0.15),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />

@@ -71,7 +71,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-16 sm:py-24 md:py-32 relative z-10 border-t border-white/5 bg-[black] overflow-hidden w-full max-w-full">
+    <section id="contact" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative z-10 border-t border-white/5 bg-[black] overflow-hidden w-full max-w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16">
           <motion.div

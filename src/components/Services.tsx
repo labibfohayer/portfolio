@@ -145,7 +145,7 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: idx * 0.1 }}
       onMouseMove={handleMouseMove}
-      className="group relative rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 flex flex-col justify-between h-full bg-[#070b0e]/90 border border-white/10 hover:border-cyan-500/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_40px_rgba(var(--theme-rgb),0.18)] backdrop-blur-xl overflow-hidden"
+      className="group relative rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 flex flex-col justify-between h-auto min-h-[300px] bg-[#070b0e]/95 border border-white/10 hover:border-cyan-500/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_40px_rgba(var(--theme-rgb),0.18)] backdrop-blur-xl overflow-hidden"
     >
       {/* Interactive Radial Spotlight Hover */}
       <motion.div
@@ -165,7 +165,7 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
       <AnimatedBackground type={service.bgType} />
 
       {/* Content Container (flex-col justify-between h-full ensures zero empty void) */}
-      <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
+      <div className="relative z-10 flex flex-col justify-between h-full space-y-5">
         
         {/* Top Header Section */}
         <div>
@@ -207,11 +207,11 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
         </div>
 
         {/* Bottom Enriched Area (Eliminates Empty Space completely) */}
-        <div className="pt-5 border-t border-white/10 space-y-4 mt-auto">
+        <div className="pt-4 border-t border-white/10 space-y-3.5 mt-auto">
           
           {/* Sub-Feature Pill Group / Tech Stack */}
           <div>
-            <div className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-2">
+            <div className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1.5">
               FRAMEWORKS & APIS
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -271,7 +271,7 @@ function ServiceCard({ service, idx }: { service: typeof services[0]; idx: numbe
 
 export default function Services() {
   return (
-    <section id="services" className="py-16 sm:py-24 md:py-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
+    <section id="services" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
       {/* Background Ambience */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-cyan-500/5 blur-[160px] pointer-events-none rounded-full" />
 

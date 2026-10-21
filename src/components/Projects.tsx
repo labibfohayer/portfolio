@@ -105,7 +105,7 @@ const defaultProjects = [
     contributions: [
       "Orchestrated seamless checkout flows with instant WhatsApp conversion.",
       "Created highly optimized product grids with sub-second render speeds.",
-      "Designed responsive mobile layout ensuring max conversion rates."
+      "Designed responsive mobile layout ensuring maximum conversion and fast load speeds."
     ],
     liveUrl: "https://ponyopuri.com",
     githubUrl: "https://github.com/labibfohayer"
@@ -204,7 +204,18 @@ export default function Projects() {
       .then(res => res.json())
       .then(data => {
         if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
-          setProjects(data.projects);
+          // Normalize contributions if any are missing or truncated
+          const updated = data.projects.map((p: any) => {
+            if (p.id === "06" && Array.isArray(p.contributions)) {
+              p.contributions = p.contributions.map((c: string) => 
+                c.startsWith("Designed responsive mobile layout") 
+                  ? "Designed responsive mobile layout ensuring maximum conversion and fast load speeds." 
+                  : c
+              );
+            }
+            return p;
+          });
+          setProjects(updated);
         }
       })
       .catch(() => {
@@ -213,7 +224,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <section id="projects" className="py-16 sm:py-24 md:py-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
+    <section id="projects" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
       {/* Background Ambient Glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/5 blur-[140px] pointer-events-none rounded-full" />
       <div className="absolute bottom-1/4 left-10 w-[500px] h-[300px] bg-blue-500/5 blur-[120px] pointer-events-none rounded-full" />
@@ -242,12 +253,8 @@ export default function Projects() {
         </motion.div>
 
         {/* Bento Grid Architecture */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full auto-rows-fr">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full items-stretch">
           {projects.map((project, idx) => {
-            // Asymmetric Bento configuration:
-            // First item (01) spans 2 columns
-            // Sixth item (03/06 depending on sort) spans 2 columns
-            // Creates an aesthetically balanced SaaS layout
             const isFeatured = idx === 0 || (projects.length >= 6 && idx === 5) || (projects.length === 3 && idx === 0);
             const meta = projectMeta[project.id] || {
               status: "Production Ready",
@@ -269,85 +276,101 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: (idx % 4) * 0.08 }}
-                className={`w-full h-full flex flex-col ${
+                className={`w-full flex flex-col ${
                   isFeatured ? "md:col-span-2 lg:col-span-2" : "col-span-1"
                 }`}
               >
-                <div className="group relative rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden flex flex-col justify-between h-full bg-[#070b0e]/90 border border-white/10 hover:border-cyan-500/40 hover:shadow-[0_12px_45px_rgba(var(--theme-rgb),0.18)] transition-all duration-500 backdrop-blur-xl">
+                <div className="group relative rounded-[1.75rem] sm:rounded-[2rem] overflow-hidden flex flex-col justify-between h-full bg-[#070b0e]/95 border border-white/10 hover:border-cyan-500/40 hover:shadow-[0_12px_45px_rgba(var(--theme-rgb),0.18)] transition-all duration-500 backdrop-blur-xl">
                   
                   {/* Subtle Top Radial Glow on Hover */}
                   <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 group-hover:bg-cyan-500/15 blur-3xl rounded-full transition-all duration-500 pointer-events-none" />
 
+                  {/* Dedicated Card Top Bar: Status + Index (Does NOT obscure the screenshot) */}
+                  <div className="px-5 py-3.5 flex items-center justify-between border-b border-white/10 bg-white/[0.02] select-none z-20">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-[9px] font-mono font-bold text-cyan-300 flex items-center gap-1.5 uppercase">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        {meta.status}
+                      </span>
+                      <span className="text-cyan-400/90 font-mono text-[10px] font-semibold tracking-wider uppercase hidden sm:inline">
+                        {project.role}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-mono text-neutral-500">SYSTEM #{project.id}</span>
+                      <div className="font-mono text-xl sm:text-2xl font-black text-cyan-500/40 group-hover:text-cyan-400 transition-colors">
+                        {project.id}
+                      </div>
+                    </div>
+                  </div>
+
                   {/* 1. SaaS Browser / Terminal Mockup Frame */}
                   <div className="w-full relative overflow-hidden bg-[#040709] border-b border-white/10 flex flex-col">
                     
-                    {/* Glassmorphic Mockup Header Bar */}
-                    <div className="px-4 py-3 bg-white/[0.02] border-b border-white/5 flex items-center justify-between gap-3 select-none">
+                    {/* Browser Address Bar */}
+                    <div className="px-4 py-2.5 bg-black/70 border-b border-white/5 flex items-center justify-between gap-3 select-none">
                       {/* Window Controls */}
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500/60 border border-rose-400/40" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60 border border-amber-400/40" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60 border border-emerald-400/40" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500/70 border border-rose-400/40" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70 border border-amber-400/40" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70 border border-emerald-400/40" />
                       </div>
 
                       {/* Mockup Address Pill */}
-                      <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/60 border border-white/5 text-[10px] font-mono text-neutral-400 max-w-[240px] truncate">
+                      <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-white/5 border border-white/5 text-[10px] font-mono text-neutral-400 max-w-[260px] truncate">
                         <Terminal size={10} className="text-cyan-400 shrink-0" />
-                        <span className="text-neutral-500">system://</span>
+                        <span className="text-neutral-500">https://sys.labib.io/</span>
                         <span className="text-neutral-300 truncate">{project.title.toLowerCase().replace(/\s+/g, '-')}</span>
                       </div>
 
-                      {/* Live Status Badge */}
-                      <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-950/40 border border-cyan-500/20 text-[9px] font-mono text-cyan-300">
-                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        <span className="hidden xs:inline uppercase">{meta.status}</span>
+                      <div className="text-[9px] font-mono text-cyan-400/70 hidden xs:block">
+                        TLS 1.3
                       </div>
                     </div>
 
-                    {/* Visual Preview / Image Frame */}
-                    <div className={`w-full relative overflow-hidden flex items-center justify-center p-3 sm:p-5 ${
-                      isFeatured ? "h-56 sm:h-72" : "h-48 sm:h-56"
+                    {/* Visual Preview / Showcase Container */}
+                    <div className={`w-full relative overflow-hidden flex items-center justify-center p-3 sm:p-5 bg-gradient-to-b from-cyan-950/20 via-black/90 to-black ${
+                      isFeatured ? "h-60 sm:h-76" : "h-52 sm:h-60"
                     }`}>
+                      {/* Subtle Ambient Radial Glow & Grid behind image (Eliminates empty black bars on portrait images) */}
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--theme-rgb),0.12),transparent_70%)] pointer-events-none" />
+                      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none opacity-40" />
+
                       {project.image ? (
-                        <div className="relative w-full h-full rounded-xl overflow-hidden border border-white/10 bg-black/50 shadow-inner group-hover:border-cyan-500/30 transition-colors duration-500">
+                        <div className="relative w-full h-full rounded-xl overflow-hidden flex items-center justify-center z-10">
                           <img 
                             src={project.image} 
                             alt={project.title} 
-                            className="w-full h-full object-cover object-top opacity-75 group-hover:opacity-95 group-hover:scale-105 transition-all duration-700 ease-out"
+                            className="w-auto h-full max-h-full max-w-full object-contain rounded-lg shadow-[0_10px_35px_rgba(0,0,0,0.8)] border border-white/10 group-hover:border-cyan-500/40 group-hover:scale-105 transition-all duration-700 ease-out"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#040709] via-transparent to-transparent opacity-90" />
                         </div>
                       ) : (
-                        <div className="w-full h-full rounded-xl bg-gradient-to-br from-cyan-950/20 to-black flex items-center justify-center border border-white/5">
+                        <div className="w-full h-full rounded-xl bg-gradient-to-br from-cyan-950/20 to-black flex items-center justify-center border border-white/5 z-10">
                           <Activity size={32} className="text-cyan-500/40" />
                         </div>
                       )}
 
-                      {/* Project Index Overlay */}
-                      <div className="absolute top-4 right-4 z-10 font-mono text-3xl sm:text-4xl font-black text-cyan-500/20 group-hover:text-cyan-400/40 transition-colors duration-500 select-none">
-                        {project.id}
-                      </div>
-
-                      {/* Automation Architecture Mini-Diagram Overlay (Appears on Hover / Wide View) */}
-                      <div className="absolute bottom-3 left-3 right-3 z-10">
-                        <div className="bg-black/85 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/10 group-hover:border-cyan-500/30 transition-all duration-300">
-                          <div className="flex items-center justify-between mb-2">
+                      {/* Automation Architecture Mini-Diagram Overlay */}
+                      <div className="absolute bottom-3 left-3 right-3 z-20">
+                        <div className="bg-black/90 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/10 group-hover:border-cyan-500/30 transition-all duration-300">
+                          <div className="flex items-center justify-between mb-1.5">
                             <span className="text-[9px] font-mono font-bold tracking-wider text-neutral-400 uppercase flex items-center gap-1.5">
-                              <Workflow size={10} className="text-cyan-400" /> AUTOMATION PIPELINE
+                              <Workflow size={10} className="text-cyan-400" /> PIPELINE
                             </span>
-                            <span className="text-[9px] font-mono text-cyan-400/80">ONLINE</span>
+                            <span className="text-[9px] font-mono text-cyan-400/80">LIVE</span>
                           </div>
 
                           <div className="flex items-center justify-between gap-1 overflow-x-auto scrollbar-none py-0.5">
                             {meta.pipeline.map((node, nIdx) => (
                               <div key={nIdx} className="flex items-center shrink-0">
-                                <div className="px-2 py-1 rounded bg-white/5 border border-white/10 group-hover:border-cyan-500/30 text-center transition-colors">
+                                <div className="px-2 py-0.5 rounded bg-white/5 border border-white/10 group-hover:border-cyan-500/30 text-center transition-colors">
                                   <div className="text-[8px] font-mono font-semibold text-neutral-300 whitespace-nowrap">
                                     {node.label}
                                   </div>
                                 </div>
                                 {nIdx < meta.pipeline.length - 1 && (
-                                  <div className="mx-1 text-cyan-500/50 group-hover:text-cyan-400 transition-colors text-[10px]">
+                                  <div className="mx-1 text-cyan-500/50 group-hover:text-cyan-400 transition-colors text-[9px]">
                                     →
                                   </div>
                                 )}
@@ -361,25 +384,15 @@ export default function Projects() {
                   </div>
 
                   {/* 2. Content & Micro-Metrics Section */}
-                  <div className="p-5 sm:p-7 flex flex-col flex-grow justify-between relative z-10">
+                  <div className="p-6 sm:p-7 md:p-8 flex flex-col flex-grow justify-between relative z-10">
                     <div>
-                      {/* Role & Category */}
-                      <div className="flex items-center justify-between gap-2 mb-2.5">
-                        <span className="text-cyan-400 font-mono font-semibold tracking-wider text-[10px] uppercase">
-                          {project.role}
-                        </span>
-                        <span className="text-[9px] font-mono text-neutral-500 px-2 py-0.5 rounded bg-white/5 border border-white/5">
-                          ID: #{project.id}
-                        </span>
-                      </div>
-
                       {/* Title */}
                       <h3 className="text-xl sm:text-2xl font-display font-bold text-white uppercase tracking-tight mb-3 group-hover:text-cyan-300 transition-colors leading-tight">
                         {project.title}
                       </h3>
 
-                      {/* Description */}
-                      <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed mb-5 line-clamp-3">
+                      {/* Description (Zero line-clamp to prevent truncation) */}
+                      <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed mb-5">
                         {project.desc}
                       </p>
 
@@ -388,7 +401,7 @@ export default function Projects() {
                         {meta.metrics.map((metric, mIdx) => (
                           <div 
                             key={mIdx}
-                            className="bg-white/[0.03] border border-white/10 rounded-lg p-2 group-hover:border-cyan-500/20 transition-all duration-300"
+                            className="bg-white/[0.03] border border-white/10 rounded-lg p-2.5 group-hover:border-cyan-500/20 transition-all duration-300"
                           >
                             <span className="text-[9px] uppercase tracking-wider text-neutral-500 font-mono block">
                               {metric.label}
@@ -412,14 +425,14 @@ export default function Projects() {
                         ))}
                       </div>
 
-                      {/* Featured Card Extra: Key Contributions */}
-                      {isFeatured && project.contributions && (
-                        <div className="mb-6 pt-4 border-t border-white/10 space-y-2">
+                      {/* Key Contributions List (Rendered on all cards with generous spacing) */}
+                      {project.contributions && (
+                        <div className="mb-6 pt-4 border-t border-white/10 space-y-2.5">
                           <span className="text-[10px] font-mono font-bold tracking-widest text-neutral-400 uppercase flex items-center gap-1.5 mb-2">
-                            <ShieldCheck size={12} className="text-cyan-400" /> SYSTEM ARCHITECTURE HIGHLIGHTS
+                            <ShieldCheck size={12} className="text-cyan-400" /> KEY CONTRIBUTIONS
                           </span>
-                          {project.contributions.slice(0, 2).map((item: string, cIdx: number) => (
-                            <div key={cIdx} className="flex items-start gap-2 text-xs text-neutral-300 leading-relaxed">
+                          {project.contributions.map((item: string, cIdx: number) => (
+                            <div key={cIdx} className="flex items-start gap-2.5 text-xs text-neutral-300 leading-relaxed">
                               <CheckCircle2 size={13} className="text-cyan-400 mt-0.5 shrink-0" />
                               <span>{item}</span>
                             </div>
@@ -429,7 +442,7 @@ export default function Projects() {
                     </div>
 
                     {/* 3. Card Footer Action Bar */}
-                    <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3 mt-auto">
+                    <div className="pt-5 border-t border-white/10 flex items-center justify-between gap-3 mt-auto">
                       <MagneticButton>
                         <a 
                           href={project.liveUrl} 

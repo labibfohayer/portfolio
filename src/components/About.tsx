@@ -77,7 +77,7 @@ function HoverGlowCard({ children, className = "", delay = 0 }: { children: Reac
 
 export default function About() {
   return (
-    <section id="about" className="py-16 sm:py-24 md:py-32 relative bg-black overflow-hidden w-full max-w-full">
+    <section id="about" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative bg-black overflow-hidden w-full max-w-full">
       {/* Background elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[300px] sm:h-[400px] bg-cyan-900/10 blur-[100px] sm:blur-[120px] rounded-full pointer-events-none" />
 
@@ -96,8 +96,8 @@ export default function About() {
               <ShieldCheck size={12} className="text-cyan-500 animate-pulse" /> BIOGRAPHY & TARGET ARCHITECTURE
             </div>
             <h2 className="text-3xl sm:text-5xl md:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.95] break-words">
-              ABOUT MD. LABIB <br />
-              <span className="text-gradient-flow">FOHAYER.</span>
+              ABOUT MD LABIB <br />
+              <span className="text-gradient-flow">FOHAYER</span>
             </h2>
           </motion.div>
 
@@ -119,10 +119,10 @@ export default function About() {
         <div className="grid lg:grid-cols-12 gap-6 relative">
           
           {/* Main Card */}
-          <div className="lg:col-span-7 h-full">
-            <HoverGlowCard className="glass-card rounded-[2rem] p-8 md:p-12 flex flex-col justify-between h-full border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+          <div className="lg:col-span-7 h-auto">
+            <HoverGlowCard className="glass-card rounded-[2rem] p-8 md:p-12 pb-10 md:pb-12 flex flex-col justify-between h-auto min-h-full border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.5)] relative overflow-hidden">
               {/* Background Watermark */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display font-black text-[120px] md:text-[160px] text-white/[0.03] pointer-events-none select-none tracking-tighter rotate-[-5deg] z-0">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display font-black text-[120px] md:text-[160px] text-white/[0.025] opacity-[0.025] pointer-events-none select-none tracking-tighter rotate-[-5deg] z-0">
                 VISION
               </div>
 
@@ -218,7 +218,7 @@ export default function About() {
                 </p>
               </HoverGlowCard>
 
-              <HoverGlowCard delay={0.6} className="glass-card rounded-[2rem] p-8 flex-1 border-t-2 border-t-cyan-500 shadow-[0_0_20px_rgba(0,0,0,0.3)] bg-gradient-to-br from-black to-cyan-950/20">
+              <HoverGlowCard delay={0.6} className="glass-card rounded-[2rem] p-8 flex-1 border border-white/10 border-t-2 border-t-cyan-500 shadow-[0_0_20px_rgba(0,0,0,0.3)] bg-gradient-to-br from-black to-cyan-950/20">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TARGET 03
@@ -237,15 +237,15 @@ export default function About() {
         </div>
 
         {/* Wide Quote Card with Running Border */}
-        <div className="mt-10 relative overflow-hidden rounded-[2rem] p-[2px] group w-full max-w-full">
+        <div className="mt-10 relative overflow-hidden rounded-[2rem] p-[1.5px] group w-full max-w-full">
           {/* Animated Running Border Background */}
           <motion.div 
             animate={{ rotate: 360 }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[500%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_270deg,rgba(var(--theme-rgb),1)_360deg)] z-0 origin-center pointer-events-none"
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[500%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_270deg,rgba(var(--theme-rgb),0.8)_360deg)] z-0 origin-center pointer-events-none"
           />
           
-          <div className="relative z-10 w-full h-full bg-black/90 backdrop-blur-2xl rounded-[2rem] p-6 sm:p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-6 sm:gap-8 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]">
+          <div className="relative z-10 w-full h-full bg-[#070b0e] backdrop-blur-2xl rounded-[calc(2rem-1.5px)] p-6 sm:p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-6 sm:gap-8 border border-white/5 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]">
             <div className="flex-1">
               <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase mb-4 flex items-center gap-2">
                 <Zap size={12} className="animate-pulse" /> CORE ENGINEERING PHILOSOPHY

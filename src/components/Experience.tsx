@@ -131,145 +131,157 @@ function TimelineCard({ exp, idx }: { exp: typeof experiences[0]; idx: number })
           }}
         />
 
-        {/* 1. Header Information Bar */}
-        <div className="flex flex-wrap justify-between items-center gap-3 sm:gap-4 mb-6 relative z-10">
-          <div className="flex items-center gap-2.5">
-            {/* Company Badge */}
-            <div className="relative inline-flex overflow-hidden rounded-full p-[1px]">
-              <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,rgb(var(--theme-rgb))_50%,#000000_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-cyan-950/80 px-3.5 py-1.5 text-[10px] font-mono font-bold tracking-widest uppercase text-cyan-400 backdrop-blur-3xl border border-cyan-500/30 group-hover:border-transparent transition-all duration-300">
-                {exp.company}
+        {/* Main Content Area */}
+        <div className="relative z-10 flex flex-col flex-grow">
+          
+          {/* 1. Header Information Bar */}
+          <div className="flex flex-wrap justify-between items-center gap-3 sm:gap-4 mb-6">
+            <div className="flex items-center gap-2.5">
+              {/* Company Badge */}
+              <div className="relative inline-flex overflow-hidden rounded-full p-[1px]">
+                <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,rgb(var(--theme-rgb))_50%,#000000_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-cyan-950/80 px-3.5 py-1.5 text-[10px] font-mono font-bold tracking-widest uppercase text-cyan-400 backdrop-blur-3xl border border-cyan-500/30 group-hover:border-transparent transition-all duration-300">
+                  {exp.company}
+                </span>
+              </div>
+
+              {/* Role Tag */}
+              <span className="text-[10px] font-mono text-neutral-400 px-2.5 py-1 rounded-md bg-white/5 border border-white/5">
+                {exp.role}
               </span>
             </div>
-
-            {/* Role Tag */}
-            <span className="text-[10px] font-mono text-neutral-400 px-2.5 py-1 rounded-md bg-white/5 border border-white/5">
-              {exp.role}
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            {/* Metric Highlight Pill */}
-            <div className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-mono font-bold">
-              {exp.metric.value} <span className="text-[9px] text-neutral-400 font-normal">{exp.metric.label}</span>
-            </div>
-
-            {/* Date Tag */}
-            <span className="inline-flex items-center gap-1.5 text-[10px] text-neutral-400 font-mono tracking-wider uppercase bg-white/5 px-3 py-1 rounded-full border border-white/10 group-hover:border-cyan-500/30 group-hover:text-cyan-300 transition-colors">
-              <Calendar size={11} className="text-cyan-400" />
-              {exp.date}
-            </span>
-          </div>
-        </div>
-
-        {/* 2. Main Milestone Title & Description */}
-        <div className="mb-8 relative z-10">
-          <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-bold text-white uppercase tracking-tight mb-3 leading-tight group-hover:text-cyan-300 transition-colors duration-300">
-            {exp.title}
-          </h3>
-          <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-3xl">
-            {exp.description}
-          </p>
-        </div>
-
-        {/* 3. Interactive Problem ➔ Architecture ➔ Result Process Flow */}
-        <div className="relative z-10 mb-8 pt-6 border-t border-white/10">
-          <div className="text-[10px] font-mono font-bold tracking-widest text-neutral-400 uppercase flex items-center gap-2 mb-4">
-            <Sparkles size={12} className="text-cyan-400" /> SYSTEM EXECUTION PIPELINE
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 relative">
             
-            {/* Step 1: Challenge / Problem */}
-            <div className="bg-rose-950/15 border border-rose-500/20 rounded-2xl p-4 flex flex-col justify-between group/step hover:border-rose-500/40 transition-colors">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[9px] font-mono font-bold tracking-wider uppercase">
-                    <AlertCircle size={10} className="text-rose-400" /> THE CHALLENGE
-                  </span>
-                  <span className="text-[9px] font-mono text-rose-400/60">STAGE 01</span>
-                </div>
-                <p className="text-xs text-neutral-300 leading-relaxed mt-2">
-                  {exp.problem}
-                </p>
+            <div className="flex items-center gap-3">
+              {/* Metric Highlight Pill */}
+              <div className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-mono font-bold">
+                {exp.metric.value} <span className="text-[9px] text-neutral-400 font-normal">{exp.metric.label}</span>
               </div>
-              <div className="mt-3 pt-2 border-t border-rose-500/10 flex justify-end lg:hidden">
-                <ArrowDown size={14} className="text-rose-400/60 animate-bounce" />
-              </div>
-            </div>
 
-            {/* Step 2: Architecture & Solution */}
-            <div className="bg-cyan-950/20 border border-cyan-500/30 rounded-2xl p-4 flex flex-col justify-between group/step hover:border-cyan-400 transition-colors shadow-[0_0_20px_rgba(var(--theme-rgb),0.06)]">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] font-mono font-bold tracking-wider uppercase">
-                    <Cpu size={10} className="text-cyan-400" /> ARCHITECTURE & SOLUTION
-                  </span>
-                  <span className="text-[9px] font-mono text-cyan-400/60">STAGE 02</span>
-                </div>
-                <p className="text-xs text-neutral-200 leading-relaxed mt-2 font-normal">
-                  {exp.solution}
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-cyan-500/10 flex justify-end lg:hidden">
-                <ArrowDown size={14} className="text-cyan-400/60 animate-bounce" />
-              </div>
+              {/* Date Tag */}
+              <span className="inline-flex items-center gap-1.5 text-[10px] text-neutral-400 font-mono tracking-wider uppercase bg-white/5 px-3 py-1 rounded-full border border-white/10 group-hover:border-cyan-500/30 group-hover:text-cyan-300 transition-colors">
+                <Calendar size={11} className="text-cyan-400" />
+                {exp.date}
+              </span>
             </div>
-
-            {/* Step 3: Measurable Impact & Results */}
-            <div className="bg-emerald-950/15 border border-emerald-500/20 rounded-2xl p-4 flex flex-col justify-between group/step hover:border-emerald-500/40 transition-colors">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] font-mono font-bold tracking-wider uppercase">
-                    <TrendingUp size={10} className="text-emerald-400" /> MEASURABLE IMPACT
-                  </span>
-                  <span className="text-[9px] font-mono text-emerald-400/60">STAGE 03</span>
-                </div>
-                <p className="text-xs text-neutral-300 leading-relaxed mt-2">
-                  {exp.impact}
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-emerald-500/10 flex items-center justify-between">
-                <span className="text-[9px] font-mono text-emerald-400 font-bold uppercase">OUTCOME</span>
-                <span className="text-[10px] font-mono text-emerald-300 font-bold">{exp.metric.value}</span>
-              </div>
-            </div>
-
           </div>
+
+          {/* 2. Main Milestone Title & Description */}
+          <div className="mb-8">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-bold text-white uppercase tracking-tight mb-3 leading-tight group-hover:text-cyan-300 transition-colors duration-300">
+              {exp.title}
+            </h3>
+            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-3xl">
+              {exp.description}
+            </p>
+          </div>
+
+          {/* 3. Interactive Problem ➔ Architecture ➔ Result Process Flow */}
+          <div className="mb-8 pt-6 border-t border-white/10">
+            <div className="text-[10px] font-mono font-bold tracking-widest text-neutral-400 uppercase flex items-center gap-2 mb-4">
+              <Sparkles size={12} className="text-cyan-400" /> SYSTEM EXECUTION PIPELINE
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 relative">
+              
+              {/* Step 1: Challenge / Problem */}
+              <div className="bg-rose-950/15 border border-rose-500/20 rounded-2xl p-4 flex flex-col justify-between group/step hover:border-rose-500/40 transition-colors">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[9px] font-mono font-bold tracking-wider uppercase">
+                      <AlertCircle size={10} className="text-rose-400" /> THE CHALLENGE
+                    </span>
+                    <span className="text-[9px] font-mono text-rose-400/60">STAGE 01</span>
+                  </div>
+                  <p className="text-xs text-neutral-300 leading-relaxed mt-2">
+                    {exp.problem}
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-rose-500/10 flex justify-end lg:hidden">
+                  <ArrowDown size={14} className="text-rose-400/60 animate-bounce" />
+                </div>
+              </div>
+
+              {/* Step 2: Architecture & Solution */}
+              <div className="bg-cyan-950/20 border border-cyan-500/30 rounded-2xl p-4 flex flex-col justify-between group/step hover:border-cyan-400 transition-colors shadow-[0_0_20px_rgba(var(--theme-rgb),0.06)]">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] font-mono font-bold tracking-wider uppercase">
+                      <Cpu size={10} className="text-cyan-400" /> ARCHITECTURE & SOLUTION
+                    </span>
+                    <span className="text-[9px] font-mono text-cyan-400/60">STAGE 02</span>
+                  </div>
+                  <p className="text-xs text-neutral-200 leading-relaxed mt-2 font-normal">
+                    {exp.solution}
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-cyan-500/10 flex justify-end lg:hidden">
+                  <ArrowDown size={14} className="text-cyan-400/60 animate-bounce" />
+                </div>
+              </div>
+
+              {/* Step 3: Measurable Impact & Results */}
+              <div className="bg-emerald-950/15 border border-emerald-500/20 rounded-2xl p-4 flex flex-col justify-between group/step hover:border-emerald-500/40 transition-colors">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] font-mono font-bold tracking-wider uppercase">
+                      <TrendingUp size={10} className="text-emerald-400" /> MEASURABLE IMPACT
+                    </span>
+                    <span className="text-[9px] font-mono text-emerald-400/60">STAGE 03</span>
+                  </div>
+                  <p className="text-xs text-neutral-300 leading-relaxed mt-2">
+                    {exp.impact}
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-emerald-500/10 flex items-center justify-between">
+                  <span className="text-[9px] font-mono text-emerald-400 font-bold uppercase">OUTCOME</span>
+                  <span className="text-[10px] font-mono text-emerald-300 font-bold">{exp.metric.value}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* 4. Bullets */}
+          <div className="pt-4 border-t border-white/10 space-y-3">
+            <span className="text-[10px] font-mono font-bold tracking-widest text-neutral-400 uppercase flex items-center gap-1.5 mb-2">
+              <ShieldCheck size={12} className="text-cyan-400" /> KEY MILESTONE CONTRIBUTIONS
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {exp.bullets.map((bullet, i) => (
+                <div 
+                  key={i} 
+                  className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/[0.02] border border-white/5"
+                >
+                  <CheckCircle2 size={13} className="text-cyan-400 mt-0.5 shrink-0" />
+                  <span className="text-xs text-neutral-300 leading-relaxed">{bullet}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
 
-        {/* 4. Bullets & Tech Badges */}
-        <div className="relative z-10 pt-4 border-t border-white/10 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {exp.bullets.map((bullet, i) => (
-              <div 
-                key={i} 
-                className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.02] border border-white/5"
+        {/* 5. Clean Non-Absolute Footer Bar (Eliminates overlap with bullets completely) */}
+        <div className="relative z-10 mt-8 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ROLE:</span>
+            <span className="text-xs font-mono font-bold text-white uppercase tracking-wider text-cyan-300">{exp.role}</span>
+          </div>
+
+          <div className="flex flex-wrap gap-1.5">
+            {exp.tech.map((t, tIdx) => (
+              <span 
+                key={tIdx} 
+                className="text-[9px] font-mono px-2 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-400"
               >
-                <CheckCircle2 size={13} className="text-cyan-400 mt-0.5 shrink-0" />
-                <span className="text-xs text-neutral-300 leading-relaxed">{bullet}</span>
-              </div>
+                {t}
+              </span>
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3">
-            {/* Tech Stack Pills */}
-            <div className="flex flex-wrap gap-1.5">
-              {exp.tech.map((t, tIdx) => (
-                <span 
-                  key={tIdx} 
-                  className="text-[9px] font-mono px-2 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-400"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-
-            {/* Verified Badge */}
-            <div className="flex items-center gap-1.5 text-neutral-500 group-hover:text-cyan-400 transition-all duration-300">
-              <ShieldCheck size={14} className="group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" />
-              <span className="text-[9px] font-mono font-bold tracking-widest uppercase">VERIFIED MILESTONE</span>
-            </div>
+          <div className="flex items-center gap-1.5 text-neutral-500 group-hover:text-cyan-400 transition-all duration-300">
+            <ShieldCheck size={14} className="group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" />
+            <span className="text-[9px] font-mono font-bold tracking-widest uppercase">VERIFIED MILESTONE</span>
           </div>
         </div>
 
@@ -280,7 +292,7 @@ function TimelineCard({ exp, idx }: { exp: typeof experiences[0]; idx: number })
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-16 sm:py-24 md:py-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
+    <section id="experience" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 md:pb-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
       {/* Background Ambience */}
       <div className="absolute top-1/3 right-0 w-[600px] h-[400px] bg-cyan-500/5 blur-[150px] pointer-events-none rounded-full" />
       <div className="absolute bottom-10 left-10 w-[500px] h-[350px] bg-blue-500/5 blur-[130px] pointer-events-none rounded-full" />

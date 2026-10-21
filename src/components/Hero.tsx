@@ -118,7 +118,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="relative min-h-screen pt-20 sm:pt-28 overflow-x-hidden flex flex-col justify-between w-full max-w-full">
+    <section id="home" className="relative min-h-screen pt-28 sm:pt-36 overflow-x-hidden flex flex-col justify-between w-full max-w-full">
       {/* Sci-Fi Background Effects */}
       <div className="absolute inset-0 bg-[black] -z-20" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/10 via-[black] to-[black] -z-10" />
@@ -220,18 +220,23 @@ export default function Hero() {
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
           className="relative h-[280px] sm:h-[400px] md:h-[480px] xl:h-[580px] w-full flex flex-col justify-center items-center xl:justify-end xl:items-end mt-2 xl:mt-0 [perspective:1000px] z-10 max-w-full overflow-hidden sm:overflow-visible"
         >
-          {/* Glowing Aura behind image */}
+          {/* Soft Diffused Ambient Radial Glow */}
           <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[300px] h-[300px] sm:h-[400px] bg-cyan-500/20 blur-[80px] sm:blur-[100px] rounded-full z-0 pointer-events-none" 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[380px] h-[360px] sm:h-[460px] bg-cyan-500/15 blur-3xl rounded-full z-0 pointer-events-none" 
             style={{ transform: "translateZ(-50px)" }}
           />
           
-          <img 
-            src="/profile-transparent.png" 
-            alt="Md. Labib Fohayer" 
-            className="relative z-10 w-auto h-[90%] md:h-[95%] object-contain object-bottom drop-shadow-[0_0_30px_rgba(var(--theme-rgb),0.4)] pointer-events-none select-none"
+          {/* Portrait with smooth bottom fade mask to blend seamlessly above signature */}
+          <div 
+            className="relative z-10 w-auto h-[90%] md:h-[95%] flex items-end justify-center [mask-image:linear-gradient(to_bottom,black_82%,transparent_100%)] select-none pointer-events-none"
             style={{ transform: "translateZ(30px)" }}
-          />
+          >
+            <img 
+              src="/profile-transparent.png" 
+              alt="Md. Labib Fohayer" 
+              className="w-auto h-full object-contain object-bottom pointer-events-none select-none"
+            />
+          </div>
           
           {/* Signature Image */}
           <motion.div 

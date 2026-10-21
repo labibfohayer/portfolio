@@ -21,7 +21,7 @@ const nodes = [
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-16 sm:py-24 md:py-32 relative z-10 overflow-hidden w-full max-w-full border-t border-white/5 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/10 via-[black] to-[black]">
+    <section id="skills" className="scroll-mt-28 md:scroll-mt-32 pt-24 sm:pt-28 md:pt-32 pb-24 sm:pb-28 md:pb-36 relative z-10 overflow-hidden w-full max-w-full border-t border-white/5 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/10 via-[black] to-[black]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex flex-col items-center w-full">
         
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6 sm:mb-8">
@@ -132,10 +132,10 @@ export default function Skills() {
         </div>
 
         {/* Tech Stack Marquee */}
-        <div className="w-full max-w-full mt-14 sm:mt-20 border-y border-cyan-500/20 py-4 overflow-hidden bg-cyan-900/5 shadow-[0_0_30px_rgba(var(--theme-rgb),0.05)]">
-          <div className="flex gap-8 whitespace-nowrap animate-marquee">
+        <div className="w-full max-w-full mt-14 sm:mt-20 border-y border-cyan-500/20 py-4 sm:py-5 overflow-x-hidden bg-cyan-900/5 shadow-[0_0_30px_rgba(var(--theme-rgb),0.05)] select-none">
+          <div className="flex gap-8 whitespace-nowrap animate-marquee items-center">
             {[...allSkills, ...allSkills, ...allSkills].map((skill, i) => (
-              <span key={i} className="text-xs sm:text-sm font-bold tracking-widest text-neutral-400 uppercase hover:text-cyan-400 transition-all cursor-pointer">
+              <span key={i} className="text-xs sm:text-sm font-bold tracking-widest text-neutral-400 uppercase hover:text-cyan-400 transition-all cursor-pointer py-1">
                 // {skill}
               </span>
             ))}

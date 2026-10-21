@@ -39,7 +39,7 @@ const defaultProjects = [
     id: "06", title: "PONYOPURI E-COMMERCE", role: "SCALABLE DIGITAL STOREFRONT",
     desc: "Custom high-performance storefront that handles inventory management and direct WhatsApp ordering workflows.",
     tech: ["E-COMMERCE", "NODE.JS", "PAYMENT GATEWAYS", "REACT"], image: "/projects/ponyopuri.png",
-    contributions: ["Orchestrated seamless checkout flows with instant WhatsApp conversion.", "Created highly optimized product grids with sub-second render speeds.", "Designed responsive mobile layout ensuring max conversion rates."], liveUrl: "#", githubUrl: "#"
+    contributions: ["Orchestrated seamless checkout flows with instant WhatsApp conversion.", "Created highly optimized product grids with sub-second render speeds.", "Designed responsive mobile layout ensuring maximum conversion and fast load speeds."], liveUrl: "#", githubUrl: "#"
   }
 ];
 
