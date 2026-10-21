@@ -17,7 +17,7 @@ import PageTracker from "@/components/PageTracker";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[black] selection:bg-cyan-500/30 selection:text-white">
+    <main className="min-h-screen bg-[black] selection:bg-cyan-500/30 selection:text-white overflow-x-hidden w-full max-w-full relative">
       <PageTracker />
       <CommandPalette />
       <FloatingMusic />

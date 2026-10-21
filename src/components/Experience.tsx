@@ -71,11 +71,11 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: idx * 0.1 }}
       onMouseMove={handleMouseMove}
-      className="glass-card rounded-[2rem] p-8 md:p-10 relative overflow-hidden group pb-28 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 bg-black/40"
+      className="glass-card rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-10 relative overflow-hidden group pb-24 sm:pb-28 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 bg-black/40 w-full"
     >
       {/* Magnetic Spotlight Hover Effect */}
       <motion.div
-        className="pointer-events-none absolute -inset-px rounded-[2rem] opacity-0 transition duration-500 group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-px rounded-[1.5rem] sm:rounded-[2rem] opacity-0 transition duration-500 group-hover:opacity-100"
         style={{
           background: useMotionTemplate`
             radial-gradient(
@@ -87,7 +87,7 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
         }}
       />
 
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-8 relative z-10">
+      <div className="flex flex-wrap justify-between items-center gap-3 sm:gap-4 mb-6 sm:mb-8 relative z-10">
         {/* Animated Glowing Badge */}
         <div className="relative inline-flex overflow-hidden rounded-full p-[1px]">
           <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,rgb(var(--theme-rgb))_50%,#000000_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -101,39 +101,38 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
         </span>
       </div>
 
-      <h3 className="text-2xl md:text-3xl font-display font-bold text-white uppercase tracking-wider mb-4 leading-tight group-hover:text-cyan-300 transition-colors duration-500 relative z-10">
+      <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-bold text-white uppercase tracking-wider mb-4 leading-tight group-hover:text-cyan-300 transition-colors duration-500 relative z-10 break-words">
         {exp.title}
       </h3>
       
-      <p className="text-sm text-neutral-400 mb-8 leading-relaxed relative z-10">
+      <p className="text-xs sm:text-sm text-neutral-400 mb-6 sm:mb-8 leading-relaxed relative z-10">
         {exp.description}
       </p>
 
       {/* Staggered Bullet Points */}
-      <div className="space-y-4 mb-4 relative z-10">
+      <div className="space-y-3 sm:space-y-4 mb-4 relative z-10">
         {exp.bullets.map((bullet, i) => (
           <div 
             key={i} 
-            className="flex items-start gap-3 opacity-70 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out"
-            style={{ transitionDelay: `${i * 100}ms` }}
+            className="flex items-start gap-2.5 sm:gap-3 opacity-80 sm:opacity-70 group-hover:opacity-100 transition-all duration-500 ease-out"
           >
             <div className="mt-1.5 shrink-0">
               <div className="w-1.5 h-1.5 rotate-45 bg-cyan-500/50 group-hover:bg-cyan-400 group-hover:shadow-[0_0_10px_rgba(var(--theme-rgb),0.8)] transition-all duration-500" />
             </div>
-            <span className="text-sm text-neutral-400 group-hover:text-white transition-colors duration-500">{bullet}</span>
+            <span className="text-xs sm:text-sm text-neutral-400 group-hover:text-white transition-colors duration-500">{bullet}</span>
           </div>
         ))}
       </div>
 
       {/* Neon VERIFIED Footer */}
-      <div className="absolute bottom-0 left-0 right-0 px-8 py-6 border-t border-white/5 flex justify-between items-center bg-black/60 backdrop-blur-xl group-hover:bg-cyan-950/30 group-hover:border-cyan-500/20 transition-all duration-500">
-        <div className="translate-y-1 opacity-80 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-          <span className="text-[10px] text-neutral-500 tracking-widest uppercase block mb-1 group-hover:text-cyan-500 transition-colors">ROLE:</span>
+      <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-8 py-4 sm:py-6 border-t border-white/5 flex justify-between items-center bg-black/60 backdrop-blur-xl group-hover:bg-cyan-950/30 group-hover:border-cyan-500/20 transition-all duration-500">
+        <div className="translate-y-0.5 opacity-90 group-hover:opacity-100 transition-all duration-500">
+          <span className="text-[9px] sm:text-[10px] text-neutral-500 tracking-widest uppercase block mb-0.5 group-hover:text-cyan-500 transition-colors">ROLE:</span>
           <span className="text-xs font-bold text-white tracking-widest uppercase group-hover:text-cyan-100 transition-colors">{exp.role}</span>
         </div>
-        <div className="flex items-center gap-2 text-neutral-600 group-hover:text-cyan-400 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(var(--theme-rgb),1)]">
-          <ShieldCheck size={18} className="group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500" />
-          <span className="text-[10px] font-bold tracking-widest uppercase">VERIFIED</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 text-neutral-500 group-hover:text-cyan-400 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(var(--theme-rgb),1)]">
+          <ShieldCheck size={16} className="group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500" />
+          <span className="text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">VERIFIED</span>
         </div>
       </div>
     </motion.div>
@@ -142,26 +141,27 @@ function ExperienceCard({ exp, idx }: { exp: typeof experiences[0], idx: number 
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-20 md:py-32 relative z-10 bg-black">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+    <section id="experience" className="py-16 sm:py-24 md:py-32 relative z-10 bg-black overflow-hidden w-full max-w-full">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full">
         
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 sm:mb-20 gap-6 sm:gap-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="w-full md:w-auto"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6 bg-cyan-950/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6 bg-cyan-950/20">
               <Diamond size={12} className="text-cyan-500 animate-pulse" /> PROFESSIONAL MILESTONES
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
+            <h2 className="text-3xl sm:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
               WHAT I'VE BUILT <br />
               <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">& SOLVED.</span>
             </h2>
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 w-full">
           {experiences.map((exp, idx) => (
             <ExperienceCard key={idx} exp={exp} idx={idx} />
           ))}

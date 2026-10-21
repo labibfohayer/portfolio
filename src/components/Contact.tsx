@@ -71,33 +71,33 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-32 relative z-10 border-t border-white/5 bg-[black]">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid lg:grid-cols-2 gap-16">
+    <section id="contact" className="py-16 sm:py-24 md:py-32 relative z-10 border-t border-white/5 bg-[black] overflow-hidden w-full max-w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col justify-between"
+            className="flex flex-col justify-between w-full"
           >
             <div>
-              <h2 className="text-[12vw] lg:text-[7rem] font-display font-bold leading-[0.8] tracking-tighter uppercase mb-8">
+              <h2 className="text-4xl sm:text-6xl lg:text-[6.5rem] font-display font-bold leading-[0.9] tracking-tighter uppercase mb-6 sm:mb-8 break-words">
                 LET'S <br/> 
                 WORK <br/> 
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-600">TOGETHER.</span>
               </h2>
-              <p className="text-neutral-400 text-sm max-w-sm uppercase tracking-widest leading-relaxed">
+              <p className="text-neutral-400 text-xs sm:text-sm max-w-sm uppercase tracking-widest leading-relaxed">
                 HAVE A PROJECT IN MIND OR WANT TO AUTOMATE YOUR BUSINESS? LET'S TALK ABOUT YOUR IDEAS.
               </p>
 
               {/* Holographic ID Badge */}
-              <div className="mt-10 mb-8 p-4 rounded-2xl glass-card border border-white/10 bg-black/40 flex items-center gap-5 max-w-sm relative overflow-hidden group">
+              <div className="mt-8 sm:mt-10 mb-6 sm:mb-8 p-3.5 sm:p-4 rounded-2xl glass-card border border-white/10 bg-black/40 flex items-center gap-4 sm:gap-5 max-w-sm relative overflow-hidden group w-full">
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative">
-                  <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-cyan-500/50 relative shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">
+                <div className="relative shrink-0">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-cyan-500/50 relative shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">
                     <img src="/blog/blog-2-inner-2.jpg" alt="Labib" className="w-full h-full object-cover" />
                   </div>
-                  <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-black rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
+                  <div className="absolute bottom-0 right-0 w-3 h-3 sm:w-3.5 sm:h-3.5 bg-green-500 border-2 border-black rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
                 </div>
                 <div className="relative z-10">
                   <h4 className="text-white font-bold tracking-wider text-sm">LABIB FOHAYER</h4>
@@ -108,14 +108,14 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-4">
+            <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full">
               <a 
                 href={`https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, '')}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 px-8 py-5 rounded-full bg-cyan-500 text-black font-extrabold tracking-widest uppercase hover:bg-cyan-400 transition-colors shadow-[0_0_30px_rgba(var(--theme-rgb),0.3)]"
+                className="flex items-center justify-center gap-3 px-7 sm:px-8 py-4 sm:py-5 rounded-full bg-cyan-500 text-black font-extrabold tracking-widest uppercase hover:bg-cyan-400 transition-colors shadow-[0_0_30px_rgba(var(--theme-rgb),0.3)] w-full sm:w-auto text-xs sm:text-sm"
               >
-                <MessageCircle fill="currentColor" size={20} />
+                <MessageCircle fill="currentColor" size={18} />
                 WHATSAPP ME
               </a>
             </div>
@@ -125,7 +125,7 @@ export default function Contact() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="glass-card rounded-[2rem] p-8 md:p-12 relative overflow-hidden"
+            className="glass-card rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-12 relative overflow-hidden w-full"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] -z-10" />
             

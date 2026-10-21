@@ -17,24 +17,24 @@ const techStack = [
 
 export default function TechMarquee() {
   return (
-    <section className="w-full bg-[black] py-10 border-y border-white/5 overflow-hidden flex relative z-10">
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[black] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[black] to-transparent z-10 pointer-events-none" />
+    <section className="w-full max-w-full bg-[black] py-8 sm:py-10 border-y border-white/5 overflow-hidden flex relative z-10 pointer-events-none select-none">
+      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-[black] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-[black] to-transparent z-10 pointer-events-none" />
       
       <motion.div
-        className="flex whitespace-nowrap gap-16 items-center"
-        animate={{ x: [0, -1800] }}
-        transition={{ ease: "linear", duration: 30, repeat: Infinity }}
+        className="flex whitespace-nowrap gap-10 sm:gap-16 items-center"
+        animate={{ x: [0, -1400] }}
+        transition={{ ease: "linear", duration: 25, repeat: Infinity }}
       >
-        {/* Repeat the array multiple times for seamless infinite loop */}
-        {[...techStack, ...techStack, ...techStack, ...techStack, ...techStack].map((tech, idx) => (
-          <div key={idx} className="flex items-center gap-4 group cursor-default">
+        {[...techStack, ...techStack, ...techStack, ...techStack].map((tech, idx) => (
+          <div key={idx} className="flex items-center gap-3 sm:gap-4 shrink-0">
             <img 
               src={`https://cdn.simpleicons.org/${tech.slug}/${tech.color}`} 
               alt={tech.name}
-              className="w-10 h-10 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 drop-shadow-none"
+              className="w-7 h-7 sm:w-10 sm:h-10 grayscale opacity-40 transition-all duration-300"
+              loading="lazy"
             />
-            <span className="text-xl md:text-2xl font-bold text-slate-700 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
+            <span className="text-base sm:text-xl md:text-2xl font-bold text-slate-700 uppercase tracking-widest">
               {tech.name}
             </span>
           </div>

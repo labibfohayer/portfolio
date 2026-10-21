@@ -33,10 +33,10 @@ export default function CommandPalette() {
 
   return (
     <>
-      {/* Search Trigger Button for Mobile/Desktop visibility without keyboard */}
+      {/* Search Trigger Button for Desktop visibility without keyboard */}
       <button 
         onClick={() => { playClickSound(); setOpen(true); }}
-        className="fixed top-6 right-6 md:right-10 z-[100] px-4 py-2 rounded-full glass-card border border-white/10 text-neutral-400 text-sm hover:text-white hover:border-cyan-500/50 transition-all flex items-center gap-4"
+        className="hidden md:flex fixed top-6 right-6 md:right-10 z-[100] px-4 py-2 rounded-full glass-card border border-white/10 text-neutral-400 text-sm hover:text-white hover:border-cyan-500/50 transition-all items-center gap-4"
       >
         <span>Search</span>
         <kbd className="hidden md:inline-block px-2 py-0.5 rounded bg-white/10 text-xs font-mono">Ctrl K</kbd>

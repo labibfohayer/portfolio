@@ -19,54 +19,51 @@ export default function Projects() {
       });
   }, []);
   return (
-    <section id="projects" className="py-20 md:py-32 relative z-10 bg-[black]">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+    <section id="projects" className="py-16 sm:py-24 md:py-32 relative z-10 bg-[black] overflow-hidden w-full max-w-full">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-8"
+          className="mb-12 sm:mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 sm:gap-8"
         >
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6">
+          <div className="w-full md:w-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6">
               <Code2 size={12} className="text-cyan-500" /> SELECTED WORK
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
+            <h2 className="text-3xl sm:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
               ARCHITECTING <br />
               <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">DIGITAL ECOSYSTEMS</span>
             </h2>
           </div>
-          <p className="text-neutral-400 text-sm max-w-sm leading-relaxed">
+          <p className="text-neutral-400 text-xs sm:text-sm max-w-sm leading-relaxed">
             A selection of modern web applications, management platforms, and high-performance digital systems engineered for scale and speed.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {projects.map((project, idx) => {
             return (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: (idx % 3) * 0.1 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <Tilt 
-                  glareEnable={true} 
-                  glareMaxOpacity={0.15} 
-                  glareColor="cyan" 
-                  glarePosition="all" 
-                  tiltMaxAngleX={5} 
-                  tiltMaxAngleY={5} 
-                  scale={1.02}
+                  glareEnable={false} 
+                  tiltMaxAngleX={3} 
+                  tiltMaxAngleY={3} 
+                  scale={1}
                   transitionSpeed={2500}
-                  className="h-full"
+                  className="h-full w-full"
                 >
-                  <div className="glass-card rounded-[2rem] overflow-hidden group flex flex-col relative bg-cyan-950/5 border border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(var(--theme-rgb),0.15)] transition-all duration-500 h-full">
+                  <div className="glass-card rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden group flex flex-col relative bg-cyan-950/5 border border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(var(--theme-rgb),0.15)] transition-all duration-500 h-full w-full">
                     
                     {/* Top Image Section (Zoom Reveal on Hover) */}
-                    <div className="w-full h-64 md:h-80 relative overflow-hidden bg-black/60 border-b border-white/5">
+                    <div className="w-full h-52 sm:h-64 md:h-80 relative overflow-hidden bg-black/60 border-b border-white/5">
                       <div className="absolute top-4 left-4 z-20">
                         <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white tracking-widest uppercase flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" /> FEATURED APP

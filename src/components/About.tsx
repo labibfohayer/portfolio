@@ -77,24 +77,25 @@ function HoverGlowCard({ children, className = "", delay = 0 }: { children: Reac
 
 export default function About() {
   return (
-    <section id="about" className="py-20 md:py-32 relative bg-black">
+    <section id="about" className="py-16 sm:py-24 md:py-32 relative bg-black overflow-hidden w-full max-w-full">
       {/* Background elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-900/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[300px] sm:h-[400px] bg-cyan-900/10 blur-[100px] sm:blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10 w-full">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 sm:mb-16 gap-6 sm:gap-8">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="w-full md:w-auto"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6 shadow-[0_0_15px_rgba(var(--theme-rgb),0.1)]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6 shadow-[0_0_15px_rgba(var(--theme-rgb),0.1)]">
               <ShieldCheck size={12} className="text-cyan-500 animate-pulse" /> BIOGRAPHY & TARGET ARCHITECTURE
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9]">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.95] break-words">
               ABOUT MD. LABIB <br />
               <span className="text-gradient-flow">FOHAYER.</span>
             </h2>
@@ -236,20 +237,20 @@ export default function About() {
         </div>
 
         {/* Wide Quote Card with Running Border */}
-        <div className="mt-10 relative overflow-hidden rounded-[2rem] p-[2px] group">
+        <div className="mt-10 relative overflow-hidden rounded-[2rem] p-[2px] group w-full max-w-full">
           {/* Animated Running Border Background */}
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[500%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_270deg,rgba(var(--theme-rgb),1)_360deg)] z-0 origin-center"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[500%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_270deg,rgba(var(--theme-rgb),1)_360deg)] z-0 origin-center pointer-events-none"
           />
           
-          <div className="relative z-10 w-full h-full bg-black/90 backdrop-blur-2xl rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]">
+          <div className="relative z-10 w-full h-full bg-black/90 backdrop-blur-2xl rounded-[2rem] p-6 sm:p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-6 sm:gap-8 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]">
             <div className="flex-1">
               <span className="text-[10px] font-bold text-cyan-500 tracking-widest uppercase mb-4 flex items-center gap-2">
                 <Zap size={12} className="animate-pulse" /> CORE ENGINEERING PHILOSOPHY
               </span>
-              <h4 className="text-2xl md:text-3xl font-bold font-display uppercase tracking-wider text-white">
+              <h4 className="text-lg sm:text-2xl md:text-3xl font-bold font-display uppercase tracking-wider text-white leading-relaxed">
                 "Turning ideas and resilience into <span className="text-shine drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.8)]">high-impact</span> digital solutions that eliminate operational friction and scale effortlessly."
               </h4>
             </div>

@@ -77,22 +77,22 @@ export default function Blog() {
   // if (!loading && posts.length === 0) return null;
 
   return (
-    <section id="blog" className="py-20 md:py-32 relative z-10 bg-[black]">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+    <section id="blog" className="py-16 sm:py-24 md:py-32 relative z-10 bg-[black] overflow-hidden w-full max-w-full">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20 flex flex-col items-center text-center"
+          className="mb-12 sm:mb-20 flex flex-col items-center text-center"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-6 bg-cyan-950/20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6 bg-cyan-950/20">
             <BookOpen size={12} className="text-cyan-500 animate-pulse" /> KNOWLEDGE BASE
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.9] text-white">
+          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
             LATEST <br />
             <span className="text-cyan-500 drop-shadow-[0_0_15px_rgba(var(--theme-rgb),0.4)]">THOUGHTS.</span>
           </h2>
-          <p className="text-neutral-400 text-sm max-w-xl mx-auto mt-6 leading-relaxed">
+          <p className="text-neutral-400 text-xs sm:text-sm max-w-xl mx-auto mt-4 sm:mt-6 leading-relaxed">
             Articles on tech, automation, and the journey of building startups.
           </p>
         </motion.div>
@@ -100,7 +100,7 @@ export default function Blog() {
         {loading ? (
           <div className="text-center text-cyan-500 animate-pulse font-mono">Loading articles...</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
             {posts.map((post, idx) => {
               const isWide = idx === 0 || idx === 3;
               
@@ -111,10 +111,10 @@ export default function Blog() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: idx * 0.1, duration: 0.5 }}
-                  className={isWide ? "lg:col-span-2" : "lg:col-span-1"}
+                  className={isWide ? "lg:col-span-2 w-full" : "lg:col-span-1 w-full"}
                 >
-                  <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} scale={1.01} transitionSpeed={2000} className="h-full">
-                    <Link href={`/blog/${post.slug}`} className="glass-card p-8 md:p-10 rounded-[2rem] relative h-full flex flex-col group border border-white/5 hover:border-cyan-500/30 transition-all duration-500 cursor-pointer block bg-black/40 hover:bg-black/60 overflow-hidden">
+                  <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} scale={1} transitionSpeed={2000} className="h-full w-full">
+                    <Link href={`/blog/${post.slug}`} className="glass-card p-6 sm:p-8 md:p-10 rounded-[1.5rem] sm:rounded-[2rem] relative h-full flex flex-col group border border-white/5 hover:border-cyan-500/30 transition-all duration-500 cursor-pointer block bg-black/40 hover:bg-black/60 overflow-hidden w-full">
                       
                       {post.coverImage && (
                         <div className="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">

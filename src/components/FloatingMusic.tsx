@@ -29,16 +29,17 @@ export default function FloatingMusic() {
   return (
     <motion.button
       onClick={togglePlay}
-      className="fixed bottom-6 left-6 z-[100] w-14 h-14 rounded-full glass-card flex items-center justify-center text-cyan-400 hover:text-white hover:bg-cyan-500/20 transition-all border border-cyan-500/30 shadow-[0_0_20px_rgba(var(--theme-rgb),0.15)]"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
+      className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[90] w-11 h-11 sm:w-14 sm:h-14 rounded-full glass-card flex items-center justify-center text-cyan-400 hover:text-white hover:bg-cyan-500/20 transition-all border border-cyan-500/30 shadow-[0_0_20px_rgba(var(--theme-rgb),0.15)]"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       title="Toggle Focus Music"
+      aria-label="Toggle Focus Music"
     >
       <motion.div
         animate={{ rotate: isPlaying ? 360 : 0 }}
         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
       >
-        {isPlaying ? <Pause size={20} /> : <Music size={20} />}
+        {isPlaying ? <Pause size={17} className="sm:w-5 sm:h-5" /> : <Music size={17} className="sm:w-5 sm:h-5" />}
       </motion.div>
     </motion.button>
   );
