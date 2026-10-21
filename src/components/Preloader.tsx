@@ -45,8 +45,14 @@ export default function Preloader() {
       overlayRef.current.style.pointerEvents = "none";
     }
     setIsLoading(false);
-    if (typeof window !== "undefined") {
-      ScrollTrigger.refresh();
+    try {
+      if (typeof window !== "undefined") {
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
+      }
+    } catch {
+      // safe fallback
     }
   };
 
@@ -59,10 +65,10 @@ export default function Preloader() {
     // Lock page scroll immediately on mount
     document.body.style.overflow = "hidden";
 
-    // Fail-safe fallback timer (ensures user is never blocked)
+    // Fail-safe fallback timer (guarantees site is unlocked within 1.9s)
     const safetyTimer = setTimeout(() => {
       completeAndUnlock();
-    }, 3400);
+    }, 1900);
 
     return () => {
       clearTimeout(safetyTimer);
@@ -73,11 +79,11 @@ export default function Preloader() {
   useGSAP(() => {
     if (isAdmin) return;
 
-    // Initial state for brand name (hidden until 100% completion)
+    // Initial state for brand name
     gsap.set(brandContainerRef.current, {
       opacity: 0,
-      scale: 0.85,
-      y: 16,
+      scale: 0.9,
+      y: 12,
       transformOrigin: "center center",
     });
 
@@ -88,7 +94,7 @@ export default function Preloader() {
     });
 
     // -------------------------------------------------------------
-    // STEP 1: Cyan Progress Fill & Rolling Counter (0s to 1.35s)
+    // STEP 1: Ultra-Fast Cyan Progress Fill & Rolling Counter (0s to 0.75s)
     // -------------------------------------------------------------
     const progressObj = { val: 0 };
     let lastVal = -1;
@@ -98,7 +104,7 @@ export default function Preloader() {
       progressObj,
       {
         val: 100,
-        duration: 1.35,
+        duration: 0.75,
         ease: "power2.inOut",
         onUpdate: () => {
           const current = Math.min(100, Math.floor(progressObj.val));
@@ -129,14 +135,14 @@ export default function Preloader() {
       { width: "0%" },
       {
         width: "100%",
-        duration: 1.35,
+        duration: 0.75,
         ease: "power2.inOut",
       },
       0
     );
 
     // -------------------------------------------------------------
-    // STEP 2: Morph into "LABIB FOHAYER | PORTFOLIO" (at 1.35s)
+    // STEP 2: Morph into "LABIB FOHAYER | PORTFOLIO" (at 0.75s)
     // -------------------------------------------------------------
     // a) bar-track & fill dissolve
     tl.to(
@@ -144,10 +150,10 @@ export default function Preloader() {
       {
         opacity: 0,
         scale: 0.95,
-        duration: 0.15,
+        duration: 0.1,
         ease: "power1.out",
       },
-      1.35
+      0.75
     );
 
     // b) Bottom-left counter slides down and disappears
@@ -156,10 +162,10 @@ export default function Preloader() {
       {
         yPercent: 110,
         opacity: 0,
-        duration: 0.35,
+        duration: 0.25,
         ease: "power2.in",
       },
-      1.35
+      0.75
     );
 
     // c) "LABIB FOHAYER | PORTFOLIO" emerges in glowing Cyan
@@ -169,35 +175,35 @@ export default function Preloader() {
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.45,
+        duration: 0.35,
         ease: "expo.out",
       },
-      1.35
+      0.75
     );
 
     // -------------------------------------------------------------
-    // STEP 3: Short Pause (1.8s to 2.3s) & Massive Zoom Reveal (at 2.3s)
+    // STEP 3: Short Pause (1.1s to 1.35s) & Massive Zoom Reveal (at 1.35s)
     // -------------------------------------------------------------
     // Zoom brand name into camera
     tl.to(
       brandContainerRef.current,
       {
-        scale: 75,
-        duration: 0.65,
+        scale: 70,
+        duration: 0.45,
         ease: "expo.inOut",
       },
-      2.3
+      1.35
     );
 
-    // Preloader overlay fades out in the final 0.25s as cyan radiance reveals site
+    // Preloader overlay fades out in the final 0.2s as site is revealed
     tl.to(
       overlayRef.current,
       {
         opacity: 0,
-        duration: 0.25,
+        duration: 0.2,
         ease: "power2.out",
       },
-      2.7
+      1.6
     );
   }, { scope: overlayRef, dependencies: [isAdmin] });
 
@@ -206,8 +212,10 @@ export default function Preloader() {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[99999] bg-[#020710] overflow-hidden select-none pointer-events-auto"
+      onClick={completeAndUnlock}
+      className="fixed inset-0 z-[99999] bg-[#020710] overflow-hidden select-none pointer-events-auto cursor-pointer"
       style={{ backgroundColor: "#020710" }}
+      title="Click or tap to enter"
     >
       {/* Sci-Fi Cyan Radial Aura & Tech Grid Background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.18)_0%,_rgba(2,8,16,0.85)_60%,_#01050a_100%)] pointer-events-none" />
@@ -215,7 +223,7 @@ export default function Preloader() {
 
       {/* Center Container: Cyan Progress Bar & "LABIB FOHAYER | PORTFOLIO" */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4">
-        {/* Initial Cyan Progress Bar (0s to 1.35s) */}
+        {/* Initial Cyan Progress Bar (0s to 0.75s) */}
         <div
           ref={barContainerRef}
           className="relative flex items-center justify-center will-change-transform"
@@ -235,7 +243,7 @@ export default function Preloader() {
           </div>
         </div>
 
-        {/* "LABIB FOHAYER | PORTFOLIO" Brand Showcase (Assembles at 1.35s, Zooms at 2.3s) */}
+        {/* "LABIB FOHAYER | PORTFOLIO" Brand Showcase (Assembles at 0.75s, Zooms at 1.35s) */}
         <div
           ref={brandContainerRef}
           className="absolute flex items-center justify-center will-change-transform px-4 pointer-events-none"

@@ -143,8 +143,8 @@ export default function Skills() {
               const radius = 290;
               const angle = (i * 360) / nodes.length;
               const radian = (angle * Math.PI) / 180;
-              const x = Math.cos(radian) * radius;
-              const y = Math.sin(radian) * radius;
+              const x = Math.round(Math.cos(radian) * radius * 100) / 100;
+              const y = Math.round(Math.sin(radian) * radius * 100) / 100;
               const isHovered = hoveredNode === node.name;
               
               return (
