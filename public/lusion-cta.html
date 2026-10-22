@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lusion-Style Particle Wave CTA // LABIB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #050505;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ========================================================
+       1. MAIN 100vh FULL-SCREEN HERO SECTION
+       ======================================================== */
+    #lusion-cta-section {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      background-color: #1A2FFB;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.2rem 3rem;
+      user-select: none;
+      cursor: crosshair;
+    }
+
+    @media (max-width: 768px) {
+      #lusion-cta-section {
+        padding: 1.5rem 1.25rem;
+      }
+    }
+
+    /* ========================================================
+       2. FULL-SCREEN 2D FLUID CANVAS
+       ======================================================== */
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+      z-index: 1;
+    }
+
+    /* Subtle Center Radial Glow */
+    .ambient-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(60, 95, 255, 0.45) 0%, rgba(26, 47, 251, 0) 70%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Decorative Plus (+) Crosshairs across the screen */
+    .grid-cross {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.45);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      line-height: 1;
+      pointer-events: none;
+      z-index: 3;
+      user-select: none;
+    }
+    .cross-top-left { top: 6rem; left: 3rem; }
+    .cross-mid-left { top: 50%; left: 3rem; transform: translateY(-50%); }
+    .cross-bot-left { bottom: 6rem; left: 3rem; }
+    .cross-top-right { top: 6rem; right: 3rem; }
+    .cross-mid-right { top: 50%; right: 3rem; transform: translateY(-50%); }
+    .cross-bot-right { bottom: 6rem; right: 3rem; }
+
+    @media (max-width: 768px) {
+      .cross-top-left, .cross-mid-left, .cross-bot-left { left: 1rem; }
+      .cross-top-right, .cross-mid-right, .cross-bot-right { right: 1rem; }
+    }
+
+    /* ========================================================
+       3. TOP NAVIGATION BAR
+       ======================================================== */
+    .top-nav {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .brand-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Action 1: Circle Sound-Wave Button */
+    .btn-sound {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-sound:hover {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.05);
+    }
+    .sound-bar {
+      width: 2px;
+      background: #ffffff;
+      border-radius: 2px;
+      animation: soundPulse 1.2s ease-in-out infinite alternate;
+    }
+    .sound-bar:nth-child(1) { height: 10px; animation-delay: 0.1s; }
+    .sound-bar:nth-child(2) { height: 16px; animation-delay: 0.3s; }
+    .sound-bar:nth-child(3) { height: 8px; animation-delay: 0.2s; }
+    .sound-bar:nth-child(4) { height: 14px; animation-delay: 0.4s; }
+
+    @keyframes soundPulse {
+      0% { transform: scaleY(0.4); }
+      100% { transform: scaleY(1.3); }
+    }
+
+    /* Action 2: Dark Blue Pill "LET'S TALK" */
+    .btn-talk {
+      background: #0E1CA3;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.4rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+    .btn-talk:hover {
+      background: #0A1580;
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+    .talk-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ffffff;
+      animation: pingDot 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes pingDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* Action 3: White Pill "MENU" */
+    .btn-menu {
+      background: #ffffff;
+      border: none;
+      color: #000000;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.35rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .btn-menu:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+    }
+    .menu-dots {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .menu-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #000000;
+    }
+
+    /* ========================================================
+       4. CENTER TYPOGRAPHY & VERTICAL LETTER FLIP
+       ======================================================== */
+    .center-lockup {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+      margin: auto 0;
+    }
+
+    .micro-heading {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .main-headline {
+      font-size: clamp(4rem, 9vw, 8.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .headline-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    /* Letter Slot Container for Vertical Roll / Slot-Machine Flip */
+    .letter-slot {
+      display: inline-block;
+      overflow: hidden;
+      height: 1.05em;
+      line-height: 1.05em;
+      vertical-align: middle;
+      position: relative;
+    }
+
+    .letter-strip {
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0%);
+      transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+      will-change: transform;
+    }
+
+    .char {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 1.05em;
+      line-height: 1.05em;
+      text-align: center;
+    }
+
+    /* Typographic Variation on Flip: Elegant Serif Italic Accent */
+    .char.styled {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      color: #ffffff;
+    }
+
+    /* ========================================================
+       5. BOTTOM SCROLL BUTTON & 2-SEC SCROLL LOCK PROGRESS
+       ======================================================== */
+    .bottom-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .scroll-progress-track {
+      width: 140px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scroll-progress-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+      border-radius: 9999px;
+      transition: width 0.1s linear;
+    }
+
+    .btn-scroll {
+      background: #ffffff;
+      color: #000000;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.8rem;
+      border-radius: 9999px;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      text-decoration: none;
+    }
+    .btn-scroll:hover {
+      transform: scale(1.04);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ========================================================
+       6. DUMMY NEXT SECTION (TARGET FOR SCROLL-LOCK RELEASE)
+       ======================================================== */
+    #next-section {
+      width: 100vw;
+      min-height: 100vh;
+      background: #09090b;
+      color: #ffffff;
+      padding: 6rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 20;
+    }
+
+    .next-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #1A2FFB;
+      margin-bottom: 1rem;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid rgba(26, 47, 251, 0.3);
+      border-radius: 9999px;
+      background: rgba(26, 47, 251, 0.1);
+    }
+
+    .next-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .next-desc {
+      max-width: 620px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #a1a1aa;
+      margin-bottom: 3rem;
+    }
+
+    .dummy-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .dummy-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.5rem;
+      padding: 2.2rem;
+      text-align: left;
+    }
+
+    .dummy-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+      color: #ffffff;
+    }
+
+    .dummy-card p {
+      font-size: 0.9rem;
+      color: #71717a;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       HERO: 100vw x 100vh LUSION-STYLE PARTICLE WAVE SECTION
+       ======================================================== -->
+  <section id="lusion-cta-section">
+    <!-- Fluid Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Radial Electric Glow -->
+    <div class="ambient-glow"></div>
+
+    <!-- Plus Grid Markers -->
+    <span class="grid-cross cross-top-left">+</span>
+    <span class="grid-cross cross-mid-left">+</span>
+    <span class="grid-cross cross-bot-left">+</span>
+    <span class="grid-cross cross-top-right">+</span>
+    <span class="grid-cross cross-mid-right">+</span>
+    <span class="grid-cross cross-bot-right">+</span>
+
+    <!-- 1. TOP NAVIGATION BAR -->
+    <header class="top-nav">
+      <a href="#" class="brand-logo">LABIB</a>
+
+      <div class="nav-actions">
+        <!-- Sound Wave Button -->
+        <button class="btn-sound" aria-label="Toggle Sound">
+          <div class="sound-bar"></div>
+          <div class="sound-bar"></div>
+          <div class="sound-bar"></div>
+          <div class="sound-bar"></div>
+        </button>
+
+        <!-- Dark Blue Pill "LET'S TALK" -->
+        <a href="#next-section" class="btn-talk">
+          <span>LET'S TALK</span>
+          <span class="talk-dot"></span>
+        </a>
+
+        <!-- White Pill "MENU" -->
+        <button class="btn-menu">
+          <span>MENU</span>
+          <div class="menu-dots">
+            <span class="menu-dot"></span>
+            <span class="menu-dot"></span>
+          </div>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. CENTER TYPOGRAPHY & LETTER FLIP -->
+    <div class="center-lockup">
+      <p class="micro-heading">IS YOUR BIG IDEA READY TO GO WILD?</p>
+
+      <h1 class="main-headline">
+        <!-- Line 1: Let's work -->
+        <span class="headline-line" id="line-1">
+          <!-- Populated by JS for individual letter-slot wrappers -->
+        </span>
+
+        <!-- Line 2: together! -->
+        <span class="headline-line" id="line-2">
+          <!-- Populated by JS for individual letter-slot wrappers -->
+        </span>
+      </h1>
+    </div>
+
+    <!-- 3. BOTTOM PILL BUTTON & SCROLL PROGRESS -->
+    <div class="bottom-container">
+      <div class="scroll-progress-track">
+        <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+      </div>
+      <button class="btn-scroll" id="btn-scroll-action">
+        ↓ CONTINUE TO SCROLL ↓
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       DUMMY NEXT SECTION (TARGET OF SCROLL-LOCK RELEASE)
+       ======================================================== -->
+  <section id="next-section">
+    <div class="next-tag">NEXT HORIZON // ARCHITECTURE</div>
+    <h2 class="next-title">AUTONOMOUS SYSTEMS & ENGINEERING</h2>
+    <p class="next-desc">
+      You have successfully traversed the 2-second interactive fluid particle gate. Below lies the next generation of full-stack platforms and intelligent automation pipelines.
+    </p>
+
+    <div class="dummy-cards">
+      <div class="dummy-card">
+        <h3>10X Execution</h3>
+        <p>Ultra-fast production cycles engineered with clean React architectures, typed APIs, and automated test suites.</p>
+      </div>
+      <div class="dummy-card">
+        <h3>70% Cost Compression</h3>
+        <p>Replacing manual friction with autonomous workflows, scalable cloud infrastructure, and intelligent bots.</p>
+      </div>
+      <div class="dummy-card">
+        <h3>Resilient Backends</h3>
+        <p>High-availability systems built to withstand enterprise load with zero runtime errors or performance hitches.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       LOGIC: CANVAS FLUID PHYSICS, LETTER FLIP, & SCROLL-LOCK
+       ======================================================== -->
+  <script>
+    (function() {
+      // ========================================================
+      // A. SETUP TYPOGRAPHY & VERTICAL LETTER FLIP ENGINE
+      // ========================================================
+      const line1Text = "Let's work";
+      const line2Text = "together!";
+      const line1Container = document.getElementById("line-1");
+      const line2Container = document.getElementById("line-2");
+
+      const allLetterSlots = [];
+
+      function createLetterSlot(char) {
+        if (char === " ") {
+          const space = document.createElement("span");
+          space.style.display = "inline-block";
+          space.style.width = "0.3em";
+          space.innerHTML = "&nbsp;";
+          return space;
+        }
+
+        const slot = document.createElement("span");
+        slot.className = "letter-slot";
+
+        const strip = document.createElement("span");
+        strip.className = "letter-strip";
+
+        // Primary Character
+        const charPrimary = document.createElement("span");
+        charPrimary.className = "char primary";
+        charPrimary.textContent = char;
+
+        // Alternate Styled Character (Serif Italic Variation)
+        const charAlt = document.createElement("span");
+        charAlt.className = "char alt styled";
+        charAlt.textContent = char;
+
+        // Duplicate primary for infinite seamless roll
+        const charRepeat = document.createElement("span");
+        charRepeat.className = "char primary";
+        charRepeat.textContent = char;
+
+        strip.appendChild(charPrimary);
+        strip.appendChild(charAlt);
+        strip.appendChild(charRepeat);
+
+        slot.appendChild(strip);
+
+        // State tracking
+        const slotObj = {
+          element: strip,
+          char: char,
+          state: 0 // 0: primary (0%), 1: alt (-33.333%), 2: repeat (-66.666%)
+        };
+        allLetterSlots.push(slotObj);
+
+        return slot;
+      }
+
+      for (let ch of line1Text) line1Container.appendChild(createLetterSlot(ch));
+      for (let ch of line2Text) line2Container.appendChild(createLetterSlot(ch));
+
+      // Flip 1 to 3 random letters every 1.0 to 1.5 seconds
+      function triggerRandomLetterFlip() {
+        if (allLetterSlots.length === 0) return;
+
+        const countToFlip = Math.floor(Math.random() * 2) + 1; // 1 or 2 letters
+        for (let i = 0; i < countToFlip; i++) {
+          const randomIndex = Math.floor(Math.random() * allLetterSlots.length);
+          const slot = allLetterSlots[randomIndex];
+
+          slot.state = (slot.state + 1) % 3;
+
+          if (slot.state === 1) {
+            slot.element.style.transition = "transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)";
+            slot.element.style.transform = "translateY(-33.333%)";
+          } else if (slot.state === 2) {
+            slot.element.style.transition = "transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)";
+            slot.element.style.transform = "translateY(-66.666%)";
+          } else {
+            // Instantly reset to 0% after brief transition
+            slot.element.style.transition = "transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)";
+            slot.element.style.transform = "translateY(-66.666%)";
+            setTimeout(() => {
+              slot.element.style.transition = "none";
+              slot.element.style.transform = "translateY(0%)";
+            }, 820);
+          }
+        }
+
+        const nextDelay = 1000 + Math.random() * 500; // 1.0s to 1.5s
+        setTimeout(triggerRandomLetterFlip, nextDelay);
+      }
+
+      setTimeout(triggerRandomLetterFlip, 1200);
+
+
+      // ========================================================
+      // B. 2,000 PARTICLE FLUID CANVAS PHYSICS ENGINE
+      // ========================================================
+      const canvas = document.getElementById("particle-canvas");
+      const ctx = canvas.getContext("2d", { alpha: false });
+      const section = document.getElementById("lusion-cta-section");
+
+      let width = (canvas.width = section.clientWidth || window.innerWidth);
+      let height = (canvas.height = section.clientHeight || window.innerHeight);
+
+      window.addEventListener("resize", () => {
+        width = canvas.width = section.clientWidth || window.innerWidth;
+        height = canvas.height = section.clientHeight || window.innerHeight;
+      });
+
+      const PARTICLE_COUNT = 2100; // 1800 - 2500 range
+      const particles = [];
+      const particleSizes = [2.0, 2.8, 3.8, 5.2, 7.0, 9.0];
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const baseXRatio = Math.random();
+        // Dense distribution in lower half (0.50 to 0.95 height)
+        const depthCurve = Math.pow(Math.random(), 1.5);
+        const baseYRatio = 0.52 + depthCurve * 0.44;
+        const radius = particleSizes[Math.floor(Math.random() * particleSizes.length)];
+
+        particles.push({
+          x: baseXRatio * width,
+          y: baseYRatio * height,
+          vx: 0,
+          vy: 0,
+          baseXRatio,
+          baseYRatio,
+          radius,
+          mass: radius * 0.65,
+          phase: Math.random() * Math.PI * 2,
+          buoyancy: 0.055 + Math.random() * 0.045
+        });
+      }
+
+      // Mouse tracking
+      let mouseX = -9999;
+      let mouseY = -9999;
+      let prevMouseX = -9999;
+      let prevMouseY = -9999;
+      let mouseSpeed = 0;
+      let isHovering = false;
+
+      window.addEventListener("pointermove", (e) => {
+        const rect = section.getBoundingClientRect();
+        const clientX = e.clientX - rect.left;
+        const clientY = e.clientY - rect.top;
+
+        if (prevMouseX !== -9999) {
+          const dx = clientX - prevMouseX;
+          const dy = clientY - prevMouseY;
+          mouseSpeed = Math.sqrt(dx * dx + dy * dy);
+        }
+        prevMouseX = mouseX;
+        prevMouseY = mouseY;
+        mouseX = clientX;
+        mouseY = clientY;
+        isHovering = true;
+      });
+
+      window.addEventListener("pointerleave", () => {
+        mouseX = -9999;
+        mouseY = -9999;
+        prevMouseX = -9999;
+        prevMouseY = -9999;
+        mouseSpeed = 0;
+        isHovering = false;
+      });
+
+      // Ambient liquid wave elevation function
+      function getLiquidHeight(x, y, time, scrollSurge) {
+        const normX = x / width;
+        const swell1 = Math.sin(normX * 6.2 + time * 1.8) * 20;
+        const swell2 = Math.cos(normX * 10.5 - time * 2.4) * 14;
+        const swell3 = Math.sin((x + y) * 0.007 + time * 3.2) * 8;
+        // Scroll surge lifts the whole wave upward
+        const surge = scrollSurge * 140;
+        return swell1 + swell2 + swell3 - surge;
+      }
+
+      let startTime = performance.now();
+      let scrollEnergySurge = 0; // boosts wave on scroll
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        const time = (performance.now() - startTime) * 0.001;
+        mouseSpeed *= 0.91;
+        scrollEnergySurge *= 0.94; // decays smoothly
+
+        // 1. Draw Electric Royal Blue Background (#1A2FFB)
+        ctx.fillStyle = "#1A2FFB";
+        ctx.fillRect(0, 0, width, height);
+
+        // 2. Physics & Position Integration
+        const REPULSION_RADIUS = 180; // specified 180px radius
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const p = particles[i];
+
+          const targetX = p.baseXRatio * width;
+          const waveElevation = getLiquidHeight(p.x, p.y, time, scrollEnergySurge);
+          const surfaceY = p.baseYRatio * height + waveElevation;
+
+          // Spring restoration toward resting wave baseline
+          const dy = surfaceY - p.y;
+          const dx = targetX - p.x;
+          p.vy += dy * p.buoyancy;
+          p.vx += dx * 0.018;
+
+          // Mouse 180px Radial Velocity Wake
+          if (isHovering && mouseX > -1000) {
+            const distX = p.x - mouseX;
+            const distY = p.y - mouseY;
+            const dist = Math.sqrt(distX * distX + distY * distY);
+
+            if (dist < REPULSION_RADIUS && dist > 0.01) {
+              const factor = Math.pow(1 - dist / REPULSION_RADIUS, 1.8);
+              const push = (factor * (20 + mouseSpeed * 1.6)) / p.mass;
+              const normX = distX / dist;
+              const normY = distY / dist;
+
+              // Radial scatter
+              p.vx += normX * push;
+              p.vy += normY * push;
+
+              // Fluid upward surge wake
+              p.vy -= factor * (18 + mouseSpeed * 2.2) / p.mass;
+            }
+          }
+
+          // Damping (fluid friction)
+          p.vx *= 0.90;
+          p.vy *= 0.90;
+
+          // Integrate
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Horizontal boundary wrap
+          if (p.x < -15) p.x = width + 15;
+          if (p.x > width + 15) p.x = -15;
+        }
+
+        // 3. Batched Draw Call: Pure White Circles (#FFFFFF)
+        ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath();
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const p = particles[i];
+          ctx.moveTo(p.x + p.radius, p.y);
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        }
+        ctx.fill();
+      }
+
+      animate();
+
+
+      // ========================================================
+      // C. 2-SECOND SCROLL-LOCK & SMOOTH RELEASE ENGINE
+      // ========================================================
+      let scrollLocked = true;
+      let scrollAccumulator = 0;
+      const SCROLL_TARGET = 2000; // Requires ~2 seconds of sustained scrolling
+      const progressBar = document.getElementById("scroll-progress-bar");
+      const btnScroll = document.getElementById("btn-scroll-action");
+      const nextSection = document.getElementById("next-section");
+
+      function unlockAndProceed() {
+        if (!scrollLocked) return;
+        scrollLocked = false;
+        progressBar.style.width = "100%";
+
+        // Smooth scroll to next section
+        nextSection.scrollIntoView({ behavior: "smooth" });
+
+        // Reset lock after user scrolls back up
+        setTimeout(() => {
+          const checkScrollBack = () => {
+            if (window.scrollY < 50) {
+              scrollLocked = true;
+              scrollAccumulator = 0;
+              progressBar.style.width = "0%";
+              window.removeEventListener("scroll", checkScrollBack);
+            }
+          };
+          window.addEventListener("scroll", checkScrollBack);
+        }, 1200);
+      }
+
+      // Wheel scroll listener with lock
+      window.addEventListener("wheel", (e) => {
+        // If we are at the top section and still locked
+        if (scrollLocked && window.scrollY <= 10) {
+          if (e.deltaY > 0) {
+            e.preventDefault(); // lock viewport
+            scrollAccumulator += Math.min(Math.abs(e.deltaY), 80);
+            scrollEnergySurge = Math.min(scrollEnergySurge + 0.15, 1.0); // surge particles
+
+            const progress = Math.min((scrollAccumulator / SCROLL_TARGET) * 100, 100);
+            progressBar.style.width = progress + "%";
+
+            if (scrollAccumulator >= SCROLL_TARGET) {
+              unlockAndProceed();
+            }
+          }
+        }
+      }, { passive: false });
+
+      // Touch scroll listener for mobile
+      let touchStartY = 0;
+      window.addEventListener("touchstart", (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      window.addEventListener("touchmove", (e) => {
+        if (scrollLocked && window.scrollY <= 10) {
+          const touchY = e.touches[0].clientY;
+          const diffY = touchStartY - touchY;
+          if (diffY > 0) {
+            e.preventDefault();
+            scrollAccumulator += diffY * 2.5;
+            scrollEnergySurge = Math.min(scrollEnergySurge + 0.12, 1.0);
+
+            const progress = Math.min((scrollAccumulator / SCROLL_TARGET) * 100, 100);
+            progressBar.style.width = progress + "%";
+
+            if (scrollAccumulator >= SCROLL_TARGET) {
+              unlockAndProceed();
+            }
+          }
+        }
+      }, { passive: false });
+
+      // Button Click also smoothly unlocks and scrolls down
+      btnScroll.addEventListener("click", (e) => {
+        e.preventDefault();
+        unlockAndProceed();
+      });
+
+    })();
+  </script>
+</body>
+</html>

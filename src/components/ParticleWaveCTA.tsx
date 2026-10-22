@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
-interface FloatingParticle {
+interface Particle {
   x: number;
   y: number;
   vx: number;
@@ -17,23 +16,114 @@ interface FloatingParticle {
   buoyancy: number;
 }
 
-interface WaterRipple {
-  x: number;
-  y: number;
-  radius: number;
-  maxRadius: number;
-  amplitude: number;
-  speed: number;
-  wavelength: number;
-  alpha: number;
-}
-
 export default function ParticleWaveCTA() {
   const containerRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isSectionInView, setIsSectionInView] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Letter flip references
+  const line1ContainerRef = useRef<HTMLSpanElement>(null);
+  const line2ContainerRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    // ========================================================
+    // 1. DYNAMIC LETTER FLIP ENGINE
+    // ========================================================
+    const line1Text = "Let's work";
+    const line2Text = "together!";
+    const line1El = line1ContainerRef.current;
+    const line2El = line2ContainerRef.current;
+    if (!line1El || !line2El) return;
+
+    line1El.innerHTML = "";
+    line2El.innerHTML = "";
+
+    const allLetterSlots: { element: HTMLElement; state: number }[] = [];
+
+    const createSlot = (char: string) => {
+      if (char === " ") {
+        const space = document.createElement("span");
+        space.style.display = "inline-block";
+        space.style.width = "0.3em";
+        space.innerHTML = "&nbsp;";
+        return space;
+      }
+
+      const slot = document.createElement("span");
+      slot.className = "inline-block overflow-hidden h-[1.05em] leading-[1.05em] align-middle relative";
+
+      const strip = document.createElement("span");
+      strip.className = "flex flex-col will-change-transform";
+      strip.style.transform = "translateY(0%)";
+      strip.style.transition = "transform 0.85s cubic-bezier(0.76, 0, 0.24, 1)";
+
+      // Primary Char
+      const c1 = document.createElement("span");
+      c1.className = "h-[1.05em] leading-[1.05em] flex items-center justify-center";
+      c1.textContent = char;
+
+      // Stylized Italic Serif Char
+      const c2 = document.createElement("span");
+      c2.className = "h-[1.05em] leading-[1.05em] flex items-center justify-center font-serif italic font-normal text-white";
+      c2.textContent = char;
+
+      // Repeat Primary Char
+      const c3 = document.createElement("span");
+      c3.className = "h-[1.05em] leading-[1.05em] flex items-center justify-center";
+      c3.textContent = char;
+
+      strip.appendChild(c1);
+      strip.appendChild(c2);
+      strip.appendChild(c3);
+
+      slot.appendChild(strip);
+
+      allLetterSlots.push({ element: strip, state: 0 });
+      return slot;
+    };
+
+    for (const ch of line1Text) line1El.appendChild(createSlot(ch));
+    for (const ch of line2Text) line2El.appendChild(createSlot(ch));
+
+    let flipTimeout: NodeJS.Timeout;
+    const triggerFlip = () => {
+      if (allLetterSlots.length > 0) {
+        const count = Math.floor(Math.random() * 2) + 1;
+        for (let i = 0; i < count; i++) {
+          const idx = Math.floor(Math.random() * allLetterSlots.length);
+          const slot = allLetterSlots[idx];
+          slot.state = (slot.state + 1) % 3;
+
+          if (slot.state === 1) {
+            slot.element.style.transition = "transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)";
+            slot.element.style.transform = "translateY(-33.333%)";
+          } else if (slot.state === 2) {
+            slot.element.style.transition = "transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)";
+            slot.element.style.transform = "translateY(-66.666%)";
+          } else {
+            slot.element.style.transition = "transform 0.8s cubic-bezier(0.76, 0, 0.24, 1)";
+            slot.element.style.transform = "translateY(-66.666%)";
+            setTimeout(() => {
+              slot.element.style.transition = "none";
+              slot.element.style.transform = "translateY(0%)";
+            }, 820);
+          }
+        }
+      }
+      flipTimeout = setTimeout(triggerFlip, 1000 + Math.random() * 500);
+    };
+
+    flipTimeout = setTimeout(triggerFlip, 1200);
+
+    return () => {
+      clearTimeout(flipTimeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    // ========================================================
+    // 2. CANVAS FLUID PHYSICS (2,100 Particles + 180px Wave Wake)
+    // ========================================================
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container || typeof window === "undefined") return;
@@ -44,18 +134,14 @@ export default function ParticleWaveCTA() {
     let width = (canvas.width = container.clientWidth || window.innerWidth);
     let height = (canvas.height = container.clientHeight || window.innerHeight);
 
-    // ========================================================
-    // 1. Floating Particle Pool (1,300 Particles Floating on Water)
-    // ========================================================
-    const PARTICLE_COUNT = 1350;
-    const particles: FloatingParticle[] = [];
-    const sizes = [1.5, 2.2, 3.2, 4.4, 5.8];
+    const PARTICLE_COUNT = 2100;
+    const particles: Particle[] = [];
+    const sizes = [2.0, 2.8, 3.8, 5.2, 7.0, 9.0];
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       const baseXRatio = Math.random();
-      // Particles rest across the water bed, with denser foam in bottom 55%
-      const depthCurve = Math.pow(Math.random(), 1.4);
-      const baseYRatio = 0.52 + depthCurve * 0.42;
+      const depthCurve = Math.pow(Math.random(), 1.5);
+      const baseYRatio = 0.52 + depthCurve * 0.44;
       const radius = sizes[Math.floor(Math.random() * sizes.length)];
 
       particles.push({
@@ -66,36 +152,18 @@ export default function ParticleWaveCTA() {
         baseXRatio,
         baseYRatio,
         radius,
-        mass: radius * 0.6,
+        mass: radius * 0.65,
         phase: Math.random() * Math.PI * 2,
-        buoyancy: 0.06 + Math.random() * 0.04,
+        buoyancy: 0.055 + Math.random() * 0.045,
       });
     }
 
-    // ========================================================
-    // 2. Liquid Ripple System (Water Waves on Cursor Move)
-    // ========================================================
-    const ripples: WaterRipple[] = [];
     let mouseX = -9999;
     let mouseY = -9999;
     let prevMouseX = -9999;
     let prevMouseY = -9999;
     let mouseSpeed = 0;
-    let lastRippleTime = 0;
-
-    const addRipple = (x: number, y: number, intensity: number) => {
-      if (ripples.length > 25) ripples.shift();
-      ripples.push({
-        x,
-        y,
-        radius: 8,
-        maxRadius: Math.min(220 + intensity * 6, 420),
-        amplitude: Math.min(18 + intensity * 1.5, 45),
-        speed: 4.2 + Math.min(intensity * 0.25, 3.5),
-        wavelength: 45,
-        alpha: 0.65,
-      });
-    };
+    let isHovering = false;
 
     const handlePointerMove = (e: PointerEvent) => {
       const rect = container.getBoundingClientRect();
@@ -111,13 +179,7 @@ export default function ParticleWaveCTA() {
       prevMouseY = mouseY;
       mouseX = clientX;
       mouseY = clientY;
-
-      // Drop water ripples as cursor sweeps through liquid
-      const now = performance.now();
-      if (now - lastRippleTime > 45 && mouseSpeed > 2.5) {
-        addRipple(clientX, clientY, mouseSpeed);
-        lastRippleTime = now;
-      }
+      isHovering = true;
     };
 
     const handlePointerLeave = () => {
@@ -126,14 +188,12 @@ export default function ParticleWaveCTA() {
       prevMouseX = -9999;
       prevMouseY = -9999;
       mouseSpeed = 0;
+      isHovering = false;
     };
 
-    container.addEventListener("pointermove", handlePointerMove);
-    container.addEventListener("pointerleave", handlePointerLeave);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerleave", handlePointerLeave);
 
-    // ========================================================
-    // 3. Resize Handling
-    // ========================================================
     const handleResize = () => {
       if (!container || !canvas) return;
       width = canvas.width = container.clientWidth || window.innerWidth;
@@ -141,156 +201,85 @@ export default function ParticleWaveCTA() {
     };
     window.addEventListener("resize", handleResize);
 
-    // ========================================================
-    // 4. Performance Safeguard: IntersectionObserver
-    // ========================================================
     let isVisible = true;
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
-        setIsSectionInView(entry.isIntersecting);
       },
-      { threshold: 0.15 }
+      { threshold: 0.05 }
     );
     observer.observe(container);
 
-    // ========================================================
-    // 5. Water Surface & Buoyancy Simulation Loop
-    // ========================================================
     let animId: number;
-    let startTime = performance.now();
+    const startTime = performance.now();
 
-    const render = () => {
-      animId = requestAnimationFrame(render);
+    const getLiquidHeight = (x: number, y: number, time: number) => {
+      const normX = x / width;
+      const swell1 = Math.sin(normX * 6.2 + time * 1.8) * 20;
+      const swell2 = Math.cos(normX * 10.5 - time * 2.4) * 14;
+      const swell3 = Math.sin((x + y) * 0.007 + time * 3.2) * 8;
+      return swell1 + swell2 + swell3;
+    };
+
+    const simulateAndRender = () => {
+      animId = requestAnimationFrame(simulateAndRender);
       if (!isVisible) return;
 
       const time = (performance.now() - startTime) * 0.001;
-      mouseSpeed *= 0.93;
+      mouseSpeed *= 0.91;
 
-      // 1. Draw Deep Glowing Royal Blue Liquid Water Gradient
-      const waterGrad = ctx.createLinearGradient(0, 0, 0, height);
-      waterGrad.addColorStop(0, "#0e1ff3");
-      waterGrad.addColorStop(0.5, "#1024f5");
-      waterGrad.addColorStop(1, "#07129c");
-      ctx.fillStyle = waterGrad;
+      // 1. Pure Electric Royal Blue (#1A2FFB)
+      ctx.fillStyle = "#1A2FFB";
       ctx.fillRect(0, 0, width, height);
 
-      // 2. Update and Render Expanding Water Waves / Ripples
-      for (let i = ripples.length - 1; i >= 0; i--) {
-        const r = ripples[i];
-        r.radius += r.speed;
-        r.alpha *= 0.965;
-        r.amplitude *= 0.965;
+      const REPULSION_RADIUS = 180;
 
-        // Render visible water wave ripples on the liquid surface
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${r.alpha * 0.35})`;
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
-
-        // Secondary concentric caustic echo
-        if (r.radius > 25) {
-          ctx.beginPath();
-          ctx.arc(r.x, r.y, r.radius * 0.72, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(90, 160, 255, ${r.alpha * 0.25})`;
-          ctx.lineWidth = 1.4;
-          ctx.stroke();
-        }
-
-        if (r.alpha < 0.015 || r.radius > r.maxRadius) {
-          ripples.splice(i, 1);
-        }
-      }
-
-      // 3. Natural Oceanic Ambient Liquid Swell Equation
-      const getAmbientSwell = (x: number, y: number) => {
-        const normX = x / width;
-        // Natural cradle: undulating wave crests
-        const swell1 = Math.sin(normX * 6.5 + time * 1.8 + y * 0.003) * 16;
-        const swell2 = Math.cos(normX * 10.2 - time * 2.3 + y * 0.004) * 10;
-        const swell3 = Math.sin((x + y) * 0.008 + time * 3.1) * 6;
-        return swell1 + swell2 + swell3;
-      };
-
-      // 4. Update Each Particle Floating on Water Surface
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const p = particles[i];
 
-        // Base resting coordinate on the liquid body
         const targetX = p.baseXRatio * width;
-        const baseWaterY = p.baseYRatio * height;
+        const waveElevation = getLiquidHeight(p.x, p.y, time);
+        const surfaceY = p.baseYRatio * height + waveElevation;
 
-        // Calculate cumulative water height and fluid slope at particle's location
-        let waterHeightOffset = getAmbientSwell(p.x, p.y);
-        let fluidPushX = 0;
-        let fluidPushY = 0;
-
-        for (let j = 0; j < ripples.length; j++) {
-          const r = ripples[j];
-          const dx = p.x - r.x;
-          const dy = p.y - r.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          // Interaction with expanding wave front
-          const distFromFront = dist - r.radius;
-          if (Math.abs(distFromFront) < r.wavelength) {
-            const phase = (distFromFront / r.wavelength) * Math.PI;
-            const elevation = Math.cos(phase) * r.amplitude;
-            waterHeightOffset += elevation;
-
-            // Fluid wave slope pushes particles outward like real water
-            const slope = Math.sin(phase) * (r.amplitude / r.wavelength);
-            const nx = dx / (dist || 1);
-            const ny = dy / (dist || 1);
-            fluidPushX += nx * slope * 2.4;
-            fluidPushY += ny * slope * 2.4;
-          }
-        }
-
-        // Target surface height for this floating droplet
-        const surfaceY = baseWaterY + waterHeightOffset;
-
-        // A. Archimedes Buoyancy: Particle wants to stay right on water surface
+        // Spring restoration toward resting wave baseline
         const dy = surfaceY - p.y;
         const dx = targetX - p.x;
         p.vy += dy * p.buoyancy;
-        p.vx += dx * 0.015;
+        p.vx += dx * 0.018;
 
-        // B. Wave Advection: Water wave pushes particle along surface
-        p.vx += fluidPushX;
-        p.vy += fluidPushY;
+        // Mouse 180px fluid wave wake
+        if (isHovering && mouseX > -1000) {
+          const distX = p.x - mouseX;
+          const distY = p.y - mouseY;
+          const dist = Math.sqrt(distX * distX + distY * distY);
 
-        // C. Direct Mouse Repulsion Wake (Water Displacement)
-        if (mouseX > -1000) {
-          const cdx = p.x - mouseX;
-          const cdy = p.y - mouseY;
-          const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
-          const pushRadius = Math.min(130 + mouseSpeed * 3.5, 240);
+          if (dist < REPULSION_RADIUS && dist > 0.01) {
+            const factor = Math.pow(1 - dist / REPULSION_RADIUS, 1.8);
+            const push = (factor * (20 + mouseSpeed * 1.6)) / p.mass;
+            const normX = distX / dist;
+            const normY = distY / dist;
 
-          if (cdist < pushRadius && cdist > 0.01) {
-            const factor = Math.pow(1 - cdist / pushRadius, 1.8);
-            const push = (factor * (18 + mouseSpeed * 1.8)) / p.mass;
-            p.vx += (cdx / cdist) * push;
-            p.vy += (cdy / cdist) * push - factor * 8; // upward splash
+            p.vx += normX * push;
+            p.vy += normY * push;
+
+            // Fluid upward surge wake
+            p.vy -= factor * (18 + mouseSpeed * 2.2) / p.mass;
           }
         }
 
-        // D. Fluid Friction / Viscous Damping
-        p.vx *= 0.895;
-        p.vy *= 0.895;
+        // Fluid friction damping
+        p.vx *= 0.90;
+        p.vy *= 0.90;
 
-        // E. Position Integration
         p.x += p.vx;
         p.y += p.vy;
 
-        // Screen boundary wrapping
         if (p.x < -15) p.x = width + 15;
         if (p.x > width + 15) p.x = -15;
       }
 
-      // 5. Batched 60FPS Hardware Draw for All Floating White Beads
-      ctx.fillStyle = "#ffffff";
+      // 2. Pure White Dots (#FFFFFF)
+      ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const p = particles[i];
@@ -300,13 +289,13 @@ export default function ParticleWaveCTA() {
       ctx.fill();
     };
 
-    render();
+    simulateAndRender();
 
     return () => {
       cancelAnimationFrame(animId);
       observer.disconnect();
-      container.removeEventListener("pointermove", handlePointerMove);
-      container.removeEventListener("pointerleave", handlePointerLeave);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerleave", handlePointerLeave);
       window.removeEventListener("resize", handleResize);
     };
   }, []);
@@ -322,103 +311,96 @@ export default function ParticleWaveCTA() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-[90vh] md:min-h-screen bg-gradient-to-b from-[#0e1ff3] via-[#1024f5] to-[#07129c] overflow-hidden flex flex-col justify-between items-center py-12 md:py-16 select-none cursor-crosshair"
+      className="relative w-full h-screen min-h-screen bg-[#1A2FFB] overflow-hidden flex flex-col justify-between items-center py-8 md:py-10 px-6 sm:px-12 select-none cursor-crosshair"
       aria-label="Let's work together interactive call to action"
     >
-      {/* Interactive Water Surface & Floating Particles Canvas */}
+      {/* 2,100 Particles Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-auto z-0"
+        className="absolute inset-0 w-full h-full pointer-events-auto z-1"
       />
 
-      {/* Decorative Grid Crosshairs (+) */}
-      <span className="absolute top-8 left-8 sm:left-12 text-white/60 font-mono text-sm leading-none pointer-events-none select-none z-10">
-        +
-      </span>
-      <span className="absolute top-1/2 left-8 sm:left-12 -translate-y-1/2 text-white/60 font-mono text-sm leading-none pointer-events-none select-none z-10">
-        +
-      </span>
-      <span className="absolute bottom-8 left-8 sm:left-12 text-white/60 font-mono text-sm leading-none pointer-events-none select-none z-10">
-        +
-      </span>
+      {/* Ambient Radial Electric Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,_rgba(60,95,255,0.45)_0%,_transparent_70%)] pointer-events-none z-2" />
 
-      <span className="absolute top-8 right-8 sm:right-12 text-white/60 font-mono text-sm leading-none pointer-events-none select-none z-10">
-        +
-      </span>
-      <span className="absolute top-1/2 right-8 sm:right-12 -translate-y-1/2 text-white/60 font-mono text-sm leading-none pointer-events-none select-none z-10">
-        +
-      </span>
-      <span className="absolute bottom-8 right-8 sm:right-12 text-white/60 font-mono text-sm leading-none pointer-events-none select-none z-10">
-        +
-      </span>
-
-      {/* Top HUD Status */}
-      <div className="relative z-10 w-full max-w-7xl px-8 sm:px-12 flex items-center justify-between pointer-events-none">
-        <div className="flex items-center gap-2.5 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-white/90 uppercase font-medium">
-          <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-          <span>LUSION FLUID BED // WATER SURFACE</span>
-        </div>
-
-        <div className="hidden sm:flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-white/80 uppercase font-medium">
-          <span>BUOYANCY SIMULATION // 60 FPS</span>
-        </div>
-      </div>
+      {/* Decorative Grid Plus Markers (+) */}
+      <span className="absolute top-24 left-8 sm:left-12 text-white/50 font-mono text-base pointer-events-none select-none z-10">+</span>
+      <span className="absolute top-1/2 left-8 sm:left-12 -translate-y-1/2 text-white/50 font-mono text-base pointer-events-none select-none z-10">+</span>
+      <span className="absolute bottom-24 left-8 sm:left-12 text-white/50 font-mono text-base pointer-events-none select-none z-10">+</span>
+      <span className="absolute top-24 right-8 sm:right-12 text-white/50 font-mono text-base pointer-events-none select-none z-10">+</span>
+      <span className="absolute top-1/2 right-8 sm:right-12 -translate-y-1/2 text-white/50 font-mono text-base pointer-events-none select-none z-10">+</span>
+      <span className="absolute bottom-24 right-8 sm:right-12 text-white/50 font-mono text-base pointer-events-none select-none z-10">+</span>
 
       {/* ======================================================== */}
-      {/* Center Headline Rising from Beneath Water Surface */}
+      {/* 1. TOP NAVIGATION BAR */}
       {/* ======================================================== */}
-      <div className="relative z-10 flex flex-col items-center justify-center my-auto px-4 text-center pointer-events-none select-none overflow-hidden py-6">
-        {/* Top Micro-Heading */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={isSectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[11px] sm:text-xs md:text-sm font-mono tracking-[0.28em] uppercase text-white/95 mb-4 sm:mb-6 font-semibold drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]"
-        >
+      <header className="relative z-10 w-full flex items-center justify-between pointer-events-auto">
+        <a href="#" className="font-bold text-2xl tracking-tight text-white uppercase">
+          LABIB
+        </a>
+
+        <div className="flex items-center gap-3">
+          {/* Audio Sound-Wave Circle Button */}
+          <button
+            aria-label="Audio Wave"
+            className="w-11 h-11 rounded-full border border-white/60 bg-transparent flex items-center justify-center gap-[3px] hover:bg-white/10 transition-colors"
+          >
+            <span className="w-[2px] h-2.5 bg-white rounded-full animate-pulse" />
+            <span className="w-[2px] h-4 bg-white rounded-full animate-pulse delay-75" />
+            <span className="w-[2px] h-2 bg-white rounded-full animate-pulse delay-150" />
+            <span className="w-[2px] h-3.5 bg-white rounded-full animate-pulse delay-100" />
+          </button>
+
+          {/* Dark Blue Pill "LET'S TALK" */}
+          <a
+            href="#contact"
+            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0E1CA3] border border-white/20 text-white text-xs font-bold tracking-widest uppercase hover:bg-[#0A1580] transition-colors shadow-lg"
+          >
+            <span>LET&apos;S TALK</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+          </a>
+
+          {/* White Pill "MENU" */}
+          <button
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-xs font-extrabold tracking-widest uppercase hover:bg-neutral-100 transition-colors shadow-lg"
+          >
+            <span>MENU</span>
+            <div className="flex items-center gap-1">
+              <span className="w-1 h-1 rounded-full bg-black" />
+              <span className="w-1 h-1 rounded-full bg-black" />
+            </div>
+          </button>
+        </div>
+      </header>
+
+      {/* ======================================================== */}
+      {/* 2. CENTER TYPOGRAPHY & LETTER FLIP LOCKUP */}
+      {/* ======================================================== */}
+      <div className="relative z-10 flex flex-col items-center justify-center my-auto px-4 text-center pointer-events-none select-none">
+        <p className="text-[11px] sm:text-xs font-mono tracking-[0.25em] uppercase text-white/95 mb-4 sm:mb-6 font-semibold">
           IS YOUR BIG IDEA READY TO GO WILD?
-        </motion.p>
+        </p>
 
-        {/* Headline Emerging & Rising out of the Water Surface */}
-        <motion.div
-          initial={{ y: 110, opacity: 0, filter: "blur(10px)" }}
-          animate={isSectionInView ? { y: 0, opacity: 1, filter: "blur(0px)" } : { y: 110, opacity: 0, filter: "blur(10px)" }}
-          transition={{ duration: 1.4, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="relative"
-        >
-          <h2 className="text-6xl sm:text-8xl md:text-[7.5rem] lg:text-[9.5rem] font-bold tracking-tight text-white leading-[0.92] text-center drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
-            Let&apos;s work<br />
-            together!
-          </h2>
-
-          {/* Liquid Underline Expanding Across */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isSectionInView ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 1.1, delay: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="w-56 sm:w-80 md:w-[32rem] lg:w-[40rem] h-2 sm:h-2.5 bg-white rounded-full mt-4 sm:mt-6 shadow-[0_0_25px_rgba(255,255,255,0.8)] origin-center"
-          />
-        </motion.div>
+        <h2 className="text-6xl sm:text-8xl md:text-[7.5rem] lg:text-[8.5rem] font-extrabold tracking-tight text-white leading-[1.05] text-center drop-shadow-[0_15px_35px_rgba(0,0,0,0.3)]">
+          <span ref={line1ContainerRef} className="flex items-center justify-center" />
+          <span ref={line2ContainerRef} className="flex items-center justify-center" />
+        </h2>
       </div>
 
       {/* ======================================================== */}
-      {/* Bottom Interactive White Pill Button */}
+      {/* 3. BOTTOM PILL BUTTON (SCROLLS TO CONTACT) */}
       {/* ======================================================== */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isSectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
-        className="relative z-20 pb-4"
-      >
+      <div className="relative z-20 pb-2">
         <a
           href="#contact"
           onClick={scrollToContact}
           className="group relative flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full text-[11px] font-mono tracking-[0.25em] uppercase font-bold shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:bg-neutral-100 hover:scale-105 active:scale-95 transition-all duration-300 pointer-events-auto cursor-pointer"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1024f5] animate-ping" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1A2FFB] animate-ping" />
           <span>↓ CONTINUE TO SCROLL ↓</span>
           <ArrowDown size={14} className="text-black group-hover:translate-y-0.5 transition-transform" />
         </a>
-      </motion.div>
+      </div>
     </section>
   );
 }
