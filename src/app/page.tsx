@@ -3,7 +3,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Services from "@/components/Services";
-import Projects from "@/components/Projects";
+import Projects3DScene from "@/components/Projects3DScene";
 import Experience from "@/components/Experience";
 import Blog from "@/components/Blog";
 import ParticleWaveCTA from "@/components/ParticleWaveCTA";
@@ -28,7 +28,7 @@ export default function Home() {
       <Hero />
       <TechMarquee />
       <About />
-      <Projects />
+      <Projects3DScene />
       <Skills />
       <Services />
       <Experience />
