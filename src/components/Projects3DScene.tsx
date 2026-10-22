@@ -667,58 +667,58 @@ export default function Projects3DScene() {
   const cameraKeyframes = useMemo(() => [
     {
       progress: 0.0,
-      camPos: new THREE.Vector3(0, 3.2, 21.0),
+      camPos: new THREE.Vector3(0, 0.5, 23.5),
       lookAt: new THREE.Vector3(0, 0, 0),
       activeIdx: -1
     },
     {
       progress: 0.16,
-      camPos: new THREE.Vector3(5.8, 1.2, 4.2),
-      lookAt: new THREE.Vector3(clusterCoordinates[0].x, clusterCoordinates[0].y, clusterCoordinates[0].z),
+      camPos: new THREE.Vector3(5.8, 1.2 - 3.5, 4.2),
+      lookAt: new THREE.Vector3(clusterCoordinates[0].x, clusterCoordinates[0].y - 3.5, clusterCoordinates[0].z),
       activeIdx: 0
     },
     {
       progress: 0.32,
-      camPos: new THREE.Vector3(7.8, -0.2, 4.4),
-      lookAt: new THREE.Vector3(clusterCoordinates[1].x, clusterCoordinates[1].y, clusterCoordinates[1].z),
+      camPos: new THREE.Vector3(7.8, -0.2 - 3.5, 4.4),
+      lookAt: new THREE.Vector3(clusterCoordinates[1].x, clusterCoordinates[1].y - 3.5, clusterCoordinates[1].z),
       activeIdx: 1
     },
     {
       progress: 0.48,
-      camPos: new THREE.Vector3(-1.4, 1.8, 4.6),
-      lookAt: new THREE.Vector3(clusterCoordinates[2].x, clusterCoordinates[2].y, clusterCoordinates[2].z),
+      camPos: new THREE.Vector3(-1.4, 1.8 - 3.5, 4.6),
+      lookAt: new THREE.Vector3(clusterCoordinates[2].x, clusterCoordinates[2].y - 3.5, clusterCoordinates[2].z),
       activeIdx: 2
     },
     {
       progress: 0.64,
-      camPos: new THREE.Vector3(-5.8, 0.2, 4.4),
-      lookAt: new THREE.Vector3(clusterCoordinates[3].x, clusterCoordinates[3].y, clusterCoordinates[3].z),
+      camPos: new THREE.Vector3(-5.8, 0.2 - 3.5, 4.4),
+      lookAt: new THREE.Vector3(clusterCoordinates[3].x, clusterCoordinates[3].y - 3.5, clusterCoordinates[3].z),
       activeIdx: 3
     },
     {
       progress: 0.80,
-      camPos: new THREE.Vector3(-1.4, 1.9, -4.6),
-      lookAt: new THREE.Vector3(clusterCoordinates[4].x, clusterCoordinates[4].y, clusterCoordinates[4].z),
+      camPos: new THREE.Vector3(-1.4, 1.9 - 3.5, -4.6),
+      lookAt: new THREE.Vector3(clusterCoordinates[4].x, clusterCoordinates[4].y - 3.5, clusterCoordinates[4].z),
       activeIdx: 4
     },
     {
       progress: 0.94,
-      camPos: new THREE.Vector3(7.8, -0.3, -4.4),
-      lookAt: new THREE.Vector3(clusterCoordinates[5].x, clusterCoordinates[5].y, clusterCoordinates[5].z),
+      camPos: new THREE.Vector3(7.8, -0.3 - 3.5, -4.4),
+      lookAt: new THREE.Vector3(clusterCoordinates[5].x, clusterCoordinates[5].y - 3.5, clusterCoordinates[5].z),
       activeIdx: 5
     },
     {
       progress: 1.0,
-      camPos: new THREE.Vector3(0, 2.8, 20.0),
+      camPos: new THREE.Vector3(0, 0.5, 22.0),
       lookAt: new THREE.Vector3(0, 0, 0),
       activeIdx: -1
     }
   ], [clusterCoordinates]);
 
   // Current smoothed camera vectors
-  const currentCamPos = useRef(new THREE.Vector3(0, 3.2, 21.0));
+  const currentCamPos = useRef(new THREE.Vector3(0, 0.5, 23.5));
   const currentCamLook = useRef(new THREE.Vector3(0, 0, 0));
-  const targetCamPos = useRef(new THREE.Vector3(0, 3.2, 21.0));
+  const targetCamPos = useRef(new THREE.Vector3(0, 0.5, 23.5));
   const targetCamLook = useRef(new THREE.Vector3(0, 0, 0));
 
   // Initialize Three.js Scene
@@ -734,7 +734,7 @@ export default function Projects3DScene() {
 
     // Camera
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 3.2, 21.0);
+    camera.position.set(0, 0.5, 23.5);
     cameraRef.current = camera;
 
     // WebGL Renderer with High Performance
@@ -767,9 +767,14 @@ export default function Projects3DScene() {
     blueRimLight.position.set(0, -15, 5);
     scene.add(blueRimLight);
 
+    // Master Ecosystem Group shifted down along Y to clear headline space above
+    const ecosystemGroup = new THREE.Group();
+    ecosystemGroup.position.y = -3.5;
+    scene.add(ecosystemGroup);
+
     // Central Core
     const core = createCentralEcosystemCore();
-    scene.add(core);
+    ecosystemGroup.add(core);
     coreRef.current = core;
 
     // Build the 6 Orbiting Clusters
@@ -787,7 +792,7 @@ export default function Projects3DScene() {
       const cluster = gen();
       const coords = clusterCoordinates[idx];
       cluster.position.set(coords.x, coords.y, coords.z);
-      scene.add(cluster);
+      ecosystemGroup.add(cluster);
       clusters.push(cluster);
     });
     clustersRef.current = clusters;
@@ -961,11 +966,14 @@ export default function Projects3DScene() {
           {/* Ambient Lighting Vignette */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(3,3,5,0.7)_80%,#030305_100%)] pointer-events-none z-1" />
 
+          {/* Top Soft Cinema Vignette to ensure headline readability */}
+          <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#030305]/95 via-[#030305]/60 to-transparent pointer-events-none z-10" />
+
           {/* Top HUD Bar: Section Badge & 3D Project Stepper */}
-          <div className="absolute top-8 left-8 right-8 z-20 flex items-center justify-between pointer-events-none">
-            {/* Left Header */}
-            <div className="flex items-center gap-3">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/40 backdrop-blur-md text-[10px] font-mono tracking-widest text-cyan-300 uppercase shadow-lg">
+          <div className="absolute top-6 sm:top-8 left-6 sm:left-8 right-6 sm:right-8 z-30 flex items-center justify-between pointer-events-none">
+            {/* Left Header - Visible when inspecting nodes */}
+            <div className={`flex items-center gap-3 transition-opacity duration-300 ${activeProjectIdx >= 0 ? "opacity-100" : "opacity-0"}`}>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/50 backdrop-blur-md text-[10px] font-mono tracking-widest text-cyan-300 uppercase shadow-lg">
                 <Radio size={12} className="text-cyan-400 animate-pulse" />
                 <span>3D ECOSYSTEM RADAR</span>
               </div>
@@ -975,14 +983,14 @@ export default function Projects3DScene() {
             </div>
 
             {/* Right Project Stepper Pills (Clickable navigation) */}
-            <div className="flex items-center gap-2 pointer-events-auto bg-black/60 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-2xl">
+            <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto bg-black/70 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-2xl ml-auto">
               {projects.map((p, idx) => {
                 const isActive = activeProjectIdx === idx;
                 return (
                   <button
                     key={p.id}
                     onClick={() => handleJumpToProject(idx)}
-                    className={`relative px-3 py-1 rounded-full text-[10px] font-mono font-bold transition-all duration-300 ${
+                    className={`relative px-2.5 sm:px-3 py-1 rounded-full text-[10px] font-mono font-bold transition-all duration-300 ${
                       isActive 
                         ? "text-black bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.8)] scale-105" 
                         : "text-neutral-400 hover:text-white hover:bg-white/10"
@@ -996,36 +1004,37 @@ export default function Projects3DScene() {
           </div>
 
           {/* ======================================================== */}
-          {/* INTRO HERO OVERLAY (When activeProjectIdx === -1)         */}
+          {/* INTRO HERO OVERLAY - Positioned cleanly BELOW navbar     */}
+          {/* 3D Core & Clusters float with generous breathing room    */}
           {/* ======================================================== */}
           <AnimatePresence>
             {activeProjectIdx === -1 && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.6 }}
-                className="relative z-10 flex flex-col items-center text-center max-w-2xl px-6 pointer-events-none"
+                initial={{ opacity: 0, y: -25 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="absolute top-16 sm:top-20 md:top-24 left-0 right-0 z-20 flex flex-col items-center text-center max-w-4xl mx-auto px-6 pointer-events-none"
               >
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 text-[10px] font-mono font-bold tracking-[0.25em] text-cyan-400 uppercase mb-5 bg-cyan-950/30 backdrop-blur-md">
-                  <Sparkles size={12} className="text-cyan-400" /> BENTO 3D SPATIAL SHOWCASE
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-cyan-500/30 text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.25em] text-cyan-400 uppercase mb-3 bg-cyan-950/40 backdrop-blur-md shadow-lg">
+                  <Sparkles size={11} className="text-cyan-400" /> BENTO 3D SPATIAL SHOWCASE
                 </div>
 
-                <h2 className="text-4xl sm:text-6xl font-display font-black uppercase tracking-tight text-white mb-4 leading-[0.95] drop-shadow-2xl">
-                  ARCHITECTING <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black uppercase tracking-tight text-white mb-2 leading-[0.95] drop-shadow-2xl">
+                  ARCHITECTING <br className="hidden sm:inline" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 drop-shadow-[0_0_25px_rgba(6,182,212,0.4)]">
                     DIGITAL ECOSYSTEMS
                   </span>
                 </h2>
 
-                <p className="text-neutral-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl">
+                <p className="text-neutral-300 text-xs sm:text-sm leading-relaxed mb-4 max-w-xl">
                   Explore my production web systems, autonomous AI agent pipelines, and enterprise management operating systems rendered as interactive 3D spatial clusters.
                 </p>
 
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-300/90 shadow-xl backdrop-blur-md animate-bounce">
-                  <Compass size={14} className="text-cyan-400" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-[10px] font-mono text-cyan-300 shadow-xl backdrop-blur-md animate-bounce">
+                  <Compass size={12} className="text-cyan-400" />
                   <span>SCROLL DOWN TO ENGAGE 3D CAMERA</span>
-                  <ChevronDown size={14} className="text-cyan-400" />
+                  <ChevronDown size={12} className="text-cyan-400" />
                 </div>
               </motion.div>
             )}
