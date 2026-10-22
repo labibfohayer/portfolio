@@ -6,6 +6,7 @@ import Services from "@/components/Services";
 import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Blog from "@/components/Blog";
+import ParticleWaveCTA from "@/components/ParticleWaveCTA";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import FloatingMusic from "@/components/FloatingMusic";
@@ -32,6 +33,7 @@ export default function Home() {
       <Services />
       <Experience />
       <Blog />
+      <ParticleWaveCTA />
       <Contact />
       <Footer />
     </main>
