@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { Sparkles, Move } from "lucide-react";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { Sparkles } from "lucide-react";
 
 interface PhysicsCross {
   group: THREE.Group;
@@ -12,7 +14,6 @@ interface PhysicsCross {
   angularVelocity: THREE.Vector3;
   radius: number;
   scale: number;
-  baseYOffset: number;
   phase: number;
 }
 
@@ -35,13 +36,14 @@ export default function Interactive3DShowcase() {
     if (!container || typeof window === "undefined") return;
 
     let width = container.clientWidth || 800;
-    let height = container.clientHeight || 500;
+    let height = container.clientHeight || 540;
 
-    // 1. Scene, Camera, Renderer
+    // 1. Scene & Macro Camera Framing
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 14);
+    const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 100);
+    camera.position.set(0, 0, 11.5);
 
+    // 2. High-Performance WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -50,104 +52,207 @@ export default function Interactive3DShowcase() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.05;
     container.appendChild(renderer.domElement);
 
-    // 2. Dramatic Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    // 3. Studio HDRI Reflection Generation (RoomEnvironment + PMREMGenerator)
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator.compileEquirectangularShader();
+    const roomEnv = new RoomEnvironment();
+    const envMap = pmremGenerator.fromScene(roomEnv, 0.04).texture;
+    scene.environment = envMap;
+
+    // 4. Subtle Studio Directional Lighting & Rim Fill
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 3.2);
-    dirLight1.position.set(8, 12, 10);
-    scene.add(dirLight1);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
+    keyLight.position.set(7, 10, 8);
+    scene.add(keyLight);
 
-    const dirLight2 = new THREE.DirectionalLight(0xffffff, 1.8);
-    dirLight2.position.set(-10, -6, 6);
-    scene.add(dirLight2);
+    const fillLight = new THREE.DirectionalLight(0xdce7ff, 1.4);
+    fillLight.position.set(-8, -5, 6);
+    scene.add(fillLight);
 
-    const cyanPointLight = new THREE.PointLight(0x06b6d4, 4.0, 25);
-    cyanPointLight.position.set(0, -2, 5);
-    scene.add(cyanPointLight);
+    const blueRimLight = new THREE.DirectionalLight(0x2563eb, 1.2);
+    blueRimLight.position.set(0, 8, -6);
+    scene.add(blueRimLight);
 
-    const bluePointLight = new THREE.PointLight(0x3b82f6, 3.0, 20);
-    bluePointLight.position.set(3, 4, 4);
-    scene.add(bluePointLight);
+    // 5. Authentic Hollow-End Industrial Cross Geometries (Merged for 60FPS)
+    const armRadius = 0.42;
+    const armLength = 2.3;
+    const tipOffset = 1.12;
 
-    // 3. Shared Capsule Geometry & High-Craft PBR Materials
-    const capsuleRadius = 0.38;
-    const capsuleLength = 1.3;
-    const capsuleGeo = new THREE.CapsuleGeometry(capsuleRadius, capsuleLength, 16, 32);
+    const outerGeoms: THREE.BufferGeometry[] = [];
 
-    // Obsidian Black Material
-    const obsidianMat = new THREE.MeshPhysicalMaterial({
-      color: 0x0a0a0d,
-      roughness: 0.12,
-      metalness: 0.18,
+    // Orthogonal Cylinders
+    const cylY = new THREE.CylinderGeometry(armRadius, armRadius, armLength, 32);
+    outerGeoms.push(cylY);
+
+    const cylX = new THREE.CylinderGeometry(armRadius, armRadius, armLength, 32);
+    cylX.rotateZ(Math.PI / 2);
+    outerGeoms.push(cylX);
+
+    const cylZ = new THREE.CylinderGeometry(armRadius, armRadius, armLength, 32);
+    cylZ.rotateX(Math.PI / 2);
+    outerGeoms.push(cylZ);
+
+    // Beveled Torus Rims at all 6 arm ends
+    const torZ1 = new THREE.TorusGeometry(0.36, 0.06, 16, 32);
+    torZ1.translate(0, 0, tipOffset);
+    outerGeoms.push(torZ1);
+
+    const torZ2 = new THREE.TorusGeometry(0.36, 0.06, 16, 32);
+    torZ2.translate(0, 0, -tipOffset);
+    outerGeoms.push(torZ2);
+
+    const torY1 = new THREE.TorusGeometry(0.36, 0.06, 16, 32);
+    torY1.rotateX(Math.PI / 2);
+    torY1.translate(0, tipOffset, 0);
+    outerGeoms.push(torY1);
+
+    const torY2 = new THREE.TorusGeometry(0.36, 0.06, 16, 32);
+    torY2.rotateX(Math.PI / 2);
+    torY2.translate(0, -tipOffset, 0);
+    outerGeoms.push(torY2);
+
+    const torX1 = new THREE.TorusGeometry(0.36, 0.06, 16, 32);
+    torX1.rotateY(Math.PI / 2);
+    torX1.translate(tipOffset, 0, 0);
+    outerGeoms.push(torX1);
+
+    const torX2 = new THREE.TorusGeometry(0.36, 0.06, 16, 32);
+    torX2.rotateY(Math.PI / 2);
+    torX2.translate(-tipOffset, 0, 0);
+    outerGeoms.push(torX2);
+
+    const crossOuterGeo = mergeGeometries(outerGeoms, false) || new THREE.BufferGeometry();
+    outerGeoms.forEach((g) => g.dispose());
+
+    // Recessed Dark Inner Bore Cylinders (Hollow Pipe End Interiors)
+    const innerBoreGeoms: THREE.BufferGeometry[] = [];
+    const boreRadius = 0.28;
+    const boreDepth = 0.05;
+    const boreOffset = 1.13;
+
+    const inY1 = new THREE.CylinderGeometry(boreRadius, boreRadius, boreDepth, 24);
+    inY1.translate(0, boreOffset, 0);
+    innerBoreGeoms.push(inY1);
+
+    const inY2 = new THREE.CylinderGeometry(boreRadius, boreRadius, boreDepth, 24);
+    inY2.translate(0, -boreOffset, 0);
+    innerBoreGeoms.push(inY2);
+
+    const inX1 = new THREE.CylinderGeometry(boreRadius, boreRadius, boreDepth, 24);
+    inX1.rotateZ(Math.PI / 2);
+    inX1.translate(boreOffset, 0, 0);
+    innerBoreGeoms.push(inX1);
+
+    const inX2 = new THREE.CylinderGeometry(boreRadius, boreRadius, boreDepth, 24);
+    inX2.rotateZ(Math.PI / 2);
+    inX2.translate(-boreOffset, 0, 0);
+    innerBoreGeoms.push(inX2);
+
+    const inZ1 = new THREE.CylinderGeometry(boreRadius, boreRadius, boreDepth, 24);
+    inZ1.rotateX(Math.PI / 2);
+    inZ1.translate(0, 0, boreOffset);
+    innerBoreGeoms.push(inZ1);
+
+    const inZ2 = new THREE.CylinderGeometry(boreRadius, boreRadius, boreDepth, 24);
+    inZ2.rotateX(Math.PI / 2);
+    inZ2.translate(0, 0, -boreOffset);
+    innerBoreGeoms.push(inZ2);
+
+    const crossInnerGeo = mergeGeometries(innerBoreGeoms, false) || new THREE.BufferGeometry();
+    innerBoreGeoms.forEach((g) => g.dispose());
+
+    // 6. Refined Studio PBR Materials
+    const deepCobaltMat = new THREE.MeshPhysicalMaterial({
+      color: 0x1638ff,
+      roughness: 0.14,
+      metalness: 0.08,
       clearcoat: 1.0,
       clearcoatRoughness: 0.08,
-      reflectivity: 0.9,
+      envMapIntensity: 1.25,
     });
 
-    // Ceramic Pure White Material
-    const ceramicMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf8fafc,
-      roughness: 0.15,
+    const softCeramicMat = new THREE.MeshPhysicalMaterial({
+      color: 0xd8dce3,
+      roughness: 0.18,
       metalness: 0.05,
-      clearcoat: 0.95,
-      clearcoatRoughness: 0.1,
+      clearcoat: 0.85,
+      clearcoatRoughness: 0.12,
+      envMapIntensity: 1.1,
     });
 
-    // Electric Cobalt / Cyan Material
-    const cobaltCyanMat = new THREE.MeshPhysicalMaterial({
-      color: 0x0284c7,
-      emissive: 0x083344,
-      emissiveIntensity: 0.25,
-      roughness: 0.12,
-      metalness: 0.25,
+    const satinObsidianMat = new THREE.MeshPhysicalMaterial({
+      color: 0x111216,
+      roughness: 0.16,
+      metalness: 0.15,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.06,
+      clearcoatRoughness: 0.1,
+      envMapIntensity: 1.3,
     });
 
-    // Helper: Build a single 3D rounded cross/jack from 3 intersecting orthogonal capsules
-    const createCrossGroup = (mat: THREE.Material): THREE.Group => {
+    const matteInnerMat = new THREE.MeshStandardMaterial({
+      color: 0x050507,
+      roughness: 0.9,
+      metalness: 0.0,
+    });
+
+    // Helper: Composite Cross Group
+    const createCrossGroup = (outerMat: THREE.Material): THREE.Group => {
       const group = new THREE.Group();
-
-      // Capsule 1: Along Y axis
-      const meshY = new THREE.Mesh(capsuleGeo, mat);
-      group.add(meshY);
-
-      // Capsule 2: Along X axis
-      const meshX = new THREE.Mesh(capsuleGeo, mat);
-      meshX.rotation.z = Math.PI / 2;
-      group.add(meshX);
-
-      // Capsule 3: Along Z axis
-      const meshZ = new THREE.Mesh(capsuleGeo, mat);
-      meshZ.rotation.x = Math.PI / 2;
-      group.add(meshZ);
-
+      const outerMesh = new THREE.Mesh(crossOuterGeo, outerMat);
+      const innerMesh = new THREE.Mesh(crossInnerGeo, matteInnerMat);
+      group.add(outerMesh);
+      group.add(innerMesh);
       return group;
     };
 
-    // 4. Spawn 20 Procedural 3D Cross Physics Objects
+    // 7. Spawn 20 Scaled Cross Objects with Wide Elliptical Spread
     const TOTAL_CROSSES = 20;
     const physicsObjects: PhysicsCross[] = [];
 
-    for (let i = 0; i < TOTAL_CROSSES; i++) {
-      let mat = obsidianMat;
-      if (i % 3 === 1) mat = ceramicMat;
-      else if (i % 3 === 2) mat = cobaltCyanMat;
+    // Curated material distribution matching reference
+    const materialSequence = [
+      satinObsidianMat,
+      softCeramicMat,
+      deepCobaltMat,
+      satinObsidianMat,
+      softCeramicMat,
+      satinObsidianMat,
+      softCeramicMat,
+      deepCobaltMat,
+      satinObsidianMat,
+      softCeramicMat,
+      deepCobaltMat,
+      satinObsidianMat,
+      softCeramicMat,
+      satinObsidianMat,
+      deepCobaltMat,
+      softCeramicMat,
+      satinObsidianMat,
+      softCeramicMat,
+      deepCobaltMat,
+      satinObsidianMat,
+    ];
 
+    for (let i = 0; i < TOTAL_CROSSES; i++) {
+      const mat = materialSequence[i % materialSequence.length];
       const group = createCrossGroup(mat);
-      const scale = THREE.MathUtils.randFloat(0.85, 1.15);
+
+      // Macro scale: 1.55 to 1.85 to boldly fill 80%-85% of viewport
+      const scale = THREE.MathUtils.randFloat(1.55, 1.85);
       group.scale.set(scale, scale, scale);
 
-      // Initial clustered distribution
-      const angle = (i / TOTAL_CROSSES) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
-      const dist = THREE.MathUtils.randFloat(0.8, 3.8);
-      const x = Math.cos(angle) * dist;
-      const y = Math.sin(angle) * dist * 0.65;
-      const z = THREE.MathUtils.randFloat(-1.8, 1.8);
+      // Wide elliptical horizontal initial spread
+      const angle = (i / TOTAL_CROSSES) * Math.PI * 2 + (Math.random() - 0.5) * 0.35;
+      const radX = THREE.MathUtils.randFloat(0.8, 5.2);
+      const radY = THREE.MathUtils.randFloat(0.5, 2.4);
+      const x = Math.cos(angle) * radX;
+      const y = Math.sin(angle) * radY;
+      const z = THREE.MathUtils.randFloat(-1.2, 1.2);
 
       group.position.set(x, y, z);
       group.rotation.set(
@@ -158,46 +263,44 @@ export default function Interactive3DShowcase() {
 
       scene.add(group);
 
-      const effectiveRadius = (capsuleRadius + capsuleLength * 0.5) * scale * 0.88;
-
       physicsObjects.push({
         group,
         position: group.position,
         velocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.02,
-          (Math.random() - 0.5) * 0.02,
+          (Math.random() - 0.5) * 0.015,
+          (Math.random() - 0.5) * 0.015,
           (Math.random() - 0.5) * 0.01
         ),
         rotation: group.rotation,
         angularVelocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015
+          (Math.random() - 0.5) * 0.01,
+          (Math.random() - 0.5) * 0.01,
+          (Math.random() - 0.5) * 0.01
         ),
-        radius: effectiveRadius,
+        radius: 1.2 * scale,
         scale,
-        baseYOffset: y,
         phase: Math.random() * Math.PI * 2,
       });
     }
 
-    // 5. Mouse Interaction Tracking
-    const mouseNDC = new THREE.Vector2(-999, -999);
-    const targetMouseWorld = new THREE.Vector3(-999, -999, 0);
-    const prevMouseWorld = new THREE.Vector3(-999, -999, 0);
-    let mouseSpeed = 0;
-    let isHovering = false;
-
-    // 6. Liquid Ripple Trail Setup on 2D Canvas
+    // 8. 2D Chromatic Ripple Trail Setup
     const rippleCanvas = rippleCanvasRef.current;
     let rippleCtx: CanvasRenderingContext2D | null = null;
-    let ripples: Ripple[] = [];
-
     if (rippleCanvas) {
       rippleCanvas.width = width;
       rippleCanvas.height = height;
       rippleCtx = rippleCanvas.getContext("2d");
     }
+    const ripples: Ripple[] = [];
+
+    // 9. Pointer Raycasting & Repulsion Mechanics
+    const raycaster = new THREE.Raycaster();
+    const mouseNDC = new THREE.Vector2(-999, -999);
+    const planeZ0 = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    const targetMouseWorld = new THREE.Vector3(-999, -999, 0);
+    const prevMouseWorld = new THREE.Vector3(-999, -999, 0);
+    let isHovering = false;
+    let mouseSpeed = 0;
 
     const onPointerMove = (e: PointerEvent) => {
       const rect = container.getBoundingClientRect();
@@ -208,31 +311,27 @@ export default function Interactive3DShowcase() {
       mouseNDC.y = -(clientY / height) * 2 + 1;
       isHovering = true;
 
-      // Project onto Z=0 plane in world coordinates
-      const vector = new THREE.Vector3(mouseNDC.x, mouseNDC.y, 0.5).unproject(camera);
-      const dir = vector.sub(camera.position).normalize();
-      const distance = -camera.position.z / dir.z;
-      const worldPos = camera.position.clone().add(dir.multiplyScalar(distance));
-
-      if (prevMouseWorld.x !== -999) {
-        mouseSpeed = worldPos.distanceTo(prevMouseWorld);
+      raycaster.setFromCamera(mouseNDC, camera);
+      const intersectionPoint = new THREE.Vector3();
+      if (raycaster.ray.intersectPlane(planeZ0, intersectionPoint)) {
+        if (prevMouseWorld.x !== -999) {
+          mouseSpeed = intersectionPoint.distanceTo(prevMouseWorld);
+        }
+        prevMouseWorld.copy(targetMouseWorld);
+        targetMouseWorld.copy(intersectionPoint);
       }
-      prevMouseWorld.copy(targetMouseWorld);
-      targetMouseWorld.copy(worldPos);
 
-      // Add chromatic liquid ripple
-      if (Math.random() < 0.6) {
+      if (Math.random() > 0.4) {
         const colors = [
-          "rgba(6, 182, 212, 0.5)", // Cyan
-          "rgba(59, 130, 246, 0.4)", // Cobalt Blue
-          "rgba(147, 197, 253, 0.45)", // Ice Blue
-          "rgba(255, 255, 255, 0.35)", // Liquid White
+          "rgba(22, 56, 255, 0.75)",
+          "rgba(59, 130, 246, 0.65)",
+          "rgba(147, 197, 253, 0.5)",
         ];
         ripples.push({
           x: clientX,
           y: clientY,
-          radius: 8,
-          maxRadius: THREE.MathUtils.randFloat(30, 65),
+          radius: 10,
+          maxRadius: THREE.MathUtils.randFloat(35, 75),
           alpha: 0.65,
           color: colors[Math.floor(Math.random() * colors.length)],
         });
@@ -249,11 +348,11 @@ export default function Interactive3DShowcase() {
     container.addEventListener("pointermove", onPointerMove);
     container.addEventListener("pointerleave", onPointerLeave);
 
-    // 7. Window Resize Listener
+    // 10. Resize Observer & Handling
     const onResize = () => {
       if (!container) return;
       width = container.clientWidth || 800;
-      height = container.clientHeight || 500;
+      height = container.clientHeight || 540;
 
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -268,12 +367,11 @@ export default function Interactive3DShowcase() {
     };
     window.addEventListener("resize", onResize);
 
-    // 8. Animation & Physics Simulation Loop
+    // 11. Physics Simulation & Render Loop
     let animationFrameId: number;
     let clock = new THREE.Clock();
     let isVisible = true;
 
-    // IntersectionObserver to pause rendering when section is out of viewport (Performance Safeguard)
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -286,61 +384,64 @@ export default function Interactive3DShowcase() {
       animationFrameId = requestAnimationFrame(animate);
       if (!isVisible) return;
 
-      const delta = Math.min(clock.getDelta(), 0.1);
       const time = clock.getElapsedTime();
 
       // ==========================================
-      // A. Center Gravity & Floating Wave
+      // A. Wide Elliptical Attractor & Float Drift
       // ==========================================
       for (let i = 0; i < physicsObjects.length; i++) {
         const obj = physicsObjects[i];
 
-        // Soft spring pull toward center cluster
-        const toCenter = new THREE.Vector3(0, 0, 0).sub(obj.position);
-        const distFromCenter = toCenter.length();
+        // Rest/attractor force: gentle horizontal elliptical spread (x * 0.45, y * 0.85, z * 0.9)
+        obj.velocity.x -= obj.position.x * 0.003 * 0.45;
+        obj.velocity.y -= obj.position.y * 0.003 * 0.85;
+        obj.velocity.z -= obj.position.z * 0.003 * 0.9;
 
-        // Gravitational force proportional to distance
-        obj.velocity.addScaledVector(toCenter, 0.0065);
-
-        // Keep depth bounded in front of camera
-        if (Math.abs(obj.position.z) > 2.2) {
+        // Soft elastic containment bounds
+        if (Math.abs(obj.position.x) > 6.5) {
+          obj.velocity.x -= Math.sign(obj.position.x) * 0.02;
+        }
+        if (Math.abs(obj.position.y) > 3.2) {
+          obj.velocity.y -= Math.sign(obj.position.y) * 0.02;
+        }
+        if (Math.abs(obj.position.z) > 1.8) {
           obj.velocity.z -= Math.sign(obj.position.z) * 0.02;
         }
 
         // Ambient fluid wave motion
-        obj.velocity.y += Math.sin(time * 1.6 + obj.phase) * 0.0018;
-        obj.velocity.x += Math.cos(time * 1.2 + obj.phase) * 0.0012;
+        obj.velocity.y += Math.sin(time * 1.3 + obj.phase) * 0.0012;
+        obj.velocity.x += Math.cos(time * 0.95 + obj.phase) * 0.0008;
       }
 
       // ==========================================
-      // B. Mouse Raycast Repulsion
+      // B. Mouse Raycast Dynamic Parting Wave
       // ==========================================
       if (isHovering && targetMouseWorld.x !== -999) {
-        const repulsionRadius = 3.6;
+        const repulsionRadius = 4.8;
 
         for (let i = 0; i < physicsObjects.length; i++) {
           const obj = physicsObjects[i];
           const diff = obj.position.clone().sub(targetMouseWorld);
-          diff.z *= 0.4; // Flatten repulsion primarily along X/Y
+          diff.z *= 0.35; // Flatten repulsion primarily along X/Y screen plane
           const distToCursor = diff.length();
 
           if (distToCursor < repulsionRadius && distToCursor > 0.001) {
             const pushDir = diff.normalize();
             const factor = 1 - distToCursor / repulsionRadius;
-            const pushStrength = factor * factor * (0.35 + Math.min(mouseSpeed, 0.8) * 0.5);
+            const pushStrength = factor * factor * (0.55 + Math.min(mouseSpeed, 1.2) * 0.8);
 
             obj.velocity.addScaledVector(pushDir, pushStrength);
 
-            // Add dynamic tumble torque on mouse collision
-            obj.angularVelocity.x += (Math.random() - 0.5) * pushStrength * 0.8;
-            obj.angularVelocity.y += (Math.random() - 0.5) * pushStrength * 0.8;
-            obj.angularVelocity.z += (Math.random() - 0.5) * pushStrength * 0.8;
+            // Dynamic tumble torque on parting wave
+            obj.angularVelocity.x += (Math.random() - 0.5) * pushStrength * 1.1;
+            obj.angularVelocity.y += (Math.random() - 0.5) * pushStrength * 1.1;
+            obj.angularVelocity.z += (Math.random() - 0.5) * pushStrength * 1.1;
           }
         }
       }
 
       // ==========================================
-      // C. Pairwise Object Collision (Elastic Repulsion)
+      // C. Pairwise Object Collision (Elastic Repulsion & Interlock Prevention)
       // ==========================================
       const restitution = 0.65;
       for (let i = 0; i < physicsObjects.length; i++) {
@@ -350,7 +451,7 @@ export default function Interactive3DShowcase() {
 
           const delta = a.position.clone().sub(b.position);
           const dist = delta.length();
-          const minDist = a.radius + b.radius;
+          const minDist = 2.45 * ((a.scale + b.scale) / 3.4);
 
           if (dist < minDist && dist > 0.0001) {
             const normal = delta.normalize();
@@ -360,7 +461,7 @@ export default function Interactive3DShowcase() {
             a.position.addScaledVector(normal, overlap * 0.5);
             b.position.addScaledVector(normal, -overlap * 0.5);
 
-            // Relative velocity & impulse calculation
+            // Velocity impulse
             const relVel = a.velocity.clone().sub(b.velocity);
             const sepVel = relVel.dot(normal);
 
@@ -370,8 +471,9 @@ export default function Interactive3DShowcase() {
               b.velocity.addScaledVector(normal, -impulse);
 
               // Impart tumbling spin on impact
-              a.angularVelocity.x += (Math.random() - 0.5) * impulse * 0.15;
-              b.angularVelocity.y += (Math.random() - 0.5) * impulse * 0.15;
+              a.angularVelocity.x += (Math.random() - 0.5) * impulse * 0.16;
+              a.angularVelocity.y += (Math.random() - 0.5) * impulse * 0.16;
+              a.angularVelocity.z += (Math.random() - 0.5) * impulse * 0.16;
             }
           }
         }
@@ -385,20 +487,14 @@ export default function Interactive3DShowcase() {
 
         // Linear movement
         obj.position.add(obj.velocity);
-        obj.velocity.multiplyScalar(0.94); // Smooth fluid friction
+        obj.velocity.multiplyScalar(0.935); // Smooth fluid friction
 
         // Angular rotation
-        obj.rotation.x += obj.angularVelocity.x + 0.0025;
-        obj.rotation.y += obj.angularVelocity.y + 0.0035;
+        obj.rotation.x += obj.angularVelocity.x + 0.002;
+        obj.rotation.y += obj.angularVelocity.y + 0.003;
         obj.rotation.z += obj.angularVelocity.z + 0.0015;
         obj.angularVelocity.multiplyScalar(0.93);
       }
-
-      // Soft light orbiting around scene for dynamic specular highlights
-      cyanPointLight.position.x = Math.sin(time * 0.8) * 5;
-      cyanPointLight.position.y = Math.cos(time * 0.6) * 4;
-      bluePointLight.position.x = Math.cos(time * 0.7) * 6;
-      bluePointLight.position.z = 4 + Math.sin(time * 0.5) * 2;
 
       renderer.render(scene, camera);
 
@@ -424,7 +520,7 @@ export default function Interactive3DShowcase() {
           // Inner chromatic glow ring
           rippleCtx.beginPath();
           rippleCtx.arc(r.x, r.y, r.radius * 0.6, 0, Math.PI * 2);
-          rippleCtx.strokeStyle = "rgba(6, 182, 212, 0.4)";
+          rippleCtx.strokeStyle = "rgba(22, 56, 255, 0.45)";
           rippleCtx.lineWidth = 2.5;
           rippleCtx.globalAlpha = r.alpha * 0.6;
           rippleCtx.stroke();
@@ -438,7 +534,7 @@ export default function Interactive3DShowcase() {
 
     animate();
 
-    // 9. Comprehensive Cleanup & Resource Disposal on Component Unmount
+    // 12. Resource Disposal on Component Unmount
     return () => {
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
@@ -447,11 +543,20 @@ export default function Interactive3DShowcase() {
       container.removeEventListener("pointerleave", onPointerLeave);
       window.removeEventListener("resize", onResize);
 
-      // Dispose Three.js geometries & materials
-      capsuleGeo.dispose();
-      obsidianMat.dispose();
-      ceramicMat.dispose();
-      cobaltCyanMat.dispose();
+      // Dispose Studio Environment
+      pmremGenerator.dispose();
+      roomEnv.dispose();
+      envMap.dispose();
+
+      // Dispose Geometries
+      crossOuterGeo.dispose();
+      crossInnerGeo.dispose();
+
+      // Dispose Materials
+      deepCobaltMat.dispose();
+      softCeramicMat.dispose();
+      satinObsidianMat.dispose();
+      matteInnerMat.dispose();
 
       // Remove meshes from scene
       for (const obj of physicsObjects) {
@@ -470,27 +575,27 @@ export default function Interactive3DShowcase() {
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/25 text-[10px] font-bold tracking-widest text-cyan-400 uppercase mb-3 bg-cyan-950/25 backdrop-blur-md">
-            <Sparkles size={11} className="text-cyan-400 animate-pulse" />
-            <span>INTERACTIVE 3D PHYSICS // LUSION LAB</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/25 text-[10px] font-bold tracking-widest text-blue-400 uppercase mb-3 bg-blue-950/25 backdrop-blur-md">
+            <Sparkles size={11} className="text-blue-400 animate-pulse" />
+            <span>// INTERACTIVE 3D ENGINE</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold uppercase tracking-tight text-white">
-            PHYSICAL <span className="text-cyan-400 drop-shadow-[0_0_20px_rgba(6,182,212,0.4)]">MATERIAL LAB</span>
+            AUTONOMOUS <span className="text-blue-500 drop-shadow-[0_0_20px_rgba(22,56,255,0.4)]">SYSTEM DYNAMICS</span>
           </h2>
         </div>
 
         <p className="text-xs sm:text-sm font-mono text-neutral-400 max-w-md leading-relaxed">
-          Procedural 3D rounded cross clusters with real-time PBR glossy shaders, elastic impulse mechanics, and fluid cursor repulsion.
+          High-fidelity industrial PBR cross physics with studio HDRI environment reflections, beveled geometry, and fluid cursor repulsion.
         </p>
       </div>
 
-      {/* Sleek Lusion Viewport Frame */}
+      {/* Sleek Viewport Frame */}
       <div
         ref={containerRef}
-        className="relative w-full h-[420px] sm:h-[520px] md:h-[620px] rounded-[2rem] overflow-hidden bg-[#070709] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-xl group"
+        className="relative w-full h-[440px] sm:h-[540px] md:h-[640px] rounded-[2rem] overflow-hidden bg-[#070709] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-xl group"
       >
         {/* Subtle Ambient Radial Glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.08)_0%,_transparent_70%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(22,56,255,0.08)_0%,_transparent_70%)] pointer-events-none" />
 
         {/* 3D WebGL Canvas Mount Container */}
         <div
@@ -507,38 +612,23 @@ export default function Interactive3DShowcase() {
         {/* Top HUD Telemetry Overlay */}
         <div className="absolute top-5 left-6 right-6 flex items-center justify-between z-30 pointer-events-none">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 border border-white/10 backdrop-blur-md text-[10px] font-mono text-neutral-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-neutral-400">PBR ENGINE:</span>
-            <span className="text-cyan-400 font-semibold">60 FPS REAL-TIME</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" />
+            <span className="text-neutral-400">PBR STUDIO:</span>
+            <span className="text-blue-400 font-semibold">HDRI ENVIRONMENT</span>
           </div>
 
           <div className="hidden sm:flex items-center gap-3 text-[10px] font-mono text-neutral-400">
-            <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/5">20 CLUSTER BODIES</span>
-            <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/5">RAYCAST REPULSION</span>
+            <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/5">20 INDUSTRIAL BODIES</span>
+            <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/5">RAYCAST PARTING DYNAMICS</span>
           </div>
         </div>
 
-        {/* Center Floating Interaction Hint (Disappears on hover/move) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 flex flex-col items-center gap-2 opacity-60 group-hover:opacity-0 transition-opacity duration-500">
-          <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 animate-bounce">
-            <Move size={16} />
-          </div>
-          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400">
-            Hover & Drag to Disperse
-          </span>
-        </div>
-
-        {/* Bottom HUD Bar matching Lusion Reference Frame */}
+        {/* Bottom HUD Bar */}
         <div className="absolute bottom-5 left-6 right-6 flex items-center justify-between z-30 pointer-events-none border-t border-white/5 pt-3">
-          {/* Left '+' Marker */}
           <span className="text-neutral-500 font-mono text-sm leading-none select-none">+</span>
-
-          {/* Centered Micro-Label */}
           <div className="flex items-center gap-2 text-[11px] font-mono tracking-[0.25em] text-neutral-400 uppercase">
             <span>SCROLL TO EXPLORE</span>
           </div>
-
-          {/* Right '+' Marker */}
           <span className="text-neutral-500 font-mono text-sm leading-none select-none">+</span>
         </div>
       </div>
