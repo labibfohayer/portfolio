@@ -12,7 +12,6 @@ import FloatingMusic from "@/components/FloatingMusic";
 import Chatbot from "@/components/Chatbot";
 import CommandPalette from "@/components/CommandPalette";
 import TechMarquee from "@/components/TechMarquee";
-import Interactive3DShowcase from "@/components/Interactive3DShowcase";
 import SocialSidebar from "@/components/SocialSidebar";
 import PageTracker from "@/components/PageTracker";
 
@@ -27,7 +26,6 @@ export default function Home() {
       <Navbar />
       <Hero />
       <TechMarquee />
-      <Interactive3DShowcase />
       <About />
       <Projects />
       <Skills />
