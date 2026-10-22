@@ -1,10 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useRef, useState, useEffect } from "react";
+import { 
+  motion, 
+  useScroll, 
+  useTransform, 
+  useMotionValue, 
+  useMotionTemplate, 
+  MotionValue 
+} from "framer-motion";
 import { 
   Bot, 
   Layout, 
@@ -12,13 +16,10 @@ import {
   ShoppingCart, 
   CheckCircle2, 
   ArrowRight, 
-  Sparkles 
+  Sparkles,
+  Layers,
+  Cpu
 } from "lucide-react";
-
-// Register ScrollTrigger safely for Next.js SSR / Client
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const services = [
   { 
@@ -133,6 +134,9 @@ function AnimatedBackground({ type }: { type: string }) {
   }
 }
 
+// ==========================================
+// Card Front: Full Capability Details
+// ==========================================
 function ServiceCard({ service }: { service: typeof services[0] }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -146,7 +150,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="group relative rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 flex flex-col justify-between h-full min-h-[480px] bg-[#070b0e]/95 border border-white/10 hover:border-cyan-500/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_40px_rgba(var(--theme-rgb),0.18)] backdrop-blur-xl overflow-hidden pointer-events-auto"
+      className="group relative rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 flex flex-col justify-between h-full min-h-[490px] bg-[#070b0e]/95 border border-white/10 hover:border-cyan-500/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_45px_rgba(var(--theme-rgb),0.2)] backdrop-blur-2xl overflow-hidden pointer-events-auto"
     >
       {/* Interactive Radial Spotlight Hover */}
       <motion.div
@@ -155,7 +159,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
           background: useMotionTemplate`
             radial-gradient(
               450px circle at ${mouseX}px ${mouseY}px,
-              rgba(var(--theme-rgb), 0.12),
+              rgba(var(--theme-rgb), 0.14),
               transparent 80%
             )
           `,
@@ -165,7 +169,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
       {/* Subtle Background Animation */}
       <AnimatedBackground type={service.bgType} />
 
-      {/* Content Container (flex-col justify-between h-full ensures zero empty void) */}
+      {/* Content Container */}
       <div className="relative z-10 flex flex-col justify-between h-full space-y-4">
         
         {/* Top Header Section */}
@@ -176,7 +180,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/40 border border-cyan-500/20 text-cyan-400">
+              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-cyan-950/50 border border-cyan-500/25 text-cyan-400">
                 {service.category}
               </span>
               <span className="text-cyan-500/50 group-hover:text-cyan-400 font-mono text-sm font-bold transition-colors">
@@ -210,7 +214,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
         {/* Bottom Enriched Area */}
         <div className="pt-3 border-t border-white/10 space-y-3 mt-auto">
           
-          {/* Sub-Feature Pill Group / Tech Stack */}
+          {/* Tech Stack Pills */}
           <div>
             <div className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1.5">
               FRAMEWORKS & APIS
@@ -227,7 +231,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
             </div>
           </div>
 
-          {/* Workflow Capacity / Micro Metric Bar */}
+          {/* Workflow Capacity Metric Bar */}
           <div className="bg-black/50 border border-white/10 rounded-xl p-3 group-hover:border-cyan-500/20 transition-colors">
             <div className="flex justify-between items-baseline mb-1.5">
               <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-wider">
@@ -237,7 +241,6 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
                 {service.stats.value}
               </span>
             </div>
-            {/* Visual Capacity Bar */}
             <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-cyan-500 to-blue-400 rounded-full transition-all duration-700"
@@ -246,7 +249,7 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
             </div>
           </div>
 
-          {/* Interactive Bottom Status Bar */}
+          {/* Bottom Status Row */}
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -270,157 +273,257 @@ function ServiceCard({ service }: { service: typeof services[0] }) {
   );
 }
 
+// ==========================================
+// Card Back: Cybernetic Tucked Deck Aesthetic
+// ==========================================
+function CardBack({ service, index }: { service: typeof services[0]; index: number }) {
+  return (
+    <div className="relative w-full h-full min-h-[490px] rounded-[1.75rem] sm:rounded-[2rem] p-7 flex flex-col justify-between bg-[#070b10] border border-cyan-500/30 shadow-[0_25px_60px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(6,182,212,0.08)] backdrop-blur-3xl overflow-hidden select-none">
+      {/* Geometric Circuit Grid Texture */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_rgba(6,182,212,0.18)_0%,_transparent_75%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.06)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+
+      {/* Crosshair Markers (+) */}
+      <span className="absolute top-4 left-4 text-cyan-500/40 font-mono text-xs">+</span>
+      <span className="absolute top-4 right-4 text-cyan-500/40 font-mono text-xs">+</span>
+      <span className="absolute bottom-4 left-4 text-cyan-500/40 font-mono text-xs">+</span>
+      <span className="absolute bottom-4 right-4 text-cyan-500/40 font-mono text-xs">+</span>
+
+      {/* Top Header of Card Back */}
+      <div className="relative z-10 flex items-center justify-between border-b border-cyan-500/20 pb-3">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+          <span className="text-[10px] font-mono tracking-[0.25em] text-cyan-400 font-bold uppercase">
+            DECK // {service.id}
+          </span>
+        </div>
+        <span className="text-[9px] font-mono tracking-widest text-neutral-500 uppercase">
+          LUSION ENGINE
+        </span>
+      </div>
+
+      {/* Center Holographic Cyber Emblem */}
+      <div className="relative z-10 my-auto flex flex-col items-center justify-center text-center py-6">
+        {/* Hologram Circle */}
+        <div className="relative w-24 h-24 rounded-full border border-cyan-500/40 flex items-center justify-center bg-cyan-950/30 shadow-[0_0_30px_rgba(6,182,212,0.3)] mb-4">
+          <div className="absolute inset-2 rounded-full border border-dashed border-cyan-400/50 animate-[spin_12s_linear_infinite]" />
+          <div className="relative z-10 text-cyan-300">
+            {service.icon}
+          </div>
+        </div>
+
+        <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-cyan-400 font-semibold mb-1">
+          {service.category}
+        </span>
+        <h4 className="text-base font-display font-bold uppercase tracking-tight text-white max-w-[200px]">
+          {service.title}
+        </h4>
+      </div>
+
+      {/* Bottom Technical Telemetry */}
+      <div className="relative z-10 border-t border-cyan-500/20 pt-3 flex items-center justify-between">
+        <div className="flex items-center gap-1.5 text-[9px] font-mono text-neutral-400 uppercase tracking-wider">
+          <Cpu size={12} className="text-cyan-400" />
+          <span>STATUS: ARMED</span>
+        </div>
+        <span className="text-[9px] font-mono tracking-widest text-cyan-400 font-bold">
+          CARD {index + 1}/4
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// Desktop Deck Card with Framer Motion Fan-Out & 3D Flip
+// ==========================================
+function DesktopDeckCard({
+  service,
+  index,
+  total,
+  scrollYProgress,
+  containerWidth,
+}: {
+  service: typeof services[0];
+  index: number;
+  total: number;
+  scrollYProgress: MotionValue<number>;
+  containerWidth: number;
+}) {
+  const gap = 24;
+  const colWidth = (containerWidth - (total - 1) * gap) / total;
+
+  // Exact mathematically centered offsets (Stage 1: All cards stacked at exact center)
+  const centerOffsets = [
+    1.5 * (colWidth + gap),   // Card 0 translates right to center
+    0.5 * (colWidth + gap),   // Card 1 translates right to center
+    -0.5 * (colWidth + gap),  // Card 2 translates left to center
+    -1.5 * (colWidth + gap),  // Card 3 translates left to center
+  ];
+  const initialOffset = centerOffsets[index] || 0;
+
+  // Slight overlapping fan angles in deck stack
+  const tilts = [-7.5, -2.5, 2.5, 7.5];
+  const initialTilt = tilts[index] || 0;
+
+  // Staggered 3D flip timings
+  const flipStart = 0.22 + index * 0.04;
+  const flipEnd = 0.72 + index * 0.035;
+
+  // Framer Motion transforms
+  // 1. Horizontal Fan-out translation
+  const x = useTransform(scrollYProgress, [0, 0.18, 0.78, 1], [initialOffset, initialOffset, 0, 0]);
+
+  // 2. Un-tilt Z-rotation
+  const rotateZ = useTransform(scrollYProgress, [0, 0.18, 0.78, 1], [initialTilt, initialTilt, 0, 0]);
+
+  // 3. 3D Flip (rotateY: 180deg [Back Facing] -> 0deg [Front Facing])
+  const rotateY = useTransform(scrollYProgress, [0, flipStart, flipEnd, 1], [180, 180, 0, 0]);
+
+  // 4. Subtle Scale Expansion
+  const scale = useTransform(scrollYProgress, [0, 0.18, 0.78, 1], [0.92, 0.92, 1, 1]);
+
+  // 5. Dynamic Z-Index (when stacked, card 0 is on top; when fanned, equal)
+  const zIndex = useTransform(scrollYProgress, (val) => (val > 0.65 ? 10 : 4 - index));
+
+  return (
+    <motion.div
+      style={{
+        x,
+        rotateZ,
+        rotateY,
+        scale,
+        zIndex,
+      }}
+      className="w-full h-full relative [transform-style:preserve-3d] will-change-transform"
+    >
+      {/* ======================================================== */}
+      {/* BACK FACE (Visible initially at rotateY = 180deg) */}
+      {/* ======================================================== */}
+      <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
+        <CardBack service={service} index={index} />
+      </div>
+
+      {/* ======================================================== */}
+      {/* FRONT FACE (Revealed after 3D flip at rotateY = 0deg) */}
+      {/* ======================================================== */}
+      <div className="w-full h-full [backface-visibility:hidden] [transform:rotateY(0deg)]">
+        <ServiceCard service={service} />
+      </div>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// Main Services Component
+// ==========================================
 export default function Services() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const targetRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(1300);
+  const [isDesktop, setIsDesktop] = useState(true);
 
-  useGSAP(() => {
-    // Dynamic horizontal center calculation for each card relative to the container
-    const getDeltaX = (card: HTMLElement, container: HTMLElement) => {
-      const cRect = container.getBoundingClientRect();
-      const kRect = card.getBoundingClientRect();
-      const currentX = (gsap.getProperty(card, "x") as number) || 0;
-      const naturalCardCenterX = (kRect.left - currentX) + kRect.width / 2;
-      const containerCenterX = cRect.left + cRect.width / 2;
-      return containerCenterX - naturalCardCenterX;
+  // Monitor viewport width for clean mobile fallback
+  useEffect(() => {
+    const updateDimensions = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth || 1300);
+      }
     };
 
-    const mm = gsap.matchMedia();
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
 
-    // ==========================================
-    // 1. DESKTOP (min-width: 1024px): Pinned Center-Stacked to 4-Column Spread
-    // ==========================================
-    mm.add("(min-width: 1024px)", () => {
-      const cards = cardRefs.current.filter(Boolean) as HTMLElement[];
-      const container = cardsContainerRef.current;
-      if (!container || cards.length === 0 || !sectionRef.current) return;
+  // Framer Motion Scroll Progress across the 300vh sticky container
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end end"],
+  });
 
-      // Card deck tilts and subtle 3D flip angles
-      const tilts = [-6, -2, 2, 6];
-      const rotateYs = [-15, -7, 7, 15];
-
-      // Set initial stacked z-indices (Card 1 on top, Card 4 at bottom)
-      cards.forEach((card, i) => {
-        gsap.set(card, { 
-          zIndex: 4 - i,
-          transformPerspective: 1200,
-          transformOrigin: "center center",
-          willChange: "transform"
-        });
-      });
-
-      // Pinned Timeline with scrub
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "+=220%",
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        }
-      });
-
-      // Animate from center-stacked deck to 4-column spread
-      cards.forEach((card, i) => {
-        tl.fromTo(
-          card,
-          {
-            x: () => getDeltaX(card, container),
-            rotation: tilts[i],
-            rotateY: rotateYs[i],
-            scale: 0.92,
-            transformPerspective: 1200,
-            force3D: true,
-          },
-          {
-            x: 0,
-            rotation: 0,
-            rotateY: 0,
-            scale: 1,
-            ease: "power2.out",
-            duration: 1,
-          },
-          0
-        );
-      });
-    });
-
-    // ==========================================
-    // 2. MOBILE & TABLET (max-width: 1023px): Responsive Grid (No horizontal overflow)
-    // ==========================================
-    mm.add("(max-width: 1023px)", () => {
-      const cards = cardRefs.current.filter(Boolean) as HTMLElement[];
-      if (cards.length === 0 || !cardsContainerRef.current) return;
-
-      // Clear any desktop GSAP transforms completely
-      gsap.set(cards, {
-        clearProps: "all"
-      });
-
-      // Gentle vertical fade-in stagger when scrolled into view
-      gsap.from(cards, {
-        opacity: 0,
-        y: 35,
-        duration: 0.6,
-        stagger: 0.12,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: cardsContainerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        }
-      });
-    });
-
-    return () => {
-      mm.revert();
-    };
-  }, { scope: sectionRef });
+  // Micro-hint that fades out once user starts expanding deck
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.15, 0.35], [1, 1, 0]);
 
   return (
     <section 
-      ref={sectionRef} 
+      ref={targetRef} 
       id="services" 
-      className="scroll-mt-28 md:scroll-mt-32 relative z-20 bg-black overflow-hidden w-full max-w-full flex flex-col justify-center py-16 sm:py-20 lg:py-0 lg:min-h-screen"
+      className="scroll-mt-28 md:scroll-mt-32 relative z-20 bg-black overflow-hidden w-full max-w-full lg:h-[300vh]"
     >
-      {/* Background Ambient Glow */}
+      {/* Background Ambient Radial Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-cyan-500/5 blur-[160px] pointer-events-none rounded-full" />
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full relative z-10 my-auto">
-        
-        {/* Section Header */}
-        <div className="mb-10 sm:mb-14 lg:mb-16 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-4 sm:mb-6 bg-cyan-950/20 backdrop-blur-md">
-            <Bot size={12} className="text-cyan-400" /> ARCHITECTURAL COMPETENCIES
-          </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
-            CORE <span className="text-cyan-500 drop-shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)]">CAPABILITIES</span>
-          </h2>
-          <p className="text-neutral-400 text-xs sm:text-sm max-w-xl mt-4 leading-relaxed">
-            Enterprise-grade web systems, autonomous LLM agent networks, and resilient cloud architectures built with precision and zero technical debt.
-          </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-transparent rounded-full mt-6" />
-        </div>
-
-        {/* 4-Column Cards Container with 3D Perspective */}
+      {/* Sticky Fullscreen Viewport for Desktop / Fluid Flow for Mobile */}
+      <div className="lg:sticky lg:top-0 lg:h-screen lg:flex lg:flex-col lg:justify-center py-16 sm:py-20 lg:py-0 w-full overflow-hidden">
         <div 
-          ref={cardsContainerRef}
-          className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full items-stretch [perspective:1200px]"
+          ref={containerRef}
+          className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full relative z-10 my-auto flex flex-col justify-center"
         >
-          {services.map((service, idx) => (
-            <div 
-              key={service.id}
-              ref={(el) => { cardRefs.current[idx] = el; }}
-              className="w-full flex flex-col h-full [transform-style:preserve-3d] will-change-transform"
-            >
-              <ServiceCard service={service} />
+          
+          {/* Section Header */}
+          <div className="mb-8 sm:mb-10 lg:mb-12 flex flex-col items-center text-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-3 sm:mb-4 bg-cyan-950/20 backdrop-blur-md">
+              <Bot size={12} className="text-cyan-400" /> ARCHITECTURAL COMPETENCIES
             </div>
-          ))}
-        </div>
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
+              CORE <span className="text-cyan-500 drop-shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)]">CAPABILITIES</span>
+            </h2>
+            <p className="text-neutral-400 text-xs sm:text-sm max-w-xl mt-3.5 leading-relaxed">
+              Enterprise-grade web systems, autonomous LLM agent networks, and resilient cloud architectures built with precision and zero technical debt.
+            </p>
 
+            {/* Desktop Fan-Out & Flip Scroll Prompt */}
+            {isDesktop && (
+              <motion.div 
+                style={{ opacity: hintOpacity }}
+                className="hidden lg:flex items-center gap-2 mt-4 px-3 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-[10px] font-mono tracking-widest uppercase text-cyan-400"
+              >
+                <Layers size={11} className="animate-pulse" />
+                <span>SCROLL TO EXPAND & FLIP DECK</span>
+              </motion.div>
+            )}
+          </div>
+
+          {/* ======================================================== */}
+          {/* Desktop: Lusion-Style Card Deck Fan-Out & 3D Flip */}
+          {/* ======================================================== */}
+          {isDesktop ? (
+            <div className="relative grid grid-cols-4 gap-6 w-full items-stretch [perspective:1500px]">
+              {services.map((service, idx) => (
+                <div key={service.id} className="w-full h-full flex flex-col">
+                  <DesktopDeckCard
+                    service={service}
+                    index={idx}
+                    total={services.length}
+                    scrollYProgress={scrollYProgress}
+                    containerWidth={containerWidth}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            /* ======================================================== */
+            /* Mobile & Tablet (<1024px): Clean Responsive Stack */
+            /* ======================================================== */
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full items-stretch">
+              {services.map((service, idx) => (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 35 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: idx * 0.12, ease: "easeOut" }}
+                  className="w-full flex flex-col h-full"
+                >
+                  <ServiceCard service={service} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+        </div>
       </div>
     </section>
   );
