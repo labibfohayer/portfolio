@@ -345,11 +345,18 @@ export default function Services() {
   const frontFaceRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    // Refresh ScrollTrigger calculations after initial render & media load
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 400);
-    return () => clearTimeout(timer);
+    // Refresh ScrollTrigger calculations after initial render, fonts & preloader finish
+    const refresh = () => ScrollTrigger.refresh();
+    const timer1 = setTimeout(refresh, 250);
+    const timer2 = setTimeout(refresh, 800);
+    const timer3 = setTimeout(refresh, 2200);
+    window.addEventListener("resize", refresh);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      window.removeEventListener("resize", refresh);
+    };
   }, []);
 
   useGSAP(() => {
@@ -366,25 +373,28 @@ export default function Services() {
     const mm = gsap.matchMedia();
 
     // ========================================================
-    // 1. DESKTOP (min-width: 1024px): Pinned Deck Stack -> 3D Flip & Fan-Out
+    // 1. DESKTOP & TABLETS (min-width: 768px)
+    // Pinned Deck Stack -> Fan-Out to 4 Columns & Staggered 180° 3D Flip
     // ========================================================
-    mm.add("(min-width: 1024px)", () => {
+    mm.add("(min-width: 768px)", () => {
       const cards = cardRefs.current.filter(Boolean) as HTMLElement[];
       const backs = backFaceRefs.current.filter(Boolean) as HTMLElement[];
       const fronts = frontFaceRefs.current.filter(Boolean) as HTMLElement[];
       const container = containerRef.current;
-      if (!container || cards.length === 0 || !sectionRef.current) return;
+      const section = sectionRef.current;
+      if (!container || cards.length === 0 || !section) return;
 
       const tilts = [-7.5, -2.5, 2.5, 7.5];
 
       // Pinned Scroll Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: "top top",
-          end: "+=220%",
+          end: "+=240%",
           pin: true,
-          scrub: 1,
+          pinSpacing: true,
+          scrub: 0.8,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         }
@@ -459,32 +469,85 @@ export default function Services() {
     });
 
     // ========================================================
-    // 2. MOBILE & TABLET (max-width: 1023px): Clean Responsive Stack
+    // 2. MOBILE (< 768px): Pinned Deck Stack & 180° 3D Flip!
     // ========================================================
-    mm.add("(max-width: 1023px)", () => {
+    mm.add("(max-width: 767px)", () => {
       const cards = cardRefs.current.filter(Boolean) as HTMLElement[];
       const backs = backFaceRefs.current.filter(Boolean) as HTMLElement[];
       const fronts = frontFaceRefs.current.filter(Boolean) as HTMLElement[];
-      if (cards.length === 0 || !containerRef.current) return;
+      const container = containerRef.current;
+      const section = sectionRef.current;
+      if (!container || cards.length === 0 || !section) return;
 
-      // Clear all desktop transforms
-      cards.forEach((card) => {
-        gsap.set(card, { clearProps: "all" });
-      });
-      backs.forEach((b) => gsap.set(b, { display: "none" }));
-      fronts.forEach((f) => gsap.set(f, { autoAlpha: 1, display: "block" }));
+      const tilts = [-4, -1.5, 1.5, 4];
 
-      // Clean vertical stagger fade-in
-      gsap.from(cards, {
-        opacity: 0,
-        y: 35,
-        duration: 0.6,
-        stagger: 0.12,
-        ease: "power2.out",
+      // Pinned Scroll Timeline on Mobile
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
+          trigger: section,
+          start: "top top",
+          end: "+=200%",
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.8,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        }
+      });
+
+      cards.forEach((card, i) => {
+        const back = backs[i];
+        const front = fronts[i];
+
+        const flipStart = 0.12 * i;
+        const flipDuration = 0.78;
+        const midPoint = flipStart + flipDuration / 2;
+
+        if (back) gsap.set(back, { autoAlpha: 1 });
+        if (front) gsap.set(front, { autoAlpha: 0 });
+
+        // On mobile: cards start stacked in the center with slight tilt and scale
+        tl.fromTo(
+          card,
+          {
+            rotationZ: tilts[i],
+            scale: 0.94 - i * 0.02,
+            transformPerspective: 1200,
+            transformOrigin: "center center",
+            zIndex: 4 - i,
+            force3D: true,
+          },
+          {
+            rotationZ: 0,
+            scale: 1,
+            ease: "power2.out",
+            duration: 0.9,
+          },
+          0
+        );
+
+        // Full 180° 3D Flip
+        tl.fromTo(
+          card,
+          { rotateY: 180 },
+          { rotateY: 0, ease: "power2.inOut", duration: flipDuration },
+          flipStart
+        );
+
+        // Seamless knife-edge face swap
+        if (back && front) {
+          tl.fromTo(
+            back,
+            { autoAlpha: 1 },
+            { autoAlpha: 0, duration: 0.04, ease: "none" },
+            midPoint - 0.02
+          );
+          tl.fromTo(
+            front,
+            { autoAlpha: 0 },
+            { autoAlpha: 1, duration: 0.04, ease: "none" },
+            midPoint - 0.02
+          );
         }
       });
     });
@@ -498,43 +561,43 @@ export default function Services() {
     <section 
       ref={sectionRef} 
       id="services" 
-      className="scroll-mt-28 md:scroll-mt-32 relative z-20 bg-black w-full max-w-full flex flex-col justify-center py-16 sm:py-20 lg:py-0 lg:min-h-screen"
+      className="relative z-20 bg-black w-full max-w-full flex flex-col justify-center h-screen min-h-[640px] overflow-hidden"
     >
       {/* Background Ambient Radial Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-cyan-500/5 blur-[160px] pointer-events-none rounded-full" />
 
       <div 
         ref={containerRef}
-        className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 w-full relative z-10 my-auto flex flex-col justify-center"
+        className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 w-full relative z-10 my-auto flex flex-col justify-center h-full max-h-screen py-4 md:py-6"
       >
         
         {/* Section Header */}
-        <div className="mb-8 sm:mb-10 lg:mb-12 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-cyan-500/20 text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-3 sm:mb-4 bg-cyan-950/20 backdrop-blur-md">
+        <div className="mb-4 sm:mb-6 lg:mb-8 flex flex-col items-center text-center shrink-0">
+          <div className="inline-flex items-center gap-2 px-3 py-0.5 sm:py-1 rounded-full border border-cyan-500/20 text-[9px] sm:text-[10px] font-bold tracking-widest text-neutral-400 uppercase mb-2 sm:mb-3 bg-cyan-950/20 backdrop-blur-md">
             <Bot size={12} className="text-cyan-400" /> ARCHITECTURAL COMPETENCIES
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white break-words">
             CORE <span className="text-cyan-500 drop-shadow-[0_0_20px_rgba(var(--theme-rgb),0.4)]">CAPABILITIES</span>
           </h2>
-          <p className="text-neutral-400 text-xs sm:text-sm max-w-xl mt-3.5 leading-relaxed">
+          <p className="text-neutral-400 text-xs sm:text-sm max-w-xl mt-2 leading-relaxed hidden sm:block">
             Enterprise-grade web systems, autonomous LLM agent networks, and resilient cloud architectures built with precision and zero technical debt.
           </p>
 
-          <div className="hidden lg:flex items-center gap-2 mt-4 px-3 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-[10px] font-mono tracking-widest uppercase text-cyan-400">
+          <div className="flex items-center gap-2 mt-2.5 px-3 py-0.5 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-cyan-400">
             <Layers size={11} className="animate-pulse" />
             <span>SCROLL TO FAN & FLIP DECK</span>
           </div>
         </div>
 
-        {/* 4-Column Cards Container */}
+        {/* Cards Container: Stacked relative deck on mobile, 4-column grid on md+ */}
         <div 
-          className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full items-stretch"
+          className="relative w-full max-w-[340px] sm:max-w-sm md:max-w-none mx-auto h-[450px] md:h-auto md:grid md:grid-cols-4 md:gap-4 lg:gap-6 items-stretch"
         >
           {services.map((service, idx) => (
             <div 
               key={service.id}
               ref={(el) => { cardRefs.current[idx] = el; }}
-              className="w-full flex flex-col h-full relative [transform-style:preserve-3d] will-change-transform"
+              className="absolute inset-0 md:relative md:inset-auto w-full flex flex-col h-full [transform-style:preserve-3d] will-change-transform"
             >
               {/* ======================================================== */}
               {/* BACK FACE (Visible initially at rotateY: 180deg) */}

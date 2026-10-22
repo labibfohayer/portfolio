@@ -81,14 +81,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className="dark">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
       </head>
-      <body className={cn(spaceGrotesk.variable, outfit.variable, greatVibes.variable, "font-sans antialiased bg-black text-neutral-200 min-h-screen selection:bg-cyan-600/30 selection:text-cyan-200 overflow-x-hidden")}>
+      <body className={cn(spaceGrotesk.variable, outfit.variable, greatVibes.variable, "font-sans antialiased bg-black text-neutral-200 min-h-screen selection:bg-cyan-600/30 selection:text-cyan-200 overflow-x-clip")}>
         <Preloader />
         <GlobalEffects />
         <EasterEgg />
