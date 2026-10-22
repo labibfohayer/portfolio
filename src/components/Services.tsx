@@ -299,7 +299,7 @@ function CardBack({ service, index }: { service: typeof services[0]; index: numb
           </span>
         </div>
         <span className="text-[9px] font-mono tracking-widest text-neutral-500 uppercase">
-          LUSION ENGINE
+          SPATIAL DECK ENGINE
         </span>
       </div>
 

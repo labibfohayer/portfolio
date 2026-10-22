@@ -389,7 +389,7 @@ export default function ParticleWaveCTA() {
       <div className="relative z-10 w-full max-w-7xl px-8 sm:px-12 flex items-center justify-between pointer-events-none">
         <div className="flex items-center gap-2.5 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-white/90 uppercase font-medium">
           <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-          <span>LUSION FLUID BED // WATER SURFACE</span>
+          <span>INTERACTIVE FLUID BED // WATER SURFACE</span>
         </div>
 
         <div className="hidden sm:flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-white/80 uppercase font-medium">
