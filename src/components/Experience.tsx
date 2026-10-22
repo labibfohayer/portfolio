@@ -18,7 +18,8 @@ import {
   ChevronRight,
   ChevronLeft,
   RotateCcw,
-  Compass
+  Compass,
+  Globe
 } from "lucide-react";
 
 interface BulletItem {
@@ -44,7 +45,22 @@ interface Milestone {
   // 3D camera vantage point coordinates for this milestone
   cameraPos: { x: number; y: number; z: number };
   lookAt: { x: number; y: number; z: number };
+  planetCoord: { x: number; y: number; z: number };
 }
+
+interface PlanetSpawnOffset {
+  x: number;
+  y: number;
+  rY: number;
+  rX: number;
+}
+
+const defaultOffsets: PlanetSpawnOffset[] = [
+  { x: -260, y: -80, rY: 25, rX: -10 },
+  { x: -120, y: 160, rY: 18, rX: 16 },
+  { x: 160, y: -130, rY: -20, rX: -14 },
+  { x: 240, y: 110, rY: -25, rX: 12 }
+];
 
 const experiences: Milestone[] = [
   {
@@ -65,8 +81,9 @@ const experiences: Milestone[] = [
     ],
     tech: ["Next.js", "Python", "FastAPI", "OpenAI / Claude", "Vercel"],
     metric: { value: "90%", label: "Faster Response Time" },
-    cameraPos: { x: -3.2, y: 1.6, z: 8.8 },
-    lookAt: { x: -1.8, y: 0.4, z: 0 }
+    planetCoord: { x: -3.5, y: 1.0, z: -0.5 },
+    cameraPos: { x: -2.8, y: 1.5, z: 9.0 },
+    lookAt: { x: -1.5, y: 0.4, z: 0 }
   },
   {
     id: "02",
@@ -86,8 +103,9 @@ const experiences: Milestone[] = [
     ],
     tech: ["OpenAI API", "Gemini", "Node.js", "AWS Lambda", "Puppeteer"],
     metric: { value: "10+", label: "Businesses Automated" },
-    cameraPos: { x: -0.8, y: -1.2, z: 9.2 },
-    lookAt: { x: -0.2, y: -0.5, z: 0 }
+    planetCoord: { x: -1.0, y: -0.9, z: 0.6 },
+    cameraPos: { x: -0.6, y: -0.8, z: 9.2 },
+    lookAt: { x: 0.0, y: -0.3, z: 0 }
   },
   {
     id: "03",
@@ -107,8 +125,9 @@ const experiences: Milestone[] = [
     ],
     tech: ["React.js", "Firebase Realtime DB", "Tailwind CSS", "Algorithms"],
     metric: { value: "500+", label: "Active Residents" },
-    cameraPos: { x: 1.8, y: 1.5, z: 8.5 },
-    lookAt: { x: 1.0, y: 0.6, z: 0 }
+    planetCoord: { x: 1.8, y: 1.3, z: -0.5 },
+    cameraPos: { x: 1.8, y: 1.5, z: 8.8 },
+    lookAt: { x: 1.0, y: 0.5, z: 0 }
   },
   {
     id: "04",
@@ -128,24 +147,25 @@ const experiences: Milestone[] = [
     ],
     tech: ["React", "Node.js", "WhatsApp Business API", "SEO Engine"],
     metric: { value: "+40%", label: "Conversion Rate" },
-    cameraPos: { x: 3.4, y: -0.6, z: 9.0 },
+    planetCoord: { x: 4.0, y: -0.5, z: 0.8 },
+    cameraPos: { x: 3.2, y: -0.6, z: 9.2 },
     lookAt: { x: 2.2, y: -0.2, z: 0 }
   }
 ];
 
 export default function Experience() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [spawnOrigin, setSpawnOrigin] = useState<PlanetSpawnOffset>(defaultOffsets[0]);
   const containerRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const card3DRef = useRef<HTMLDivElement>(null);
 
-  // Three.js References
+  // Three.js Scene References
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const beaconGroupsRef = useRef<THREE.Group[]>([]);
-  const lookAtRef = useRef<THREE.Vector3>(new THREE.Vector3(-1.8, 0.4, 0));
+  const planetGroupsRef = useRef<THREE.Group[]>([]);
+  const lookAtRef = useRef<THREE.Vector3>(new THREE.Vector3(-1.5, 0.4, 0));
   const isVisibleRef = useRef<boolean>(true);
   const animFrameId = useRef<number>(0);
 
@@ -155,19 +175,57 @@ export default function Experience() {
   const currentTiltX = useRef(0);
   const currentTiltY = useRef(0);
 
-  // Framer Motion Mouse Spotlight
+  // Framer Motion Mouse Spotlight Coordinates
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   // ---------------------------------------------------------------------------
-  // 1. THREE.JS 3D SCENE & 120 FPS RENDERING LOOP INITIALIZATION
+  // 1. COMPUTE PLANET SCREEN COORDINATES (FOR EMERGENCE ANCHORING)
+  // ---------------------------------------------------------------------------
+  const computeSpawnOffset = useCallback((index: number): PlanetSpawnOffset => {
+    const camera = cameraRef.current;
+    const planetGroup = planetGroupsRef.current[index];
+    const cardEl = card3DRef.current;
+    if (!camera || !planetGroup || !cardEl || typeof window === "undefined") {
+      return defaultOffsets[index] || defaultOffsets[0];
+    }
+
+    const worldPos = new THREE.Vector3();
+    planetGroup.getWorldPosition(worldPos);
+
+    // Project 3D planet position to Normalized Device Coordinates (-1 to +1)
+    const ndc = worldPos.clone().project(camera);
+
+    // Get current card center in window pixels
+    const cardRect = cardEl.getBoundingClientRect();
+    const cardCenterX = cardRect.left + cardRect.width / 2;
+    const cardCenterY = cardRect.top + cardRect.height / 2;
+
+    // Convert NDC to screen pixel coordinates
+    const planetScreenX = (ndc.x * 0.5 + 0.5) * window.innerWidth;
+    const planetScreenY = (-ndc.y * 0.5 + 0.5) * window.innerHeight;
+
+    const offsetX = planetScreenX - cardCenterX;
+    const offsetY = planetScreenY - cardCenterY;
+
+    const isMobile = window.innerWidth < 1024;
+    return {
+      x: isMobile ? Math.max(-40, Math.min(40, offsetX * 0.3)) : offsetX,
+      y: isMobile ? Math.max(-60, Math.min(60, offsetY * 0.3)) : offsetY,
+      rY: isMobile ? 0 : (offsetX < 0 ? 25 : -25),
+      rX: isMobile ? -8 : (offsetY < 0 ? -16 : 16)
+    };
+  }, []);
+
+  // ---------------------------------------------------------------------------
+  // 2. THREE.JS 3D SCENE & 120 FPS RENDERING LOOP INITIALIZATION
   // ---------------------------------------------------------------------------
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const width = canvas.parentElement?.clientWidth || window.innerWidth;
-    const height = canvas.parentElement?.clientHeight || 800;
+    const height = canvas.parentElement?.clientHeight || 850;
 
     // Scene
     const scene = new THREE.Scene();
@@ -194,11 +252,11 @@ export default function Experience() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.25;
     rendererRef.current = renderer;
 
-    // Subtle 3D Wireframe Depth Grid Floor
-    const grid = new THREE.GridHelper(40, 40, 0x06b6d4, 0x083344);
+    // Subtle 3D Depth Wireframe Grid
+    const grid = new THREE.GridHelper(45, 45, 0x06b6d4, 0x083344);
     grid.position.y = -3.8;
     grid.material.opacity = 0.35;
     grid.material.transparent = true;
@@ -224,64 +282,182 @@ export default function Experience() {
     const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
 
-    // 4 Architectural 3D Milestone Beacons in Space
-    const beaconCoords = [
-      { x: -3.8, y: 0.8, z: -1.0 }, // 01 Webpulse
-      { x: -1.2, y: -1.0, z: 0.8 }, // 02 Freelance
-      { x: 1.8, y: 1.2, z: -0.6 },  // 03 BD Mess
-      { x: 4.2, y: -0.4, z: 1.2 },  // 04 Ponyopuri
-    ];
+    // -------------------------------------------------------------------------
+    // 4 DISTINCT HIGH-DETAIL CELESTIAL CYBER-PLANETS
+    // -------------------------------------------------------------------------
+    const planetGroups: THREE.Group[] = [];
 
-    const beaconGroups: THREE.Group[] = [];
+    experiences.forEach((exp, idx) => {
+      const pGroup = new THREE.Group();
+      pGroup.position.set(exp.planetCoord.x, exp.planetCoord.y, exp.planetCoord.z);
 
-    beaconCoords.forEach((coord, idx) => {
-      const beaconGroup = new THREE.Group();
-      beaconGroup.position.set(coord.x, coord.y, coord.z);
+      let coreMesh: THREE.Mesh;
+      let outerMesh: THREE.Mesh | null = null;
+      let ring1: THREE.Mesh | null = null;
+      let ring2: THREE.Mesh | null = null;
+      let moonMesh: THREE.Mesh | null = null;
 
-      // Core Geometric Beacon
-      const coreGeo = new THREE.OctahedronGeometry(0.35 + idx * 0.04, 0);
-      const coreMat = new THREE.MeshStandardMaterial({
-        color: 0x07111a,
-        emissive: idx === 0 ? 0x06b6d4 : 0x0284c7,
-        emissiveIntensity: idx === 0 ? 1.6 : 0.6,
-        metalness: 0.9,
-        roughness: 0.1,
-        wireframe: true
-      });
-      const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-      beaconGroup.add(coreMesh);
+      if (idx === 0) {
+        // Planet 01: Webpulse (Cyan Autonomous Synth Planet)
+        const coreGeo = new THREE.SphereGeometry(0.72, 32, 32);
+        const coreMat = new THREE.MeshStandardMaterial({
+          color: 0x03141f,
+          emissive: 0x06b6d4,
+          emissiveIntensity: 1.1,
+          roughness: 0.15,
+          metalness: 0.9
+        });
+        coreMesh = new THREE.Mesh(coreGeo, coreMat);
+        pGroup.add(coreMesh);
 
-      // Orbiting Outer Ring
-      const ringGeo = new THREE.TorusGeometry(0.65, 0.02, 16, 48);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: 0x22d3ee,
+        // Cybernetic Outer Wireframe Cage
+        const wireGeo = new THREE.IcosahedronGeometry(0.92, 2);
+        const wireMat = new THREE.MeshBasicMaterial({
+          color: 0x22d3ee,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.4
+        });
+        outerMesh = new THREE.Mesh(wireGeo, wireMat);
+        pGroup.add(outerMesh);
+
+        // Equatorial Planetary Ring
+        const rGeo = new THREE.TorusGeometry(1.25, 0.025, 16, 64);
+        const rMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.75 });
+        ring1 = new THREE.Mesh(rGeo, rMat);
+        ring1.rotation.x = Math.PI / 2.8;
+        pGroup.add(ring1);
+
+      } else if (idx === 1) {
+        // Planet 02: Freelance (Electric Azure Gyroscope Planet)
+        const coreGeo = new THREE.SphereGeometry(0.76, 32, 32);
+        const coreMat = new THREE.MeshStandardMaterial({
+          color: 0x04192b,
+          emissive: 0x00f0ff,
+          emissiveIntensity: 1.2,
+          roughness: 0.1,
+          metalness: 0.95
+        });
+        coreMesh = new THREE.Mesh(coreGeo, coreMat);
+        pGroup.add(coreMesh);
+
+        // Dual Orbiting Gyro-Rings
+        const r1Geo = new THREE.TorusGeometry(1.35, 0.03, 16, 64);
+        const r1Mat = new THREE.MeshBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.8 });
+        ring1 = new THREE.Mesh(r1Geo, r1Mat);
+        ring1.rotation.x = Math.PI / 3;
+        pGroup.add(ring1);
+
+        const r2Geo = new THREE.TorusGeometry(1.55, 0.025, 16, 64);
+        const r2Mat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.6 });
+        ring2 = new THREE.Mesh(r2Geo, r2Mat);
+        ring2.rotation.y = Math.PI / 2.5;
+        pGroup.add(ring2);
+
+        // Orbiting Satellite Moon
+        const mGeo = new THREE.SphereGeometry(0.12, 16, 16);
+        const mMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        moonMesh = new THREE.Mesh(mGeo, mMat);
+        pGroup.add(moonMesh);
+
+      } else if (idx === 2) {
+        // Planet 03: BD Mess (Emerald / Teal Matrix Core Planet)
+        const coreGeo = new THREE.IcosahedronGeometry(0.74, 1);
+        const coreMat = new THREE.MeshStandardMaterial({
+          color: 0x02201c,
+          emissive: 0x10b981,
+          emissiveIntensity: 1.1,
+          roughness: 0.2,
+          metalness: 0.85
+        });
+        coreMesh = new THREE.Mesh(coreGeo, coreMat);
+        pGroup.add(coreMesh);
+
+        // Dodecahedron Outer Matrix Shield
+        const wireGeo = new THREE.DodecahedronGeometry(0.98, 1);
+        const wireMat = new THREE.MeshBasicMaterial({
+          color: 0x34d399,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.45
+        });
+        outerMesh = new THREE.Mesh(wireGeo, wireMat);
+        pGroup.add(outerMesh);
+
+        // Planetary Ring
+        const rGeo = new THREE.TorusGeometry(1.38, 0.028, 16, 64);
+        const rMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.75 });
+        ring1 = new THREE.Mesh(rGeo, rMat);
+        ring1.rotation.x = -Math.PI / 3;
+        pGroup.add(ring1);
+
+      } else {
+        // Planet 04: Ponyopuri (Violet / Cyan Celestial Pulsar)
+        const coreGeo = new THREE.SphereGeometry(0.74, 32, 32);
+        const coreMat = new THREE.MeshStandardMaterial({
+          color: 0x150b29,
+          emissive: 0xa855f7,
+          emissiveIntensity: 1.2,
+          roughness: 0.15,
+          metalness: 0.9
+        });
+        coreMesh = new THREE.Mesh(coreGeo, coreMat);
+        pGroup.add(coreMesh);
+
+        // Broad Planetary Ring Disc
+        const rGeo = new THREE.RingGeometry(1.1, 1.65, 48);
+        const rMat = new THREE.MeshBasicMaterial({
+          color: 0xc084fc,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.55
+        });
+        ring1 = new THREE.Mesh(rGeo, rMat);
+        ring1.rotation.x = Math.PI / 2.3;
+        pGroup.add(ring1);
+      }
+
+      // Shockwave Ejection Portal Ring (Fires when card emerges from planet!)
+      const shockwaveGeo = new THREE.TorusGeometry(0.85, 0.05, 16, 64);
+      const shockwaveMat = new THREE.MeshBasicMaterial({
+        color: idx === 2 ? 0x34d399 : idx === 3 ? 0xc084fc : 0x22d3ee,
         transparent: true,
-        opacity: idx === 0 ? 0.9 : 0.35,
-        wireframe: false
+        opacity: 0,
+        blending: THREE.AdditiveBlending
       });
-      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-      ringMesh.rotation.x = Math.PI / 2.5;
-      beaconGroup.add(ringMesh);
+      const shockwave = new THREE.Mesh(shockwaveGeo, shockwaveMat);
+      shockwave.scale.set(0.1, 0.1, 0.1);
+      pGroup.add(shockwave);
 
-      // Subtle Point Light for active beacon
-      const light = new THREE.PointLight(0x06b6d4, idx === 0 ? 3.5 : 1.0, 6);
-      beaconGroup.add(light);
+      // Planet Point Light
+      const light = new THREE.PointLight(
+        idx === 2 ? 0x10b981 : idx === 3 ? 0xa855f7 : 0x06b6d4,
+        idx === 0 ? 3.5 : 1.2,
+        8
+      );
+      pGroup.add(light);
 
-      beaconGroup.userData = {
+      pGroup.userData = {
         coreMesh,
-        ringMesh,
+        outerMesh,
+        ring1,
+        ring2,
+        moonMesh,
+        shockwave,
+        shockwaveMat,
         light,
-        rotSpeed: 0.6 + idx * 0.2
+        rotSpeed: 0.45 + idx * 0.15,
+        moonAngle: 0
       };
 
-      scene.add(beaconGroup);
-      beaconGroups.push(beaconGroup);
+      scene.add(pGroup);
+      planetGroups.push(pGroup);
     });
-    beaconGroupsRef.current = beaconGroups;
+    planetGroupsRef.current = planetGroups;
 
-    // Laser Connector Spline Connecting All 4 Beacons
+    // Laser Connector Spline Connecting All 4 Planets
     const splineCurve = new THREE.CatmullRomCurve3(
-      beaconCoords.map(c => new THREE.Vector3(c.x, c.y, c.z))
+      experiences.map(e => new THREE.Vector3(e.planetCoord.x, e.planetCoord.y, e.planetCoord.z))
     );
     const splineGeo = new THREE.BufferGeometry().setFromPoints(splineCurve.getPoints(80));
     const splineMat = new THREE.LineBasicMaterial({
@@ -300,10 +476,10 @@ export default function Experience() {
     scene.add(pulseMesh);
 
     // Ambient & Directional Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x06b6d4, 1.2);
+    const dirLight = new THREE.DirectionalLight(0x06b6d4, 1.3);
     dirLight.position.set(5, 10, 7);
     scene.add(dirLight);
 
@@ -319,7 +495,7 @@ export default function Experience() {
     };
     window.addEventListener("resize", handleResize);
 
-    // IntersectionObserver to pause loop when scrolled out of view (saves battery/GPU)
+    // IntersectionObserver to pause loop when scrolled out of view
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisibleRef.current = entry.isIntersecting;
@@ -342,22 +518,35 @@ export default function Experience() {
       const delta = Math.min((currentTime - lastTime) / 1000, 0.1);
       lastTime = currentTime;
 
-      // Rotate particles slowly
+      // Rotate ambient starfield
       particles.rotation.y += delta * 0.03;
 
-      // Animate Beacon Meshes
-      beaconGroups.forEach((group) => {
+      // Animate Celestial Planet Orbs & Orbiting Rings
+      planetGroups.forEach((group) => {
         const u = group.userData;
         if (u.coreMesh) {
           u.coreMesh.rotation.y += delta * u.rotSpeed;
-          u.coreMesh.rotation.x += delta * (u.rotSpeed * 0.5);
+          u.coreMesh.rotation.x += delta * (u.rotSpeed * 0.4);
         }
-        if (u.ringMesh) {
-          u.ringMesh.rotation.z -= delta * (u.rotSpeed * 0.7);
+        if (u.outerMesh) {
+          u.outerMesh.rotation.y -= delta * (u.rotSpeed * 0.6);
+          u.outerMesh.rotation.z += delta * (u.rotSpeed * 0.3);
+        }
+        if (u.ring1) {
+          u.ring1.rotation.z -= delta * (u.rotSpeed * 0.5);
+        }
+        if (u.ring2) {
+          u.ring2.rotation.x += delta * (u.rotSpeed * 0.6);
+        }
+        if (u.moonMesh) {
+          u.moonAngle += delta * 1.8;
+          u.moonMesh.position.x = Math.cos(u.moonAngle) * 1.85;
+          u.moonMesh.position.z = Math.sin(u.moonAngle) * 1.85;
+          u.moonMesh.position.y = Math.sin(u.moonAngle * 2) * 0.4;
         }
       });
 
-      // Animate Traveling Energy Pulse
+      // Animate Traveling Energy Pulse safely
       pulseT = (pulseT + delta * 0.2) % 1;
       const safeT = Math.max(0, Math.min(0.999, pulseT));
       try {
@@ -387,13 +576,24 @@ export default function Experience() {
 
     animFrameId.current = requestAnimationFrame(animate);
 
+    // Initial shockwave on Planet 01 when section mounts
+    setTimeout(() => {
+      const p0 = planetGroups[0]?.userData;
+      if (p0?.shockwave && p0?.shockwaveMat) {
+        p0.shockwave.scale.set(0.1, 0.1, 0.1);
+        p0.shockwaveMat.opacity = 1;
+        gsap.to(p0.shockwave.scale, { x: 4.5, y: 4.5, z: 4.5, duration: 1.2, ease: "power2.out" });
+        gsap.to(p0.shockwaveMat, { opacity: 0, duration: 1.2, ease: "power2.out" });
+      }
+    }, 400);
+
     // Cleanup
     return () => {
       cancelAnimationFrame(animFrameId.current);
       window.removeEventListener("resize", handleResize);
       observer.disconnect();
 
-      // Dispose Geometries & Materials
+      // Dispose Three.js Resources
       grid.geometry.dispose();
       particleGeo.dispose();
       particleMat.dispose();
@@ -404,14 +604,14 @@ export default function Experience() {
   }, []);
 
   // ---------------------------------------------------------------------------
-  // 2. DYNAMIC 3D CAMERA TRANSITIONS VIA GSAP ON MILESTONE SWITCH
+  // 3. TRIGGER 3D PLANETARY EJECTION & CAMERA FLIGHT VIA GSAP
   // ---------------------------------------------------------------------------
   const switchCameraToMilestone = useCallback((index: number) => {
     const targetMilestone = experiences[index];
     const camera = cameraRef.current;
     if (!camera || !targetMilestone) return;
 
-    // Smoothly animate 3D camera position
+    // Smooth 3D camera pan to frame the selected planet
     gsap.to(camera.position, {
       x: targetMilestone.cameraPos.x,
       y: targetMilestone.cameraPos.y,
@@ -421,7 +621,7 @@ export default function Experience() {
       overwrite: "auto"
     });
 
-    // Smoothly animate camera focal lookAt point
+    // Smooth camera focal lookAt point
     gsap.to(lookAtRef.current, {
       x: targetMilestone.lookAt.x,
       y: targetMilestone.lookAt.y,
@@ -431,54 +631,75 @@ export default function Experience() {
       overwrite: "auto"
     });
 
-    // Highlight active 3D Beacon in WebGL scene
-    beaconGroupsRef.current.forEach((group, idx) => {
+    // Trigger explosive Planetary Shockwave Ejection on the selected planet!
+    planetGroupsRef.current.forEach((group, idx) => {
       const isActive = idx === index;
       const u = group.userData;
 
-      gsap.to(group.scale, {
-        x: isActive ? 1.45 : 1.0,
-        y: isActive ? 1.45 : 1.0,
-        z: isActive ? 1.45 : 1.0,
-        duration: 0.8,
-        ease: "back.out(1.7)"
-      });
+      if (isActive) {
+        // Expand planetary scale with elastic recoil
+        gsap.to(group.scale, {
+          x: 1.35,
+          y: 1.35,
+          z: 1.35,
+          duration: 0.8,
+          ease: "back.out(1.8)"
+        });
 
-      if (u.coreMesh?.material) {
-        gsap.to(u.coreMesh.material, {
-          emissiveIntensity: isActive ? 1.8 : 0.4,
-          duration: 0.6
-        });
-      }
-      if (u.light) {
-        gsap.to(u.light, {
-          intensity: isActive ? 4.0 : 1.0,
-          duration: 0.6
-        });
+        // Fire expanding shockwave portal ring out of the planet!
+        if (u.shockwave && u.shockwaveMat) {
+          u.shockwave.scale.set(0.1, 0.1, 0.1);
+          u.shockwaveMat.opacity = 1;
+          gsap.killTweensOf(u.shockwave.scale);
+          gsap.killTweensOf(u.shockwaveMat);
+          gsap.to(u.shockwave.scale, { x: 4.8, y: 4.8, z: 4.8, duration: 1.2, ease: "power2.out" });
+          gsap.to(u.shockwaveMat, { opacity: 0, duration: 1.2, ease: "power2.out" });
+        }
+
+        // Flash planet core lighting
+        if (u.light) {
+          gsap.killTweensOf(u.light);
+          gsap.fromTo(u.light, { intensity: 8.5 }, { intensity: 3.5, duration: 1.1, ease: "power2.out" });
+        }
+        if (u.coreMesh?.material) {
+          gsap.to(u.coreMesh.material, { emissiveIntensity: 1.8, duration: 0.6 });
+        }
+      } else {
+        // Inactive planets return to baseline
+        gsap.to(group.scale, { x: 1.0, y: 1.0, z: 1.0, duration: 0.8, ease: "power2.out" });
+        if (u.coreMesh?.material) {
+          gsap.to(u.coreMesh.material, { emissiveIntensity: 0.6, duration: 0.6 });
+        }
+        if (u.light) {
+          gsap.to(u.light, { intensity: 1.2, duration: 0.6 });
+        }
       }
     });
   }, []);
 
   // ---------------------------------------------------------------------------
-  // 3. SELECTION & NAVIGATION HANDLERS
+  // 4. SELECTION & EMERGENCE COORDINATOR
   // ---------------------------------------------------------------------------
   const selectIndex = (nextIndex: number) => {
     if (nextIndex === activeIndex) return;
-    setDirection(nextIndex > activeIndex ? 1 : -1);
+    const origin = computeSpawnOffset(nextIndex);
+    setSpawnOrigin(origin);
     setActiveIndex(nextIndex);
     switchCameraToMilestone(nextIndex);
   };
 
   const prevMilestone = () => {
     const next = activeIndex > 0 ? activeIndex - 1 : experiences.length - 1;
-    setDirection(-1);
+    const origin = computeSpawnOffset(next);
+    setSpawnOrigin(origin);
     setActiveIndex(next);
     switchCameraToMilestone(next);
   };
 
   const nextMilestone = () => {
     const next = activeIndex < experiences.length - 1 ? activeIndex + 1 : 0;
-    setDirection(1);
+    const origin = computeSpawnOffset(next);
+    setSpawnOrigin(origin);
     setActiveIndex(next);
     switchCameraToMilestone(next);
   };
@@ -509,7 +730,6 @@ export default function Experience() {
     mouseX.set(x);
     mouseY.set(y);
 
-    // Compute 3D Card Tilt Angles
     const normX = (x / width) - 0.5;
     const normY = (y / height) - 0.5;
 
@@ -531,9 +751,9 @@ export default function Experience() {
       className="scroll-mt-28 md:scroll-mt-32 pt-20 sm:pt-28 md:pt-32 pb-16 sm:pb-24 relative z-10 bg-black overflow-hidden w-full max-w-full"
     >
       {/* ------------------------------------------------------------------- */}
-      {/* THREE.JS BACKGROUND 3D WEBGL CANVAS (120 FPS CAPABLE)               */}
+      {/* THREE.JS BACKGROUND 3D WEBGL CANVAS WITH 4 CELESTIAL PLANETS       */}
       {/* ------------------------------------------------------------------- */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-75">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-90">
         <canvas ref={canvasRef} className="w-full h-full block" />
       </div>
 
@@ -553,7 +773,7 @@ export default function Experience() {
             className="w-full lg:w-auto max-w-2xl"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/20 text-[10px] font-mono font-bold tracking-widest text-neutral-400 uppercase mb-3 sm:mb-4 bg-cyan-950/20 backdrop-blur-md">
-              <Diamond size={12} className="text-cyan-400 animate-pulse" /> 3D SPATIAL ARCHITECTURE TIMELINE
+              <Diamond size={12} className="text-cyan-400 animate-pulse" /> 3D PLANETARY ARCHITECTURE TIMELINE
             </div>
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold uppercase tracking-tighter leading-[0.95] text-white mb-3">
               WHAT I'VE BUILT <br />
@@ -567,14 +787,14 @@ export default function Experience() {
           {/* Interactive Stage Indicator & Navigation Controls */}
           <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto justify-between lg:justify-end">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono text-neutral-400 tracking-wider uppercase">STAGE:</span>
+              <span className="text-[11px] font-mono text-neutral-400 tracking-wider uppercase">PLANET STAGE:</span>
               <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/10 rounded-full px-3 py-1">
                 {experiences.map((exp, idx) => (
                   <button
                     key={exp.id}
                     onClick={() => selectIndex(idx)}
-                    aria-label={`Jump to ${exp.phase}`}
-                    className={`transition-all duration-300 rounded-full ${
+                    aria-label={`Jump to Planet ${exp.phase}`}
+                    className={`transition-all duration-300 rounded-full cursor-pointer ${
                       idx === activeIndex 
                         ? "w-6 h-2 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.8)]" 
                         : "w-2 h-2 bg-white/20 hover:bg-white/50"
@@ -643,7 +863,6 @@ export default function Experience() {
             
             {/* Continuous Vertical Connector Rail */}
             <div className="absolute left-[9px] top-6 bottom-6 w-[2px] bg-white/10 rounded-full overflow-hidden">
-              {/* Dynamic Glowing Beam Tracking Active Progress */}
               <motion.div 
                 className="w-full bg-gradient-to-b from-cyan-400 via-cyan-500 to-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.8)]"
                 initial={false}
@@ -688,9 +907,7 @@ export default function Experience() {
                   >
                     {/* Active Background Accent Glow */}
                     {isActive && (
-                      <div
-                        className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-transparent pointer-events-none transition-opacity duration-300"
-                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-transparent pointer-events-none transition-opacity duration-300" />
                     )}
 
                     <div className="relative z-10 flex flex-col gap-1.5">
@@ -737,10 +954,10 @@ export default function Experience() {
               );
             })}
 
-            {/* Keyboard Hint */}
+            {/* Keyboard & Spatial Hint */}
             <div className="pt-2 px-2 flex items-center justify-between text-[10px] font-mono text-neutral-400">
               <span className="flex items-center gap-1.5">
-                <Compass size={11} className="text-cyan-400" /> 3D SPATIAL CAMERA
+                <Globe size={11} className="text-cyan-400" /> PLANETARY EMERGENCE
               </span>
               <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-300 text-[9px]">
                 ← / → KEYS
@@ -768,31 +985,37 @@ export default function Experience() {
                   key={activeExp.id}
                   initial={{ 
                     opacity: 0, 
-                    rotateY: direction * 10, 
-                    rotateX: -4, 
-                    z: -60,
-                    x: direction * 20
+                    scale: 0.03,
+                    x: spawnOrigin.x,
+                    y: spawnOrigin.y,
+                    z: -420,
+                    rotateY: spawnOrigin.rY, 
+                    rotateX: spawnOrigin.rX,
+                    filter: "blur(18px) brightness(3.5)"
                   }}
                   animate={{ 
                     opacity: 1, 
-                    rotateY: 0, 
-                    rotateX: 0, 
+                    scale: 1,
+                    x: 0,
+                    y: 0,
                     z: 0,
-                    x: 0
+                    rotateY: 0, 
+                    rotateX: 0,
+                    filter: "blur(0px) brightness(1)"
                   }}
                   exit={{ 
                     opacity: 0, 
-                    rotateY: -direction * 10, 
-                    rotateX: 4, 
-                    z: -60,
-                    x: -direction * 20
+                    scale: 0.05,
+                    z: -300,
+                    filter: "blur(12px) brightness(2)",
+                    transition: { duration: 0.28, ease: "easeIn" }
                   }}
                   transition={{ 
-                    duration: 0.45, 
+                    duration: 0.82, 
                     ease: [0.16, 1, 0.3, 1] 
                   }}
                   style={{ transformStyle: "preserve-3d" }}
-                  className="glass-card rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-9 relative overflow-hidden group border border-white/10 hover:border-cyan-500/40 transition-all duration-500 bg-[#070b0e]/95 hover:bg-[#080e13] backdrop-blur-2xl w-full shadow-[0_15px_50px_rgba(0,0,0,0.7)]"
+                  className="glass-card rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-8 md:p-9 relative overflow-hidden group border border-white/10 hover:border-cyan-500/40 transition-colors duration-500 bg-[#070b0e]/95 hover:bg-[#080e13] backdrop-blur-2xl w-full shadow-[0_15px_50px_rgba(0,0,0,0.7)]"
                 >
                   {/* Magnetic Specular Spotlight Hover Glow (Floating at Z: 15px) */}
                   <motion.div
