@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import * as THREE from "three";
+import gsap from "gsap";
 import { buildRoomScene, InteractiveTarget } from "./RoomSceneBuilder";
 import RoomNavigation, { CameraStage } from "./RoomNavigation";
 import MacScreenOverlay from "./MacScreenOverlay";
@@ -10,35 +11,35 @@ import OriginStoryModal from "./OriginStoryModal";
 import PhoneContactModal from "./PhoneContactModal";
 import { playClickSound, playHoverSound } from "@/lib/sounds";
 
-// Camera Targets for each of the 5 narrative stages
+// Balanced & Proportional Camera Coordinates for Cozy Studio Loft
 const STAGE_CAMERAS: Record<
   CameraStage,
   { pos: [number, number, number]; lookAt: [number, number, number]; fov: number }
 > = {
   overview: {
-    pos: [7.8, 5.8, 8.4],
-    lookAt: [0.6, 2.0, 0.2],
+    pos: [3.1, 2.3, 3.1],
+    lookAt: [0.15, 1.25, -0.7],
     fov: 46,
   },
   desk: {
-    pos: [0.6, 2.25, 1.65],
-    lookAt: [0.6, 2.05, -0.2],
-    fov: 48,
+    pos: [0.0, 1.32, -0.05],
+    lookAt: [0.0, 1.24, -0.75],
+    fov: 42,
   },
   projects: {
-    pos: [2.5, 3.4, 2.8],
-    lookAt: [2.5, 3.4, -4.9],
+    pos: [1.05, 2.15, 0.5],
+    lookAt: [1.05, 2.15, -2.75],
     fov: 52,
   },
   shelf: {
-    pos: [-4.2, 3.2, 0.5],
-    lookAt: [-6.9, 3.2, 0.5],
-    fov: 46,
+    pos: [-1.4, 2.18, -0.4],
+    lookAt: [-3.36, 2.18, -0.4],
+    fov: 48,
   },
   contact: {
-    pos: [1.32, 2.15, 0.65],
-    lookAt: [1.25, 1.5, 0.35],
-    fov: 42,
+    pos: [0.46, 1.28, -0.08],
+    lookAt: [0.48, 0.79, -0.48],
+    fov: 40,
   },
 };
 
@@ -58,22 +59,39 @@ export default function StudioRoom3D() {
 
   // Three.js References
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const currentLookAtRef = useRef<THREE.Vector3>(new THREE.Vector3(0.6, 2.0, 0.2));
-  const targetCamPosRef = useRef<THREE.Vector3>(new THREE.Vector3(...STAGE_CAMERAS.overview.pos));
-  const targetLookAtRef = useRef<THREE.Vector3>(new THREE.Vector3(...STAGE_CAMERAS.overview.lookAt));
+  const currentLookAtRef = useRef<THREE.Vector3>(new THREE.Vector3(...STAGE_CAMERAS.overview.lookAt));
 
-  // Mouse Drag / Orbit Orbiting
+  // Mouse Drag Orbiting
   const isDraggingRef = useRef(false);
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
   const orbitOffsetRef = useRef({ yaw: 0, pitch: 0 });
 
-  // Switch camera stage helper
+  // Smooth GSAP Camera Transition Helper
   const navigateToStage = useCallback((stage: CameraStage) => {
     setCurrentStage(stage);
     const target = STAGE_CAMERAS[stage];
-    targetCamPosRef.current.set(...target.pos);
-    targetLookAtRef.current.set(...target.lookAt);
     orbitOffsetRef.current = { yaw: 0, pitch: 0 };
+
+    if (cameraRef.current) {
+      gsap.killTweensOf(cameraRef.current.position);
+      gsap.killTweensOf(currentLookAtRef.current);
+
+      gsap.to(cameraRef.current.position, {
+        x: target.pos[0],
+        y: target.pos[1],
+        z: target.pos[2],
+        duration: 1.4,
+        ease: "power2.inOut",
+      });
+
+      gsap.to(currentLookAtRef.current, {
+        x: target.lookAt[0],
+        y: target.lookAt[1],
+        z: target.lookAt[2],
+        duration: 1.4,
+        ease: "power2.inOut",
+      });
+    }
   }, []);
 
   // Lo-Fi Audio Toggle
@@ -96,7 +114,6 @@ export default function StudioRoom3D() {
     }
   }, [isLoFiPlaying]);
 
-  // Reset View to Overview
   const handleResetView = useCallback(() => {
     navigateToStage("overview");
   }, [navigateToStage]);
@@ -110,8 +127,7 @@ export default function StudioRoom3D() {
 
     // 1. Scene, Camera & Renderer
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x06080d);
-    scene.fog = new THREE.FogExp2(0x06080d, 0.035);
+    scene.background = new THREE.Color(0x0a0c12);
 
     const camera = new THREE.PerspectiveCamera(46, width / height, 0.1, 100);
     camera.position.set(...STAGE_CAMERAS.overview.pos);
@@ -126,7 +142,7 @@ export default function StudioRoom3D() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.2;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -153,8 +169,8 @@ export default function StudioRoom3D() {
 
         orbitOffsetRef.current.yaw -= deltaX * 0.003;
         orbitOffsetRef.current.pitch = Math.max(
-          -0.4,
-          Math.min(0.4, orbitOffsetRef.current.pitch - deltaY * 0.003)
+          -0.35,
+          Math.min(0.35, orbitOffsetRef.current.pitch - deltaY * 0.003)
         );
 
         previousMousePositionRef.current = { x: e.clientX, y: e.clientY };
@@ -189,7 +205,6 @@ export default function StudioRoom3D() {
       isDraggingRef.current = false;
       container.style.cursor = hoveredMesh ? "pointer" : "grab";
 
-      // If clicked without substantial drag, treat as click selection
       const deltaMove = Math.hypot(
         e.clientX - previousMousePositionRef.current.x,
         e.clientY - previousMousePositionRef.current.y
@@ -214,31 +229,31 @@ export default function StudioRoom3D() {
 
             if (clickedTarget.id === "mac_monitor") {
               navigateToStage("desk");
-              setTimeout(() => setIsMacScreenOpen(true), 600);
+              setTimeout(() => setIsMacScreenOpen(true), 650);
             } else if (clickedTarget.id === "speaker") {
               toggleLoFi();
             } else if (clickedTarget.id.startsWith("project_")) {
               navigateToStage("projects");
               const projId = clickedTarget.id.replace("project_", "");
               const found = ROOM_PROJECTS.find((p) => p.id === projId) || ROOM_PROJECTS[0];
-              setTimeout(() => setSelectedProject(found), 600);
+              setTimeout(() => setSelectedProject(found), 650);
             } else if (clickedTarget.id === "origin_shelf") {
               navigateToStage("shelf");
-              setTimeout(() => setIsOriginStoryOpen(true), 600);
+              setTimeout(() => setIsOriginStoryOpen(true), 650);
             } else if (clickedTarget.id === "smartphone") {
               navigateToStage("contact");
-              setTimeout(() => setIsPhoneContactOpen(true), 600);
+              setTimeout(() => setIsPhoneContactOpen(true), 650);
             }
           }
         }
       }
     };
 
-    // 4. Scroll Step Progression (Continuous Scroll Journey)
+    // Continuous Scroll Step Progression
     let lastScrollTime = 0;
     const onWheel = (e: WheelEvent) => {
       const now = Date.now();
-      if (now - lastScrollTime < 380) return; // Debounce rapid scroll ticks
+      if (now - lastScrollTime < 380) return;
 
       if (Math.abs(e.deltaY) > 20) {
         lastScrollTime = now;
@@ -263,7 +278,6 @@ export default function StudioRoom3D() {
     window.addEventListener("pointerup", onPointerUp);
     container.addEventListener("wheel", onWheel, { passive: true });
 
-    // 5. Window Resize Handler
     const handleResize = () => {
       if (!container) return;
       width = container.clientWidth || window.innerWidth;
@@ -274,7 +288,7 @@ export default function StudioRoom3D() {
     };
     window.addEventListener("resize", handleResize);
 
-    // 6. 120 FPS Locked Render Loop (Smooth Camera Damping)
+    // 120 FPS Locked Render Loop
     let animationFrameId: number;
     let clock = new THREE.Clock();
 
@@ -282,26 +296,9 @@ export default function StudioRoom3D() {
       animationFrameId = requestAnimationFrame(render);
       const elapsedTime = clock.getElapsedTime();
 
-      // Update steam & breathing lights
       updateScene(elapsedTime);
 
-      // Smooth Camera Lerping (Exponential ease out)
-      const targetPos = targetCamPosRef.current.clone();
-      
-      // Apply subtle orbit yaw/pitch offset
-      if (orbitOffsetRef.current.yaw !== 0 || orbitOffsetRef.current.pitch !== 0) {
-        const offset = new THREE.Vector3(
-          Math.sin(orbitOffsetRef.current.yaw) * 1.5,
-          orbitOffsetRef.current.pitch * 1.2,
-          Math.cos(orbitOffsetRef.current.yaw) * 1.5 - 1.5
-        );
-        targetPos.add(offset);
-      }
-
-      camera.position.lerp(targetPos, 0.055);
-
-      // Smooth LookAt Lerping
-      currentLookAtRef.current.lerp(targetLookAtRef.current, 0.055);
+      // Camera lookAt constantly synchronizes with currentLookAtRef (animated via GSAP)
       camera.lookAt(currentLookAtRef.current);
 
       renderer.render(scene, camera);
@@ -327,10 +324,8 @@ export default function StudioRoom3D() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden select-none bg-[#06080d]">
-      {/* Three.js 3D Canvas Mount */}
       <div ref={mountRef} className="absolute inset-0 w-full h-full cursor-grab" />
 
-      {/* Floating Minimalist Top Navigation */}
       <RoomNavigation
         currentStage={currentStage}
         onSelectStage={navigateToStage}
@@ -339,27 +334,23 @@ export default function StudioRoom3D() {
         onResetView={handleResetView}
       />
 
-      {/* Interactive macOS Screen Overlay (Terminal, AI Chat, Skills, Launcher) */}
       <MacScreenOverlay
         isOpen={isMacScreenOpen}
         onClose={() => setIsMacScreenOpen(false)}
         onNavigateStage={navigateToStage}
       />
 
-      {/* Interactive Wall Project Case Study Viewer */}
       <ProjectFrameModal
         selectedProject={selectedProject}
         onClose={() => setSelectedProject(null)}
         onSelectProject={(proj) => setSelectedProject(proj)}
       />
 
-      {/* The Origin Story Modal (Biker's Helmet & Authentic Journey) */}
       <OriginStoryModal
         isOpen={isOriginStoryOpen}
         onClose={() => setIsOriginStoryOpen(false)}
       />
 
-      {/* Direct Smartphone Contact Modal (WhatsApp, Email & Direct Message) */}
       <PhoneContactModal
         isOpen={isPhoneContactOpen}
         onClose={() => setIsPhoneContactOpen(false)}
