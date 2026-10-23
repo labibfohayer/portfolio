@@ -415,7 +415,7 @@ function createSoftRadialTexture(): THREE.CanvasTexture {
 }
 
 export function buildRoomScene(
-  scene: THREE.Scene,
+  scene: THREE.Scene | THREE.Group | THREE.Object3D,
   textureLoader: THREE.TextureLoader
 ): {
   interactiveTargets: InteractiveTarget[];
@@ -714,89 +714,10 @@ export function buildRoomScene(
   camLens.position.set(0, 0.81, 0.02);
   monitorGroup.add(camLens);
 
-  // High-Res Screen Texture (VS Code + Terminal)
-  const screenCanvas = document.createElement("canvas");
-  screenCanvas.width = 1024;
-  screenCanvas.height = 640;
-  const sctx = screenCanvas.getContext("2d");
-  if (sctx) {
-    sctx.fillStyle = "#0d1117";
-    sctx.fillRect(0, 0, 1024, 640);
-
-    // Sidebar
-    sctx.fillStyle = "#161b22";
-    sctx.fillRect(0, 0, 200, 640);
-    sctx.fillStyle = "#58a6ff";
-    sctx.font = "bold 15px monospace";
-    sctx.fillText("WEBPULSE CORE", 20, 36);
-    sctx.fillStyle = "#8b949e";
-    sctx.font = "13px monospace";
-    sctx.fillText("📁 src/architecture", 20, 75);
-    sctx.fillText("  📄 agent_runtime.ts", 20, 102);
-    sctx.fillText("  📄 madrasa_os.py", 20, 128);
-    sctx.fillText("  📄 telemetry.rs", 20, 154);
-    sctx.fillText("📁 shipped_platforms", 20, 190);
-    sctx.fillText("  📄 al_madina.tsx", 20, 216);
-    sctx.fillText("  📄 bd_mess.ts", 20, 242);
-    sctx.fillText("  📄 ponyopuri.tsx", 20, 268);
-
-    // Top Tab Bar
-    sctx.fillStyle = "#21262d";
-    sctx.fillRect(200, 0, 824, 40);
-    sctx.fillStyle = "#0d1117";
-    sctx.fillRect(200, 4, 230, 36);
-    sctx.fillStyle = "#58a6ff";
-    sctx.font = "bold 14px monospace";
-    sctx.fillText("agent_runtime.ts ×", 218, 26);
-
-    const lines = [
-      { text: "// Webpulse Autonomous AI Engine v4.2", color: "#8b949e" },
-      { text: "import { AutonomousAgent, SwarmCoordinator } from '@webpulse/core';", color: "#ff7b72" },
-      { text: "import { MadrasaOS, AlMadinaEngine } from '@/platforms';", color: "#ff7b72" },
-      { text: "", color: "" },
-      { text: "export class LabibSystemEngine {", color: "#d2a8ff" },
-      { text: "  private founder = 'Md. Labib Fohayer';", color: "#79c0ff" },
-      { text: "  private mission = 'Eliminate manual business friction';", color: "#79c0ff" },
-      { text: "  private status = 'DEPLOYING PRODUCTION PLATFORMS';", color: "#7ee787" },
-      { text: "", color: "" },
-      { text: "  async executeAutonomousWorkflow(pipelineId: string) {", color: "#d2a8ff" },
-      { text: "    const agent = await SwarmCoordinator.spawn({ tier: 'enterprise' });", color: "#c9d1d9" },
-      { text: "    return agent.optimizeWorkflow({ latencyMs: 12, uptime: 0.9999 });", color: "#c9d1d9" },
-      { text: "  }", color: "#d2a8ff" },
-      { text: "}", color: "#d2a8ff" },
-    ];
-
-    sctx.font = "16px monospace";
-    let ly = 72;
-    lines.forEach((l) => {
-      if (l.text) {
-        sctx.fillStyle = l.color;
-        sctx.fillText(l.text, 225, ly);
-      }
-      ly += 24;
-    });
-
-    sctx.fillStyle = "#010409";
-    sctx.fillRect(200, 460, 824, 180);
-    sctx.fillStyle = "#21262d";
-    sctx.fillRect(200, 460, 824, 26);
-    sctx.fillStyle = "#8b949e";
-    sctx.font = "bold 12px monospace";
-    sctx.fillText("TERMINAL  |  zsh  |  Mac mini M4", 220, 478);
-
-    sctx.fillStyle = "#3fb950";
-    sctx.font = "14px monospace";
-    sctx.fillText("labib@mac-mini-m4:~/webpulse $ bun run dev", 220, 515);
-    sctx.fillStyle = "#79c0ff";
-    sctx.fillText("[✓] 120 FPS Studio Loft Active. Click monitor to launch interactive terminal.", 220, 545);
-    sctx.fillStyle = "#ffa657";
-    sctx.fillText("⚡ Systems Online: Webpulse, Madrasa OS, Al-Madina, BD-Mess, Ponyopuri", 220, 575);
-  }
-
-  const screenTexture = new THREE.CanvasTexture(screenCanvas);
+  // Dark OLED Screen Backing (Interactive target: click to zoom into website)
   const monitorScreenMesh = new THREE.Mesh(
     new THREE.PlaneGeometry(1.1, 0.65),
-    new THREE.MeshBasicMaterial({ map: screenTexture })
+    new THREE.MeshBasicMaterial({ color: 0x07090e })
   );
   monitorScreenMesh.position.set(0, 0.48, 0.02);
   monitorGroup.add(monitorScreenMesh);
@@ -806,10 +727,10 @@ export function buildRoomScene(
     name: "Mac Studio Display",
     mesh: monitorScreenMesh,
     cameraStage: "desk",
-    label: "Mac mini M4 & Studio Display (Click to open terminal & skills)",
+    label: "Mac mini M4 & Studio Display (Click to explore website)",
   });
 
-  const monitorGlow = new THREE.PointLight(0x60a5fa, 1.1, 2.2);
+  const monitorGlow = new THREE.PointLight(0x60a5fa, 0.7, 2.0);
   monitorGlow.position.set(0, 0.48, 0.22);
   monitorGroup.add(monitorGlow);
 
