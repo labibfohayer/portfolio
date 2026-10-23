@@ -45,7 +45,7 @@ export default function ParticleWaveCTA() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   // =========================================================================
-  // 1. GSAP SCROLLTRIGGER PIN (LOCKS PAGE ON VIEW, UNPINS AFTER ~2 SEC OF SCROLL)
+  // 1. GSAP SCROLLTRIGGER PIN (LOCKS PAGE ON VIEW, UNPINS AFTER ~3 SEC OF SCROLL)
   // =========================================================================
   useEffect(() => {
     if (!sectionRef.current || typeof window === "undefined") return;
@@ -54,7 +54,7 @@ export default function ParticleWaveCTA() {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=1300", // ~2 seconds of natural continuous scrolling
+        end: "+=2100", // ~3 seconds of natural continuous scrolling
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
@@ -469,7 +469,7 @@ export default function ParticleWaveCTA() {
             onClick={scrollToContact}
             className="group relative flex items-center gap-3 px-8 py-3.5 sm:py-4 bg-white text-black rounded-full text-[11px] font-mono tracking-[0.25em] uppercase font-bold shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:bg-neutral-100 hover:scale-105 active:scale-95 transition-all duration-300 pointer-events-auto cursor-pointer overflow-hidden border border-white/40"
           >
-            {/* Visual Scroll Lock Fill Bar: Shows progress through the 2-second pin */}
+            {/* Visual Scroll Lock Fill Bar: Shows progress through the ~3-second pin */}
             <div 
               className="absolute inset-0 bg-blue-100/70 pointer-events-none transition-all duration-150"
               style={{ width: `${Math.min(100, Math.round(scrollProgress * 100))}%` }}
