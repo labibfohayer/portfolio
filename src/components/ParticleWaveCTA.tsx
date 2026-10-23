@@ -361,7 +361,11 @@ export default function ParticleWaveCTA() {
     e.preventDefault();
     const contactSection = document.querySelector("#contact");
     if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" });
+      if (typeof window !== "undefined" && window.lenisInstance) {
+        window.lenisInstance.scrollTo(contactSection as HTMLElement, { offset: -20, duration: 1.3 });
+      } else {
+        contactSection.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 

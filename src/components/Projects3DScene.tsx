@@ -930,7 +930,11 @@ export default function Projects3DScene() {
     const targetProgress = progressTargets[idx] ?? 0;
     const scrollDistance = sectionRef.current.scrollHeight - window.innerHeight;
     const targetScrollY = sectionRef.current.offsetTop + scrollDistance * targetProgress;
-    window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+    if (typeof window !== "undefined" && window.lenisInstance) {
+      window.lenisInstance.scrollTo(targetScrollY, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+    }
   };
 
   const currentProject = activeProjectIdx >= 0 && activeProjectIdx < projects.length 

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import GlobalEffects from "@/components/GlobalEffects";
 import EasterEgg from "@/components/EasterEgg";
 import Preloader from "@/components/Preloader";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -92,7 +93,9 @@ export default function RootLayout({
         <Preloader />
         <GlobalEffects />
         <EasterEgg />
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
