@@ -1,41 +1,13 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Skills from "@/components/Skills";
-import Services from "@/components/Services";
-import Projects3DScene from "@/components/Projects3DScene";
-import Experience from "@/components/Experience";
-import Blog from "@/components/Blog";
-import ParticleWaveCTA from "@/components/ParticleWaveCTA";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
-import FloatingMusic from "@/components/FloatingMusic";
-import Chatbot from "@/components/Chatbot";
+import StudioRoom3D from "@/components/room/StudioRoom3D";
 import CommandPalette from "@/components/CommandPalette";
-import TechMarquee from "@/components/TechMarquee";
-import SocialSidebar from "@/components/SocialSidebar";
 import PageTracker from "@/components/PageTracker";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[black] selection:bg-cyan-500/30 selection:text-white overflow-x-clip w-full max-w-full relative">
+    <main className="w-screen h-screen overflow-hidden bg-[#06080d] text-white select-none">
       <PageTracker />
       <CommandPalette />
-      <FloatingMusic />
-      <Chatbot />
-      <SocialSidebar />
-      <Navbar />
-      <Hero />
-      <TechMarquee />
-      <About />
-      <Projects3DScene />
-      <Skills />
-      <Services />
-      <Experience />
-      <Blog />
-      <ParticleWaveCTA />
-      <Contact />
-      <Footer />
+      <StudioRoom3D />
     </main>
   );
 }
